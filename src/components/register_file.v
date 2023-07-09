@@ -28,7 +28,7 @@ module register_file #(
         // write to dest register
         if (we3) begin
             if (a3 != 0) begin
-               rf[a3] <= di3; 
+               rf[a3] <= di3;
             end
         end
     end
