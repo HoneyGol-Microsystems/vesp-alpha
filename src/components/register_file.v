@@ -1,9 +1,7 @@
-`include "src/constants.vh"
-
 /* Generic register file with GPR's */
 module register_file #(
     parameter REG_CNT = 32, // number of registers
-    parameter XLEN = `XLEN  // width of registers
+    parameter XLEN = 32     // width of registers
 ) (
     input [$floor($sqrt(REG_CNT))-1:0] a1, a2, a3, // address to src (a1, a2) and dest (a3) register
     input di3, // data to write to dest register
