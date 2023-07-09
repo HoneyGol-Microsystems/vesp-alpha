@@ -10,7 +10,7 @@ module register_file #(
     output reg [XLEN-1:0] r1, r2 // src registers
 );
 
-    reg [XLEN-1:0] rf [REG_CNT-1:0]; // registers
+    reg [XLEN-1:0] rf [REG_CNT-1:0]; // register file
 
     always @(posedge clk) begin
         // output from src registers
