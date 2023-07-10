@@ -12,8 +12,8 @@ module register_file #(
 
     reg [XLEN-1:0] rf [REG_CNT-1:0]; // register file
 
-    always @(posedge clk) begin
-        // output from src registers
+    // output from src registers
+    always @(*) begin
         if (a1 == 0) begin
             r1 <= 0;
         end else begin
@@ -24,8 +24,10 @@ module register_file #(
         end else begin
             r2 <= rf[a2];
         end
+    end
 
-        // write to dest register
+    // write to dest register
+    always @(posedge clk) begin
         if (we3) begin
             if (a3 != 0) begin
                rf[a3] <= di3;
