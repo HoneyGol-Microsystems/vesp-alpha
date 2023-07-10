@@ -4,7 +4,7 @@ module register_file #(
     parameter XLEN = 32     // width of registers
 ) (
     input [$floor($sqrt(REG_CNT))-1:0] a1, a2, a3, // address to src (a1, a2) and dest (a3) register
-    input di3, // data to write to dest register
+    input [XLEN-1:0] di3, // data to write to dest register
     input we3, // write enable for dest register
     input clk, // clock
     output reg [XLEN-1:0] r1, r2 // src registers
