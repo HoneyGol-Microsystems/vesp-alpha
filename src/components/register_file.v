@@ -7,14 +7,14 @@ module register_file #(
     input [XLEN-1:0] di3, // data to write to dest register
     input we3, // write enable for dest register
     input clk, // clock
-    output [XLEN-1:0] r1, r2 // src registers
+    output [XLEN-1:0] rd1, rd2 // src registers
 );
 
     reg [XLEN-1:0] rf [REG_CNT-1:0]; // register file
 
     // output from src registers
-    assign r1 = (a1 == 0) ? 0 : rf[a1];
-    assign r2 = (a2 == 0) ? 0 : rf[a2];
+    assign rd1 = (a1 == 0) ? 0 : rf[a1];
+    assign rd2 = (a2 == 0) ? 0 : rf[a2];
 
     // write to dest register
     always @(posedge clk) begin
