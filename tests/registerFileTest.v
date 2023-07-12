@@ -1,12 +1,12 @@
-`include "../src/components/register_file.v"
+`include "../src/components/registerFile.v"
 
-module register_file_test();
+module registerFileTest();
 	reg [4:0] a1, a2, a3;
 	reg [31:0] di3;
 	reg clk, we3;
 	wire [31:0] rd1, rd2;
 
-	register_file #(32, 32) dut (a1, a2, a3, di3, we3, clk, rd1, rd2);
+	registerFile #(32, 32) dut (a1, a2, a3, di3, we3, clk, rd1, rd2);
 
 	initial begin
 		$dumpfile("test");

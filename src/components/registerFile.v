@@ -1,5 +1,5 @@
 /* Generic register file with GPR's */
-module register_file #(
+module registerFile #(
     parameter REG_CNT = 32, // number of registers
     parameter XLEN = 32     // width of registers
 ) (
