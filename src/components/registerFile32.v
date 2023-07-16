@@ -1,4 +1,4 @@
-/* register file with 32 GPR's with parametrized length */
+/* register file with 32 GPR's with parametrized width */
 module registerFile32 #(
     parameter XLEN = 32 // width of registers
 ) (
