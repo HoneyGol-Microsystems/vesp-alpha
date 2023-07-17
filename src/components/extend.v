@@ -7,6 +7,6 @@ module extend #(
     output [RES_LEN-1:0] res   // result (extended data)
 );
 
-    assign res = { {(RES_LEN - DATA_LEN){!uext}}, data };
+    assign res = uext ? { {(RES_LEN - DATA_LEN){!uext}}, data } : { {(RES_LEN - DATA_LEN){data[DATA_LEN-1]}}, data };
 
 endmodule
