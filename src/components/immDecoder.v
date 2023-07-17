@@ -1,6 +1,6 @@
 module immDecoder (
-    input [31:0] instruction, // instruction to get the immediate from
-    output reg [31:0] imm     // result immediate
+    input      [31:0] instruction, // instruction to get the immediate from
+    output reg [31:0] imm          // result immediate
 );
 
     always @(*) begin

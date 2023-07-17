@@ -1,10 +1,10 @@
 module alu #(
     parameter XLEN = 32 // width of operands
 ) (
-    input [XLEN-1:0] op1, op2, // operands (unsigned)
-    input [3:0] ctrl,          // ALU control
-    output zero,               // zero result flag
-    output reg [XLEN-1:0] res  // result
+    input      [XLEN-1:0] op1, op2, // operands (unsigned)
+    input      [3:0]      ctrl,     // ALU control
+    output                zero,     // zero result flag
+    output reg [XLEN-1:0] res       // result
 );
 
     // set zero flag

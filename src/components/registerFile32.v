@@ -2,11 +2,11 @@
 module registerFile32 #(
     parameter XLEN = 32 // width of registers
 ) (
-    input [4:0] a1, a2, a3,    // address to src (a1, a2) and dest (a3) register
-    input [XLEN-1:0] di3,      // data to write to dest register
-    input we3,                 // write enable for dest register
-    input clk,                 // clock
-    output [XLEN-1:0] rd1, rd2 // src registers
+    input  [4:0]      a1, a2, a3, // address to src (a1, a2) and dest (a3) register
+    input  [XLEN-1:0] di3,        // data to write to dest register
+    input             we3,        // write enable for dest register
+    input             clk,        // clock
+    output [XLEN-1:0] rd1, rd2    // src registers
 );
 
     reg [XLEN-1:0] rf [31:0]; // register file
