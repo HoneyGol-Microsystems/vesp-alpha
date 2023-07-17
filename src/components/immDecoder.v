@@ -1,6 +1,5 @@
 module immDecoder (
     input [31:0] instruction, // instruction to get the immediate from
-    input [6:0] immCtrl,      // control signal
     output reg [31:0] imm     // result immediate
 );
 
