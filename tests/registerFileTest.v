@@ -6,7 +6,7 @@ module registerFileTest();
 	reg clk, we3;
 	wire [31:0] rd1, rd2;
 
-	registerFile32 #(32) dut (a1, a2, a3, di3, we3, clk, rd1, rd2);
+	registerFile32#(32) dut(a1, a2, a3, di3, we3, clk, rd1, rd2);
 
 	initial begin
 		$dumpfile("test");
