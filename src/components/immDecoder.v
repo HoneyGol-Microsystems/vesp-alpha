@@ -18,6 +18,11 @@ module immDecoder (
                 end
             end
 
+            5'b11001: begin // JALR
+                imm[11:0] = instruction[31:20];
+                imm[31:12] = { 20{instruction[31]} };
+            end
+
             5'b01000: begin // S-type
                 imm[4:0] = instruction[11:7];
                 imm[11:5] = instruction[31:25];
