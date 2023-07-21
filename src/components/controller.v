@@ -136,6 +136,14 @@ module controller (
                 regDataSel <= 2'b11;
                 regWr      <= 1;
             end
+
+            5'b00011: begin end // FENCE or Zifencei standard extension
+
+            5'b11100: begin // ECALL, EBREAK or Zicsr standard extension
+                case (funct3)
+                    3'b000: begin end // ECALL or EBREAK
+                endcase
+            end
         endcase
     end
 
