@@ -3,10 +3,13 @@ module immDecoder (
     output reg [31:0] imm          // result immediate
 );
 
+    wire [2:0] funct3 = instruction[14:12];
+    wire [6:0] opcode = instruction[6:0];
+
     always @(*) begin
-        casez (instruction[6:2]) // omit the lowest two bits of opcode - they are always 11
-            5'b00x00: begin // I-type
-                if (instruction[4]) begin // SLLI, SRLI or SRAI instruction
+        casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
+            5'b00x00: begin // I-type without JALR
+                if (opcode[4] && funct3 == 3'bx01) begin // SLLI, SRLI or SRAI instruction
                     imm[4:0] = instruction[24:20];
                     imm[31:5] = 0;
                 end else begin
