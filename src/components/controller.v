@@ -24,13 +24,6 @@ module controller (
     wire [6:0] opcode = instruction[6:0];
     wire [31:0] imm;
 
-    always @(*) begin
-        loadSel     <= funct3[1:0];
-        maskSel     <= funct3[1:0];
-        rs2ShiftSel <= funct3[0];
-        uext        <= funct3[2];
-    end
-
     // decode instructions and set control signals
     always @(*) begin
         // init control signals to default values
@@ -38,10 +31,14 @@ module controller (
         ALUImm      <= 0;
         ALUToPC     <= 0;
         branch      <= 0;
+        loadSel     <= funct3[1:0];
+        maskSel     <= funct3[1:0];
         memToReg    <= 0;
         memWr       <= 0;
         regDataSel  <= 0;
         regWr       <= 0;
+        rs2ShiftSel <= funct3[0];
+        uext        <= funct3[2];
 
         casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
