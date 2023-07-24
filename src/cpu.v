@@ -20,7 +20,7 @@ module cpu (
 
     // wire/reg declarations
     wire nextPC, ALUZero, ALUImm, ALUToPC, branch, branchTarget,
-         memToReg, memWr, regWr, rs2ShiftSel, uext, PC4, immPC;
+         memToReg, regWr, rs2ShiftSel, uext, PC4, immPC;
     wire [1:0] loadSel, maskSel, regDataSel;
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
