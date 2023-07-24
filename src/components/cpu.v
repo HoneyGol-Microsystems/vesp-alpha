@@ -91,38 +91,38 @@ module cpu (
     // maskSel mux
     always @(*) begin
         case (maskSel)
-            2'b00:   mask <= 4'b0001;
-            2'b01:   mask <= 4'b0011;
-            default: mask <= 4'b1111;
+            2'b00:   mask = 4'b0001;
+            2'b01:   mask = 4'b0011;
+            default: mask = 4'b1111;
         endcase
     end
 
     // regDataSel mux
     always @(*) begin
         case (regDataSel)
-            2'b00:   regData <= ALURes;
-            2'b01:   regData <= immPC;
-            2'b10:   regData <= imm;
-            default: regData <= PC4;
+            2'b00:   regData = ALURes;
+            2'b01:   regData = immPC;
+            2'b10:   regData = imm;
+            default: regData = PC4;
         endcase
     end
 
     // dataLB mux
     always @(*) begin
         case (ALURes[1:0])
-            2'b00:   dataLB <= memOut[7:0];
-            2'b01:   dataLB <= memOut[15:8];
-            2'b10:   dataLB <= memOut[23:16];
-            default: dataLB <= memOut[31:24];
+            2'b00:   dataLB = memOut[7:0];
+            2'b01:   dataLB = memOut[15:8];
+            2'b10:   dataLB = memOut[23:16];
+            default: dataLB = memOut[31:24];
         endcase
     end
 
     // loadSel mux
     always @(*) begin
         case (loadSel)
-            2'b00:   memData <= dataExtLB;
-            2'b01:   memData <= dataExtLH;
-            default: memData <= memOut;
+            2'b00:   memData = dataExtLB;
+            2'b01:   memData = dataExtLH;
+            default: memData = memOut;
         endcase
     end
 
