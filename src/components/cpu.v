@@ -32,38 +32,65 @@ module cpu (
     reg [31:0] regData, memData;
 
     // module instantiations
-    controller ctrler (instruction,
-                       memAddr,
-                       ALUZero,
-                       ALUCtrl,
-                       ALUImm,
-                       ALUToPC,
-                       branch,
-                       loadSel,
-                       maskSel,
-                       memToReg,
-                       memWr,
-                       regDataSel,
-                       regWr,
-                       rs2ShiftSel,
-                       uext);
+    controller ctrler
+    (
+        .instruction(instruction),
+        .memAddr(memAddr),
+        .ALUZero(ALUZero),
+        .ALUCtrl(ALUCtrl),
+        .ALUImm(ALUImm),
+        .ALUToPC(ALUToPC),
+        .branch(branch),
+        .loadSel(loadSel),
+        .maskSel(maskSel),
+        .memToReg(memToReg),
+        .memWr(memWr),
+        .regDataSel(regDataSel),
+        .regWr(regWr),
+        .rs2ShiftSel(rs2ShiftSel),
+        .uext(uext)
+    );
 
-    alu #(`XLEN) ALU (src1, src2, ALUCtrl, ALUZero, ALURes);
+    alu #(`XLEN) ALU
+    (
+        .op1(src1),
+        .op2(src2),
+        .ctrl(ALUCtrl),
+        .zero(ALUZero),
+        .res(ALURes)
+    );
 
-    immDecoder immDcder (instruction, imm);
+    immDecoder immDcder
+    (
+        .instruction(instruction),
+        .imm(imm)
+    );
 
-    registerFile32 #(`XLEN) regfile (instruction[19:15],
-                                     instruction[24:20],
-                                     instruction[11:7],
-                                     regRes,
-                                     regWr,
-                                     clk,
-                                     rs1,
-                                     rs2);
+    registerFile32 #(`XLEN) regfile
+    (
+        .a1(instruction[19:15]),
+        .a2(instruction[24:20]),
+        .a3(instruction[11:7]),
+        .di3(regRes),
+        .we3(regWr),
+        .clk(clk),
+        .rd1(rs1),
+        .rd2(rs2)
+    );
 
-    extend #(8, `XLEN) ext8to32 (dataLB, uext, dataExtLB);
+    extend #(8, `XLEN) ext8to32
+    (
+        .data(dataLB),
+        .uext(uext),
+        .res(dataExtLB)
+    );
 
-    extend #(16, `XLEN) ext16to32 (dataLH, uext, dataExtLH);
+    extend #(16, `XLEN) ext16to32
+    (
+        .data(dataLH),
+        .uext(uext),
+        .res(dataExtLH)
+    );
 
     // assignments (including 1bit muxes)
     assign PC4          = PC + 4;
