@@ -3,11 +3,21 @@
 module extendTest();
 	reg [7:0] data8;
     reg [15:0] data16;
-    reg uext, clk;
+    reg uext;
     wire [31:0] res8, res16;
 
-	extend#(8, 32) ext8_32(data8, uext, res8);
-    extend#(16, 32) ext16_32(data16, uext, res16);
+	extend#(8, 32) ext8_32
+    (
+        .data(data8),
+        .uext(uext),
+        .res(res8)
+    );
+    extend#(16, 32) ext16_32
+    (
+        .data(data16),
+        .uext(uext),
+        .res(res16)
+    );
 
 	initial begin
 		$dumpfile("test");
@@ -34,12 +44,6 @@ module extendTest();
         uext = 0;
 
 		#1; $finish;
-	end
-
-	// generate clock
-	always begin
-		clk <= 1; #1;
-        clk <= 0; #1;
 	end
 
 	always @ (*) #1 $display ("data8=%b, uext=%b, res8=%b\ndata16=%b, uext=%b, res16=%b\n", data8, uext, res8, data16, uext, res16);

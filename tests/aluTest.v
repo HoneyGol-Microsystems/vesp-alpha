@@ -6,7 +6,14 @@ module aluTest();
     wire [31:0] res;
     wire zero;
 
-	alu #(32) ALU (op1, op2, ctrl, zero, res);
+	alu #(32) ALU
+    (
+        .op1(op1),
+        .op2(op2),
+        .ctrl(ctrl),
+        .zero(zero),
+        .res(res)
+    );
     
     initial begin
 		$dumpfile("test");
