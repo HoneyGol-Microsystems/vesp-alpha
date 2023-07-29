@@ -65,9 +65,11 @@ module topTest();
 
         for (i = 0; i < 38; i++) begin
             reset <= 1;
-            #2;
             $readmemh(hexFiles[i], ram);
             reset <= 0;
+            while () begin
+                // TODO
+            end
         end
 
         $finish;
@@ -77,5 +79,7 @@ module topTest();
 		clk <= 1; #1;
         clk <= 0; #1;
 	end
+
+
     
 endmodule
