@@ -4,18 +4,19 @@
 `include "immDecoder.v"
 `include "registerFile32.v"
 `include "extend.v"
+`include "dataMemory.v"
 
 module cpu (
     input             clk,
     input             reset,
     input      [31:0] instruction,
-    input      [31:0] memOut,
+    input      [31:0] memReadData,
     output            memWr,  // write enable to data memory
     output            except, // exception TODO: type of exception
     output     [3:0]  wrMask,
     output reg [31:0] PC,
     output     [31:0] memAddr,
-    output     [31:0] memIn
+    output     [31:0] memWriteData
 );
 
     // wire/reg declarations
