@@ -101,10 +101,10 @@ module cpu (
     assign src1         = rs1;
     assign src2         = ALUImm ? imm : rs2;
     assign rs2Shift     = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
-    assign memIn        = rs2 << rs2Shift;
+    assign memWriteData = rs2 << rs2Shift;
     assign memAddr      = ALURes;
     assign wrMask       = mask << ALURes[1:0];
-    assign dataLH       = ALURes[1] ? memOut[31:16] : memOut[15:0];
+    assign dataLH       = ALURes[1] ? memReadData[31:16] : memReadData[15:0];
     assign regRes       = memToReg ? memData : regData;
 
     // PCREG
@@ -138,10 +138,10 @@ module cpu (
     // dataLB mux
     always @(*) begin
         case (ALURes[1:0])
-            2'b00:   dataLB = memOut[7:0];
-            2'b01:   dataLB = memOut[15:8];
-            2'b10:   dataLB = memOut[23:16];
-            default: dataLB = memOut[31:24];
+            2'b00:   dataLB = memReadData[7:0];
+            2'b01:   dataLB = memReadData[15:8];
+            2'b10:   dataLB = memReadData[23:16];
+            default: dataLB = memReadData[31:24];
         endcase
     end
 
@@ -150,7 +150,7 @@ module cpu (
         case (loadSel)
             2'b00:   memData = dataExtLB;
             2'b01:   memData = dataExtLH;
-            default: memData = memOut;
+            default: memData = memReadData;
         endcase
     end
 
