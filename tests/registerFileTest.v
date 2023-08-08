@@ -1,4 +1,4 @@
-`include "../src/components/registerFile32.v"
+`include "src/components/registerFile32.v"
 
 module registerFileTest();
 	reg [4:0] a1, a2, a3;

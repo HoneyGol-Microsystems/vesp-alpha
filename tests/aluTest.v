@@ -1,4 +1,4 @@
-`include "../src/components/alu.v"
+`include "src/components/alu.v"
 
 module aluTest();
 	reg [31:0] op1, op2;
@@ -18,6 +18,8 @@ module aluTest();
     initial begin
 		$dumpfile("test");
 		$dumpvars;
+
+        $display("ALU test begin");
 
         op1 = -16;
         op2 = -5;

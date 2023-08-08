@@ -1,4 +1,4 @@
-`include "../src/components/extend.v"
+`include "src/components/extend.v"
 
 module extendTest();
 	reg [7:0] data8;
