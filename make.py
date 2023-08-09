@@ -46,7 +46,7 @@ def rvtest():
         with open(RVTESTS_TOP_TEMPLATE) as template:
             templateText = template.read()
             logging.debug("Replacing test names...")
-            templateText = templateText.replace("__MKPY_CURRENT_TEST", "\"build/tmp.hex\"")
+            templateText = templateText.replace("\"PATH_TO_HEX\"", "\"build/tmp.hex\"")
     except IOError:
         print("Couldn't open top entity template. Terminating.")
         return
