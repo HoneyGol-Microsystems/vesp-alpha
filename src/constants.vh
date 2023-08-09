@@ -5,3 +5,7 @@
 
 /* other constants */
 `define REG_CNT 32 // number of registers in a register file
+
+/* assertion values */
+`define ASSERT_FAIL "ASSERT_FAIL"
+`define ASSERT_SUCCESS "ASSERT_SUCCESS"
