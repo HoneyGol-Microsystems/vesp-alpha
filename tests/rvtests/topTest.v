@@ -4,6 +4,7 @@
 `define __MKPY_CURRENT_TEST "PATH_TO_HEX"
 `define ECALL               32'b1110011
 `define EBREAK              32'b100000000000001110011
+`define PC_STOP             'ha4
 
 module topTest();
     
@@ -36,6 +37,33 @@ module topTest();
 	end
 
     always @(posedge clk) begin
+        /* inner signals */
+        // $display (
+        //     "instr: %b(h%h)\n", dut.cpu.instruction, dut.cpu.instruction,
+        //     "PC: h%h\n", dut.cpu.PC,
+        //     "nextPC: h%h\n", dut.cpu.nextPC,
+        //     "imm: %b\n", dut.cpu.imm,
+        //     "immPC: h%h\n", dut.cpu.immPC,
+        //     "branchTarget: h%h\n", dut.cpu.branchTarget,
+        //     "branch: %b\n", dut.cpu.branch,
+        //     "ALUSrc1: %b\n", dut.cpu.src1,
+        //     "ALUSrc2: %b\n", dut.cpu.src2,
+        //     "ALUCtrl: %b\n", dut.cpu.ALUCtrl,
+        //     "ALURes: %b\n", dut.cpu.ALURes,
+        //     "ALUZero: %b\n", dut.cpu.ALUZero,
+        //     "ALUImm: %b\n", dut.cpu.ALUImm,
+        //     "regWr: %b\n", dut.cpu.regWr,
+        //     "regDataSel: %b\n", dut.cpu.regDataSel,
+        //     "memToReg: %b\n", dut.cpu.memToReg,
+        //     "opcode: %b", dut.cpu.ctrler.opcode
+        // );
+
+        /* register contents */
+        // for (i = 0; i <= 31; i++) begin
+        //     $display("r%0d: %b", i, dut.cpu.regfile.rf[i]);
+        // end
+        // $display("------------------------------------------");
+
         if (dut.instrBusData == `ECALL) begin
             $display(`ASSERT_SUCCESS);
             $finish;
@@ -46,7 +74,8 @@ module topTest();
             $finish;
         end
 
-        // if (dut.cpu.PC == 'h88) begin
+        /* stop on certain PC for debugging purposes */
+        // if (dut.cpu.PC == `PC_STOP) begin
         //     $display("DEBUG_STOP");
         //     $finish;
         // end
