@@ -1,10 +1,10 @@
-`include "../constants.vh"
-`include "controller.v"
-`include "alu.v"
-`include "immDecoder.v"
-`include "registerFile32.v"
-`include "extend.v"
-`include "dataMemory.v"
+`include "src/constants.vh"
+`include "src/components/controller.v"
+`include "src/components/alu.v"
+`include "src/components/immDecoder.v"
+`include "src/components/registerFile32.v"
+`include "src/components/extend.v"
+`include "src/components/dataMemory.v"
 
 module cpu (
     input             clk,
