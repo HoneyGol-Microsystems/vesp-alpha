@@ -1,45 +1,42 @@
 `include "src/components/cpu.v"
 `include "src/components/ram.v"
 
-module top(
-    input sys_clk,
-    input sys_res
+module top (
+    input sysClk,
+    input sysRes
 );
 
-    wire [31:0] instrbus_addr;
-    wire [31:0] instrbus_data;
-
-    wire [31:0] databus_addr;
-    wire [31:0] databus_datawrite, databus_dataread;
-    wire [31:0] databus_mask;
-    wire [31:0] databus_writeenable;
+    wire dataBusWE, ex;
+    wire [3:0] writeMask;
+    wire [31:0] instrBusAddr, instrBusData, dataBusAddr, dataBusDataWrite,
+                dataBusDataRead, dataBusMask;
     
-    ram ram_main(
-        .a1(instrbus_addr),
-        .do1(instrbus_data),
+    ram ramMain (
+        .a1(instrBusAddr),
+        .do1(instrBusData),
 
-        .a2(databus_addr),
-        .di2(databus_datawrite),
-        .do2(databus_dataread),
-        .m2(databus_mask),
-        .we2(databus_writeenable),
-        .clk(sys_clk)
+        .a2(dataBusAddr),
+        .di2(dataBusDataWrite),
+        .do2(dataBusDataRead),
+        .m2(writeMask),
+        .we2(dataBusWE),
+        .clk(sysClk)
     );
 
-    cpu cpu(
-        .clk(sys_clk),
-        .reset(sys_res),
+    cpu cpu (
+        .clk(sysClk),
+        .reset(sysRes),
 
-        .instruction(instrbus_data),
-        .PC(instrbus_addr),
+        .instruction(instrBusData),
+        .PC(instrBusAddr),
 
-        .memAddr(databus_addr),
-        .memReadData(databus_dataread),
-        .memWriteData(databus_datawrite),
-        .memWr(databus_writeenable),
-        .wrMask(databus_writemask)
+        .memAddr(dataBusAddr),
+        .memReadData(dataBusDataRead),
+        .memWriteData(dataBusDataWrite),
+        .memWr(dataBusWE),
+        .wrMask(writeMask),
 
-        //.except()
+        .except(ex)
     );
 
 endmodule

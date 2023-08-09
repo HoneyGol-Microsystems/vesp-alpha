@@ -5,8 +5,8 @@ module topTest();
     reg clk, reset;
 
     top dut(
-        .sys_clk(clk),
-        .sys_res(reset)
+        .sysClk(clk),
+        .sysRes(reset)
     );
 
     initial begin
