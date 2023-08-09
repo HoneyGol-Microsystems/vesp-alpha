@@ -19,14 +19,14 @@ module cpu (
 );
 
     // wire/reg declarations
-    wire nextPC, ALUZero, ALUImm, ALUToPC, branch, branchTarget,
-         memToReg, regWr, rs2ShiftSel, uext, PC4, immPC;
+    wire ALUZero, ALUImm, ALUToPC, branch, memToReg, regWr,
+         rs2ShiftSel, uext;
     wire [1:0] loadSel, maskSel, regDataSel;
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
-    wire [31:0] src1, src2, rs1, rs2, ALURes, imm, regRes, dataExtLB,
-                dataExtLH;
+    wire [31:0] src1, src2, rs1, rs2, ALURes, imm, immPC, branchTarget,
+                regRes, dataExtLB, dataExtLH, nextPC, PC4;
     reg [3:0] mask;
     reg [7:0] dataLB;
     reg [31:0] regData, memData;
