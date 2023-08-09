@@ -1,14 +1,15 @@
 // Dual port RAM.
-module ram(
+module ram (
     // Addresses.
-    input [31:0] a1, a2,
+    input  [31:0] a1, a2,
     // Data inputs and outputs.
-    input [31:0] do1, di2, do2,
+    input  [31:0] di2,
+    output [31:0] do1, do2,
     // Data mask selection.
-    input [3:0] m2,
+    input  [3:0]  m2,
     // Write enable.
-    input we2,
-    input clk
+    input         we2,
+    input         clk
 );
 
     reg [31:0] RAM [127:0];
@@ -17,7 +18,7 @@ module ram(
     assign do2 = RAM[a2[31:2]];
 
     always @(posedge clk) begin
-        if(we2) begin
+        if (we2) begin
             if (m2[0]) begin
                 RAM[a2[31:2]][7:0] <= di2[7:0];
             end
