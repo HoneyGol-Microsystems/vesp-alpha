@@ -40,7 +40,7 @@ module controller (
         rs2ShiftSel = funct3[0];
         uext        = funct3[2];
 
-        casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
+        casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
                 // set matching signals
                 regWr = 1;
