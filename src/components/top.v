@@ -1,5 +1,8 @@
+`include "cpu.v"
+`include "ram.v"
+
 module top(
-    input sys_clk
+    input sys_clk,
     input sys_res
 );
 
@@ -34,9 +37,9 @@ module top(
         .memReadData(databus_dataread),
         .memWriteData(databus_datawrite),
         .memWr(databus_writeenable),
-        .wrMask(databus_writemask),
+        .wrMask(databus_writemask)
 
-        .except(),
+        //.except()
     );
 
 endmodule
