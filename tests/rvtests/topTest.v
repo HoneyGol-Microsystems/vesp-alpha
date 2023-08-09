@@ -13,13 +13,11 @@ module topTest();
 
         $dumpfile("test");
 		$dumpvars;
+        $readmemh(__MKPY_CURRENT_TEST, dut.ram_main.RAM);
 
-        for (i = 0; i < 38; i++) begin
-            reset <= 1;
-            $readmemh(__MKPY_CURRENT_TEST, top.ram_main.RAM);
-            reset <= 0;
-
-        end
+        reset <= 1;
+        #1;
+        reset <= 0;
 
         $finish;
     end
