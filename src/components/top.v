@@ -1,5 +1,5 @@
-`include "cpu.v"
-`include "ram.v"
+`include "src/components/cpu.v"
+`include "src/components/ram.v"
 
 module top(
     input sys_clk,

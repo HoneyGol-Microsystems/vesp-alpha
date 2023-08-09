@@ -4,7 +4,6 @@
 `include "src/components/immDecoder.v"
 `include "src/components/registerFile32.v"
 `include "src/components/extend.v"
-`include "src/components/dataMemory.v"
 
 module cpu (
     input             clk,
