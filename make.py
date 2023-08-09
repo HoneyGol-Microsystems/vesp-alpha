@@ -7,8 +7,8 @@ import shutil
 
 
 HWTESTS_DIR = os.path.join("tests", "hwtests")
-RVTESTS_DIR = os.path.join("tests", "rvtests")
-RVTESTS_TOP_TEMPLATE = os.path.join(RVTESTS_DIR, "topTest.v")
+RVTESTS_DIR = os.path.join("tests", "rvtests", "hex")
+RVTESTS_TOP_TEMPLATE = os.path.join("tests", "rvtests", "topTest.v")
 BUILD_DIR = "build"
 IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
 
@@ -46,7 +46,7 @@ def rvtest():
         with open(RVTESTS_TOP_TEMPLATE) as template:
             templateText = template.read()
             logging.debug("Replacing test names...")
-            templateText.replace("__MKPY_CURRENT_TEST", "tmp.hex")
+            templateText = templateText.replace("__MKPY_CURRENT_TEST", "\"build/tmp.hex\"")
     except IOError:
         print("Couldn't open top entity template. Terminating.")
         return
@@ -77,7 +77,7 @@ def rvtest():
         
         print(f"Begin test [{testId + 1}/{len(testfiles)}]: {testName}")
         logging.debug("Copying binary...")
-        shutil(os.path.join(HWTESTS_DIR, testName), os.path.join(BUILD_DIR, "tmp.hex"))
+        shutil.copy2(os.path.join(RVTESTS_DIR, testName), os.path.join(BUILD_DIR, "tmp.hex"))
         
         print("Running test...")
         ret = subprocess.run(
