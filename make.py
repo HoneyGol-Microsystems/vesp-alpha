@@ -3,22 +3,104 @@ import sys
 import subprocess
 import os
 import logging
+import shutil
 
 
-TESTS_DIR = "tests"
+HWTESTS_DIR = os.path.join("tests", "hwtests")
+RVTESTS_DIR = os.path.join("tests", "rvtests")
+RVTESTS_TOP_TEMPLATE = os.path.join(RVTESTS_DIR, "topTest.v")
 BUILD_DIR = "build"
+IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
 
 def printSeparator():
     print("======================================")
 
-def test():
-
-    IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
-
+def prepareTesting():    
     logging.debug("Creating temp directory...")
     os.makedirs(BUILD_DIR, exist_ok = True)
 
-    testfiles = [file for file in os.listdir(TESTS_DIR) if file.endswith(".v")]
+def test():
+    hwtest()
+    rvtest()
+
+def rvtest():
+
+    prepareTesting()
+
+    PREPROCESSED_TOP_PATH = os.path.join(BUILD_DIR, "tmp.v")
+
+    testfiles = [file for file in os.listdir(RVTESTS_DIR) if file.endswith(".hex")]
+    testfiles.sort()
+
+    logging.debug(f"Found test files: {testfiles}")
+
+    if not testfiles:
+        print("No test files found. Terminating.")
+        return
+
+    successfulCount = 0
+
+    print("Preprocessing top entity...")
+    logging.debug(f"Opening top template at: {RVTESTS_TOP_TEMPLATE}")
+    try:
+        with open(RVTESTS_TOP_TEMPLATE) as template:
+            templateText = template.read()
+            logging.debug("Replacing test names...")
+            templateText.replace("__MKPY_CURRENT_TEST", "tmp.hex")
+    except IOError:
+        print("Couldn't open top entity template. Terminating.")
+        return
+    
+    logging.debug("Writing preprocessed top...")
+
+    try:
+        with open(PREPROCESSED_TOP_PATH, 'w') as target:
+            target.write(templateText)
+    except IOError:
+        print("Couldn't write preprocessed top. Terminating.")
+        return
+
+    print("Compiling top entity...")
+    ret = subprocess.run(
+        ["iverilog", PREPROCESSED_TOP_PATH, "-o" + IVERILOG_OUTPUT, "-Isrc/components"],
+        stdout = sys.stdout,
+        stderr = subprocess.STDOUT
+    )
+
+    if ret.returncode != 0:
+        print("❌ Compilation error! Terminating.")
+        printSeparator()
+        return
+    
+    logging.debug("Preparations successful, running tests...")
+    for testId, testName in enumerate(testfiles):
+        
+        print(f"Begin test [{testId + 1}/{len(testfiles)}]: {testName}")
+        logging.debug("Copying binary...")
+        shutil(os.path.join(HWTESTS_DIR, testName), os.path.join(BUILD_DIR, "tmp.hex"))
+        
+        print("Running test...")
+        ret = subprocess.run(
+            [IVERILOG_OUTPUT],
+            stdout = sys.stdout,
+            stderr = subprocess.STDOUT
+        )
+
+        if ret.returncode != 0:
+            print("❌ Test error!")
+            printSeparator()
+            continue
+
+        print("✅ Success!")
+        successfulCount += 1
+        printSeparator()
+        
+
+def hwtest():
+
+    prepareTesting()
+
+    testfiles = [file for file in os.listdir(HWTESTS_DIR) if file.endswith(".v")]
     testfiles.sort()
 
     logging.debug(f"Found test files: {testfiles}")
@@ -35,7 +117,7 @@ def test():
         print("Compiling test...")
 
         ret = subprocess.run(
-            ["iverilog", os.path.join(TESTS_DIR, testName), "-o" + IVERILOG_OUTPUT],
+            ["iverilog", os.path.join(HWTESTS_DIR, testName), "-o" + IVERILOG_OUTPUT],
             stdout = sys.stdout,
             stderr = subprocess.STDOUT
         )
@@ -62,7 +144,7 @@ def test():
         successfulCount += 1
         printSeparator()
 
-    print("Testing summary")
+    print("Hardware testing summary")
     print(f"Successful tests: {successfulCount}/{len(testfiles)}")
     if successfulCount < len(testfiles):
         print("Conclusion: your code sucks 🤮")
@@ -82,7 +164,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "command",
         help = "Action to do.",
-        choices = ["test"]
+        choices = ["test", "rvtest", "hwtest"]
     )
 
     parser.add_argument(
@@ -102,5 +184,9 @@ if __name__ == "__main__":
 
     if args.command == "test":
         test()
+    elif args.command == "rvtest":
+        rvtest()
+    elif args.command == "hwtest":
+        hwtest()
 
     
