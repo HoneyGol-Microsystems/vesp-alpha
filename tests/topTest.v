@@ -1,4 +1,4 @@
-`include "../src/components/cpu.v"
+`include "src/components/cpu.v"
 
 module topTest();
     reg clk, reset, memWr;
