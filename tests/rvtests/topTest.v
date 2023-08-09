@@ -1,5 +1,7 @@
 `include "src/components/top.v"
 
+`define __MKPY_CURRENT_TEST "PATH_TO_HEX"
+
 module topTest();
     
     reg clk, reset;
@@ -13,7 +15,7 @@ module topTest();
 
         $dumpfile("test");
 		$dumpvars;
-        $readmemh(__MKPY_CURRENT_TEST, dut.ram_main.RAM);
+        $readmemh(`__MKPY_CURRENT_TEST, dut.ramMain.RAM);
 
         reset <= 1;
         #1;
