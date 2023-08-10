@@ -9,7 +9,7 @@ module immDecoder (
     always @(*) begin
         casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b00x00: begin // I-type without JALR
-                if (opcode[4] && funct3 == 3'bx01) begin // SLLI, SRLI or SRAI instruction
+                if (opcode[4] && funct3[1:0] == 2'b01) begin // SLLI, SRLI or SRAI instruction
                     imm[4:0]  = instruction[24:20];
                     imm[31:5] = 0;
                 end else begin
