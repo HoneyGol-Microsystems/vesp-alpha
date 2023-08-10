@@ -39,28 +39,29 @@ module topTest();
     always @(posedge clk) begin
         /* inner signals */
         // $display (
-        //     "instr: %b(h%h)\n", dut.cpu.instruction, dut.cpu.instruction,
+        //     "instr: %b (h%h)\n", dut.cpu.instruction, dut.cpu.instruction,
+        //     "opcode: %b\n", dut.cpu.ctrler.opcode,
+        //     "funct3: %b\n", dut.cpu.ctrler.funct3,
         //     "PC: h%h\n", dut.cpu.PC,
         //     "nextPC: h%h\n", dut.cpu.nextPC,
-        //     "imm: %b\n", dut.cpu.imm,
+        //     "imm: %b (h%h)\n", dut.cpu.imm, dut.cpu.imm,
         //     "immPC: h%h\n", dut.cpu.immPC,
         //     "branchTarget: h%h\n", dut.cpu.branchTarget,
         //     "branch: %b\n", dut.cpu.branch,
-        //     "ALUSrc1: %b\n", dut.cpu.src1,
-        //     "ALUSrc2: %b\n", dut.cpu.src2,
+        //     "ALUSrc1: %b (h%h)\n", dut.cpu.src1, dut.cpu.src1,
+        //     "ALUSrc2: %b (h%h)\n", dut.cpu.src2, dut.cpu.src2,
         //     "ALUCtrl: %b\n", dut.cpu.ALUCtrl,
-        //     "ALURes: %b\n", dut.cpu.ALURes,
+        //     "ALURes: %b (h%h)\n", dut.cpu.ALURes, dut.cpu.ALURes,
         //     "ALUZero: %b\n", dut.cpu.ALUZero,
         //     "ALUImm: %b\n", dut.cpu.ALUImm,
         //     "regWr: %b\n", dut.cpu.regWr,
         //     "regDataSel: %b\n", dut.cpu.regDataSel,
-        //     "memToReg: %b\n", dut.cpu.memToReg,
-        //     "opcode: %b", dut.cpu.ctrler.opcode
+        //     "memToReg: %b", dut.cpu.memToReg
         // );
 
         /* register contents */
         // for (i = 0; i <= 31; i++) begin
-        //     $display("r%0d: %b", i, dut.cpu.regfile.rf[i]);
+        //     $display("r%0d: %b (h%h)", i, dut.cpu.regfile.rf[i], dut.cpu.regfile.rf[i]);
         // end
         // $display("------------------------------------------");
 
