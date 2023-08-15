@@ -12,6 +12,9 @@ RVTESTS_TOP_TEMPLATE = os.path.join("tests", "rvtests", "topTest.v")
 BUILD_DIR = "build"
 IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
 
+ASSERT_FAIL_MSG = "ASSERT_FAIL"
+ASSERT_SUCC_MSG = "ASSERT_SUCCESS"
+
 def printSeparator():
     print("======================================")
 
@@ -73,6 +76,8 @@ def rvtest():
         return
     
     logging.debug("Preparations successful, running tests...")
+    unsuccessfulTestNames = []
+    
     for testId, testName in enumerate(testfiles):
         
         print(f"Begin test [{testId + 1}/{len(testfiles)}]: {testName}")
@@ -80,21 +85,37 @@ def rvtest():
         shutil.copy2(os.path.join(RVTESTS_DIR, testName), os.path.join(BUILD_DIR, "tmp.hex"))
         
         print("Running test...")
-        ret = subprocess.run(
+        output = subprocess.check_output(
             [IVERILOG_OUTPUT],
-            stdout = sys.stdout,
             stderr = subprocess.STDOUT
         )
 
-        if ret.returncode != 0:
+        outputString = output.decode()
+
+        print(outputString)
+
+        if ASSERT_FAIL_MSG in outputString:
             print("❌ Test error!")
             printSeparator()
+            unsuccessfulTestNames.append(testName)
             continue
-
-        print("✅ Success!")
-        successfulCount += 1
-        printSeparator()
+        elif not ASSERT_SUCC_MSG in outputString:
+            print("⚠️ Unknown error!")
+            printSeparator()
+            unsuccessfulTestNames.append(testName)
+            continue
+        else:
+            print("✅ Success!")
+            successfulCount += 1
+            printSeparator()
         
+    print("RISC-V official tests summary")
+    print(f"Successful tests: {successfulCount}/{len(testfiles)}")        
+    if successfulCount < len(testfiles):
+        print("❌ There were some errors.")
+        print("Unsuccessful tests: ", unsuccessfulTestNames)
+    else:
+        print("✅ All tests passed.")
 
 def hwtest():
 
@@ -110,7 +131,7 @@ def hwtest():
         return
 
     successfulCount = 0
-
+    unsuccessfulTestNames = []
     for testId, testName in enumerate(testfiles):
 
         print(f"Begin test [{testId + 1}/{len(testfiles)}]: {testName}")
@@ -128,28 +149,37 @@ def hwtest():
             continue
 
         print("Running test...")
-
-        ret = subprocess.run(
+        output = subprocess.check_output(
             [IVERILOG_OUTPUT],
-            stdout = sys.stdout,
             stderr = subprocess.STDOUT
         )
 
-        if ret.returncode != 0:
+        outputString = output.decode()
+
+        print(outputString)
+
+        if ASSERT_FAIL_MSG in outputString:
             print("❌ Test error!")
             printSeparator()
+            unsuccessfulTestNames.append(testName)
             continue
-
-        print("✅ Success!")
-        successfulCount += 1
-        printSeparator()
+        elif not ASSERT_SUCC_MSG in outputString:
+            print("⚠️ Unknown error!")
+            printSeparator()
+            unsuccessfulTestNames.append(testName)
+            continue
+        else:
+            print("✅ Success!")
+            successfulCount += 1
+            printSeparator()
 
     print("Hardware testing summary")
     print(f"Successful tests: {successfulCount}/{len(testfiles)}")
     if successfulCount < len(testfiles):
-        print("Conclusion: your code sucks 🤮")
+        print("There were some errors.")
+        print("Unsuccessful tests: ", unsuccessfulTestNames)
     else:
-        print("Conclusion: very well done 🎉")
+        print("All tests passed.")
 
 if __name__ == "__main__":
 

@@ -12,7 +12,7 @@ module ram (
     input         clk
 );
 
-    reg [31:0] RAM [127:0];
+    reg [31:0] RAM [1023:0];
 
     assign do1 = RAM[a1[31:2]];
     assign do2 = RAM[a2[31:2]];

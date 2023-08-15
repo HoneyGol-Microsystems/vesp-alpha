@@ -40,7 +40,7 @@ module controller (
         rs2ShiftSel = funct3[0];
         uext        = funct3[2];
 
-        casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
+        casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
                 // set matching signals
                 regWr = 1;
@@ -64,6 +64,7 @@ module controller (
 
                 if (opcode[4]) begin // immediate register-register
                     case (funct3)
+                        3'b000: ALUCtrl = 4'b0000; // ADDI
                         3'b001: ALUCtrl = 4'b0101; // SLLI
                         3'b010: ALUCtrl = 4'b1000; // SLTI
                         3'b011: ALUCtrl = 4'b1001; // SLTIU
