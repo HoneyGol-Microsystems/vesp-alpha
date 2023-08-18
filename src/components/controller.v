@@ -1,3 +1,6 @@
+`ifndef __FILE_CONTROLLER_V
+`define __FILE_CONTROLLER_V
+
 module controller (
     input      [31:0] instruction,
     input      [31:0] memAddr,
@@ -142,3 +145,5 @@ module controller (
     end
 
 endmodule
+
+`endif // __FILE_CONTROLLER_V

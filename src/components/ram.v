@@ -1,3 +1,6 @@
+`ifndef __FILE_RAM_V
+`define __FILE_RAM_V
+
 // Dual port RAM.
 module ram (
     // Addresses.
@@ -38,3 +41,5 @@ module ram (
     end
 
 endmodule
+
+`endif // __FILE_RAM_V

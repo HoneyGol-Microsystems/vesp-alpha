@@ -1,3 +1,6 @@
+`ifndef __FILE_EXTEND_V
+`define __FILE_EXTEND_V
+
 module extend #(
     parameter DATA_LEN = 8, // width of data
     parameter RES_LEN  = 32 // width of result (extended) data
@@ -10,3 +13,5 @@ module extend #(
     assign res = uext ? { {(RES_LEN - DATA_LEN){!uext}}, data } : { {(RES_LEN - DATA_LEN){data[DATA_LEN-1]}}, data };
 
 endmodule
+
+`endif // __FILE_EXTEND_V

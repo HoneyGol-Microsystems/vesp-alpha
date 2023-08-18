@@ -1,3 +1,6 @@
+`ifndef __FILE_REGISTERFILE32_V
+`define __FILE_REGISTERFILE32_V
+
 /* register file with 32 GPR's with parametrized width */
 module registerFile32 #(
     parameter XLEN = 32 // width of registers
@@ -25,3 +28,5 @@ module registerFile32 #(
     end
 
 endmodule
+
+`endif // __FILE_REGISTERFILE32_V

@@ -1,3 +1,6 @@
+`ifndef __FILE_CPU_V
+`define __FILE_CPU_V
+
 `include "src/constants.vh"
 `include "src/components/controller.v"
 `include "src/components/alu.v"
@@ -154,3 +157,5 @@ module cpu (
     end
 
 endmodule
+
+`endif // __FILE_CPU_V

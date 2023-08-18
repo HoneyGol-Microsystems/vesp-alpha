@@ -1,3 +1,6 @@
+`ifndef __FILE_TOP_V
+`define __FILE_TOP_V
+
 `include "src/components/cpu.v"
 `include "src/components/ram.v"
 
@@ -40,3 +43,5 @@ module top (
     );
 
 endmodule
+
+`endif // __FILE_TOP_V

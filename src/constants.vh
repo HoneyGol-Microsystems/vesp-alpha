@@ -1,3 +1,6 @@
+`ifndef __FILE_CONSTANTS_V
+`define __FILE_CONSTANTS_V
+
 /* RISC-V ISA constants */
 `define XLEN 32       // width of an integer register (in bits)
 `define IALIGN 32     // instruction-address alignment constraint (in bits)
@@ -9,3 +12,5 @@
 /* assertion values */
 `define ASSERT_FAIL "ASSERT_FAIL"
 `define ASSERT_SUCCESS "ASSERT_SUCCESS"
+
+`endif // __FILE_CONSTANTS_V
