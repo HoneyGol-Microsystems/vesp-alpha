@@ -35,8 +35,7 @@ module cpu (
     reg [31:0] regData, memData;
 
     // module instantiations
-    controller ctrler
-    (
+    controller controllerInst (
         .instruction(instruction),
         .memAddr(memAddr),
         .ALUZero(ALUZero),
@@ -54,8 +53,9 @@ module cpu (
         .uext(uext)
     );
 
-    alu #(`XLEN) ALU
-    (
+    alu #(
+        .XLEN(`XLEN)
+    ) aluInst (
         .op1(src1),
         .op2(src2),
         .ctrl(ALUCtrl),
@@ -63,14 +63,14 @@ module cpu (
         .res(ALURes)
     );
 
-    immDecoder immDcder
-    (
+    immDecoder immDecoderInst (
         .instruction(instruction),
         .imm(imm)
     );
 
-    registerFile32 #(`XLEN) regfile
-    (
+    registerFile32 #(
+        .XLEN(`XLEN)
+    ) registerFile32Inst (
         .a1(instruction[19:15]),
         .a2(instruction[24:20]),
         .a3(instruction[11:7]),
@@ -81,15 +81,19 @@ module cpu (
         .rd2(rs2)
     );
 
-    extend #(8, `XLEN) ext8to32
-    (
+    extend #(
+        .DATA_LEN(8),
+        .RES_LEN(`XLEN)
+    ) ext8to32 (
         .data(dataLB),
         .uext(uext),
         .res(dataExtLB)
     );
 
-    extend #(16, `XLEN) ext16to32
-    (
+    extend #(
+        .DATA_LEN(16),
+        .RES_LEN(`XLEN)
+    ) ext16to32 (
         .data(dataLH),
         .uext(uext),
         .res(dataExtLH)

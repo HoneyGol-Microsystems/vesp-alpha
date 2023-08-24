@@ -20,14 +20,14 @@ module topTest();
 
         $dumpfile("test");
 		$dumpvars;
-        $readmemh(`__MKPY_CURRENT_TEST, dut.ramMain.RAM);
+        $readmemh(`__MKPY_CURRENT_TEST, dut.ramInst.RAM, 0, `RAM_WORD_CNT-1);
 
         reset <= 1;
         #1;
         reset <= 0;
         #99999;
 
-        $display("TIMEOUT");
+        $display(`ASSERT_TIMEOUT);
         $finish;
     end
 
@@ -39,29 +39,29 @@ module topTest();
     always @(posedge clk) begin
         /* inner signals */
         // $display (
-        //     "instr: %b (h%h)\n", dut.cpu.instruction, dut.cpu.instruction,
-        //     "opcode: %b\n", dut.cpu.ctrler.opcode,
-        //     "funct3: %b\n", dut.cpu.ctrler.funct3,
-        //     "PC: h%h\n", dut.cpu.PC,
-        //     "nextPC: h%h\n", dut.cpu.nextPC,
-        //     "imm: %b (h%h)\n", dut.cpu.imm, dut.cpu.imm,
-        //     "immPC: h%h\n", dut.cpu.immPC,
-        //     "branchTarget: h%h\n", dut.cpu.branchTarget,
-        //     "branch: %b\n", dut.cpu.branch,
-        //     "ALUSrc1: %b (h%h)\n", dut.cpu.src1, dut.cpu.src1,
-        //     "ALUSrc2: %b (h%h)\n", dut.cpu.src2, dut.cpu.src2,
-        //     "ALUCtrl: %b\n", dut.cpu.ALUCtrl,
-        //     "ALURes: %b (h%h)\n", dut.cpu.ALURes, dut.cpu.ALURes,
-        //     "ALUZero: %b\n", dut.cpu.ALUZero,
-        //     "ALUImm: %b\n", dut.cpu.ALUImm,
-        //     "regWr: %b\n", dut.cpu.regWr,
-        //     "regDataSel: %b\n", dut.cpu.regDataSel,
-        //     "memToReg: %b", dut.cpu.memToReg
+        //     "instr: %b (h%h)\n", dut.cpuInst.instruction, dut.cpuInst.instruction,
+        //     "opcode: %b\n", dut.cpuInst.controllerInst.opcode,
+        //     "funct3: %b\n", dut.cpuInst.controllerInst.funct3,
+        //     "PC: h%h\n", dut.cpuInst.PC,
+        //     "nextPC: h%h\n", dut.cpuInst.nextPC,
+        //     "imm: %b (h%h)\n", dut.cpuInst.imm, dut.cpuInst.imm,
+        //     "immPC: h%h\n", dut.cpuInst.immPC,
+        //     "branchTarget: h%h\n", dut.cpuInst.branchTarget,
+        //     "branch: %b\n", dut.cpuInst.branch,
+        //     "ALUSrc1: %b (h%h)\n", dut.cpuInst.src1, dut.cpuInst.src1,
+        //     "ALUSrc2: %b (h%h)\n", dut.cpuInst.src2, dut.cpuInst.src2,
+        //     "ALUCtrl: %b\n", dut.cpuInst.ALUCtrl,
+        //     "ALURes: %b (h%h)\n", dut.cpuInst.ALURes, dut.cpuInst.ALURes,
+        //     "ALUZero: %b\n", dut.cpuInst.ALUZero,
+        //     "ALUImm: %b\n", dut.cpuInst.ALUImm,
+        //     "regWr: %b\n", dut.cpuInst.regWr,
+        //     "regDataSel: %b\n", dut.cpuInst.regDataSel,
+        //     "memToReg: %b", dut.cpuInst.memToReg
         // );
 
         /* register contents */
         // for (i = 0; i <= 31; i++) begin
-        //     $display("r%0d: %b (h%h)", i, dut.cpu.regfile.rf[i], dut.cpu.regfile.rf[i]);
+        //     $display("r%0d: %b (h%h)", i, dut.cpuInst.registerFile32Inst.rf[i], dut.cpuInst.registerFile32Inst.rf[i]);
         // end
         // $display("------------------------------------------");
 
@@ -76,8 +76,8 @@ module topTest();
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpu.PC == `PC_STOP) begin
-        //     $display("DEBUG_STOP");
+        // if (dut.cpuInst.PC == `PC_STOP) begin
+        //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end
     end

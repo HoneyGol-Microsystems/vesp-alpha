@@ -2,7 +2,9 @@
 `define __FILE_RAM_V
 
 // Dual port RAM.
-module ram (
+module ram #(
+    parameter WORD_CNT = 16 // number of words (32b) in RAM
+) (
     // Addresses.
     input  [31:0] a1, a2,
     // Data inputs and outputs.
@@ -15,7 +17,7 @@ module ram (
     input         clk
 );
 
-    reg [31:0] RAM [1023:0];
+    reg [31:0] RAM [WORD_CNT-1:0];
 
     assign do1 = RAM[a1[31:2]];
     assign do2 = RAM[a2[31:2]];

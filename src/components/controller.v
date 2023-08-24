@@ -25,7 +25,6 @@ module controller (
     wire [4:0] rs2    = instruction[24:20];
     wire [4:0] rd     = instruction[11:7];
     wire [6:0] opcode = instruction[6:0];
-    wire [31:0] imm;
 
     // decode instructions and set control signals
     always @(*) begin

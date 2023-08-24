@@ -8,9 +8,12 @@
 
 /* other constants */
 `define REG_CNT 32 // number of registers in a register file
+`define RAM_WORD_CNT 1024 // number of words in RAM
 
 /* assertion values */
 `define ASSERT_FAIL "ASSERT_FAIL"
 `define ASSERT_SUCCESS "ASSERT_SUCCESS"
+`define ASSERT_TIMEOUT "ASSERT_TIMEOUT"
+`define ASSERT_DEBUG_STOP "ASSERT_DEBUG_STOP"
 
 `endif // __FILE_CONSTANTS_V
