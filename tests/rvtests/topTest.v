@@ -27,7 +27,7 @@ module topTest();
         reset <= 0;
         #99999;
 
-        $display("TIMEOUT");
+        $display(`ASSERT_TIMEOUT);
         $finish;
     end
 
@@ -76,8 +76,8 @@ module topTest();
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpu.PC == `PC_STOP) begin
-        //     $display("DEBUG_STOP");
+        // if (dut.cpuInst.PC == `PC_STOP) begin
+        //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end
     end
