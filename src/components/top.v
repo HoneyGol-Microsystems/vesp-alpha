@@ -26,7 +26,7 @@ module top (
         .clk(sysClk)
     );
 
-    cpu cpu (
+    cpu cpuInst (
         .clk(sysClk),
         .reset(sysRes),
 
