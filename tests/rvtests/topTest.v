@@ -20,7 +20,7 @@ module topTest();
 
         $dumpfile("test");
 		$dumpvars;
-        $readmemh(`__MKPY_CURRENT_TEST, dut.ramMain.RAM);
+        $readmemh(`__MKPY_CURRENT_TEST, dut.ramInst.RAM, 0, `RAM_WORD_CNT-1);
 
         reset <= 1;
         #1;

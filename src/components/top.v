@@ -1,5 +1,6 @@
 `include "src/components/cpu.v"
 `include "src/components/ram.v"
+`include "src/constants.vh"
 
 module top (
     input sysClk,
@@ -11,7 +12,9 @@ module top (
     wire [31:0] instrBusAddr, instrBusData, dataBusAddr, dataBusDataWrite,
                 dataBusDataRead, dataBusMask;
     
-    ram ramMain (
+    ram #(
+        .WORD_CNT(`RAM_WORD_CNT)
+    ) ramInst (
         .a1(instrBusAddr),
         .do1(instrBusData),
 
