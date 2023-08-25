@@ -10,10 +10,10 @@ module top (
     input sysRes
 );
 
-    wire dataBusWE, ex;
+    wire dataBusWE;
     wire [3:0] writeMask;
     wire [31:0] instrBusAddr, instrBusData, dataBusAddr, dataBusDataWrite,
-                dataBusDataRead, dataBusMask;
+                dataBusDataRead;
     
     ram #(
         .WORD_CNT(`RAM_WORD_CNT)
@@ -40,9 +40,7 @@ module top (
         .memReadData(dataBusDataRead),
         .memWriteData(dataBusDataWrite),
         .memWr(dataBusWE),
-        .wrMask(writeMask),
-
-        .except(ex)
+        .wrMask(writeMask)
     );
 
 endmodule
