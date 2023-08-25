@@ -1,7 +1,6 @@
 `ifndef __FILE_LEDDEBUGTOP_V
 `define __FILE_LEDDEBUGTOP_V
 
-`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -35,7 +34,7 @@ module ledDebugTop(
         .sysRes(sysRes)
     );
     
-    assign PCdebug = topInst.cpu.PC[31:16];
+    assign PCdebug = topInst.cpuInst.PC[31:16];
 
 endmodule
 
