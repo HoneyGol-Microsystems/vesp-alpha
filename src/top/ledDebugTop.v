@@ -30,12 +30,23 @@ module ledDebugTop(
     output [31:16] PCdebug
 );
 
+    reg clkdiv2;
+    
+    always @(posedge sysClk) begin
+        
+        clkdiv2 = ~clkdiv2;
+        
+        if (sysRes == 1) begin
+            clkdiv2 = 0;
+        end
+    end
+
     top topInst(
-        .sysClk(sysClk),
+        .sysClk(clkdiv2),
         .sysRes(sysRes)
     );
     
-    assign PCdebug = topInst.cpu.PC[31:16];
+    assign PCdebug = topInst.cpuInst.PC[31:16];
 
 endmodule
 
