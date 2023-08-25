@@ -25,7 +25,7 @@ module ledDebugTop(
         .sysRes(sysRes)
     );
     
-    assign PCdebug = topInst.cpuInst.PC[31:16];
+    assign PCdebug = topInst.cpuInst.registerFile32Inst.rf[1][31:16];
 
 endmodule
 

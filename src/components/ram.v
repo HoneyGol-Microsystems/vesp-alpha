@@ -9,7 +9,8 @@ module ram #(
     input  [31:0] a1, a2,
     // Data inputs and outputs.
     input  [31:0] di2,
-    output [31:0] do1, do2,
+    output reg [31:0] do1,
+    output [31:0] do2,
     // Data mask selection.
     input  [3:0]  m2,
     // Write enable.
@@ -17,10 +18,19 @@ module ram #(
     input         clk
 );
 
-    reg [31:0] RAM [WORD_CNT-1:0];
+     (*rom_style = "block"*) reg [31:0] RAM [WORD_CNT-1:0];
 
-    assign do1 = RAM[a1[31:2]];
+//    assign do1 = RAM[a1[31:2]];
     assign do2 = RAM[a2[31:2]];
+
+    always @(*) begin
+        case (a1)
+            0: do1 = 'h00000093;
+            1: do1 = 'h00108093;
+            2: do1 = 'hfe000ee3;
+            default: do1 = RAM[a1[31:2]]; 
+        endcase
+    end
 
     always @(posedge clk) begin
         if (we2) begin
@@ -39,7 +49,7 @@ module ram #(
             if (m2[3]) begin
                 RAM[a2[31:2]][31:24] <= di2[31:24];
             end
-        end
+        end    
     end
 
 endmodule

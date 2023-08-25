@@ -36,5 +36,5 @@ set_property PACKAGE_PIN V19 [get_ports {PCdebug[19]}]
 set_property PACKAGE_PIN U19 [get_ports {PCdebug[18]}]
 set_property PACKAGE_PIN E19 [get_ports {PCdebug[17]}]
 set_property PACKAGE_PIN U16 [get_ports {PCdebug[16]}]
-create_clock -period 20.000 -name CLK -waveform {0.000 10.000} [get_ports sysClk]
+create_clock -period 10.000 -name CLK -waveform {0.000 5.000} [get_ports sysClk]
 
