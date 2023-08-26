@@ -7,7 +7,7 @@ fi
 
 elfSrcPath=$1
 hexDestPath=$2
-elfFiles=$(scanelf -E ET_EXEC -BF %F "$elfSrcPath" | grep 'rv32')
+elfFiles=$(scanelf -E ET_EXEC -BF %F "$elfSrcPath")
 
 for f in $elfFiles; do
     fName=$(basename "$f")
