@@ -14,7 +14,6 @@ module cpu (
     input      [31:0] instruction,
     input      [31:0] memReadData,
     output            memWr,  // write enable to data memory
-    output            except, // exception TODO: type of exception
     output     [3:0]  wrMask,
     output reg [31:0] PC,
     output     [31:0] memAddr,
