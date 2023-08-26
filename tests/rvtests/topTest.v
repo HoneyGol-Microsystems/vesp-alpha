@@ -66,18 +66,18 @@ module topTest();
         // end
         // $display("------------------------------------------");
 
-        if (dut.instrBusData == `ECALL) begin
+        if (dut.instrBusData === `ECALL) begin
             $display(`ASSERT_SUCCESS);
             $finish;
         end
 
-        if (dut.instrBusData == `EBREAK) begin
+        if (dut.instrBusData === `EBREAK) begin
             $display(`ASSERT_FAIL);
             $finish;
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpuInst.PC == `PC_STOP) begin
+        // if (dut.cpuInst.PC === `PC_STOP) begin
         //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end
