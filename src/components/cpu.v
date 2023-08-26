@@ -7,6 +7,7 @@
 `include "src/components/immDecoder.v"
 `include "src/components/registerFile32.v"
 `include "src/components/extend.v"
+`include "src/components/csr.v"
 
 module cpu (
     input             clk,
@@ -21,17 +22,18 @@ module cpu (
 );
 
     // wire/reg declarations
-    wire ALUZero, ALUImm, ALUToPC, branch, memToReg, regWr,
-         rs2ShiftSel, uext;
-    wire [1:0] loadSel, maskSel, regDataSel;
+    wire ALUZero, ALUToPC, branch, memToReg, regWr, rs2ShiftSel,
+         uext, csrWr, mcauseWr, mepcWr;
+    wire [1:0] loadSel, maskSel, regDataSel, ALUSrc1, ALUSrc2;
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
-    wire [31:0] src1, src2, rs1, rs2, ALURes, imm, immPC, branchTarget,
-                regRes, dataExtLB, dataExtLH, nextPC, PC4;
+    wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
+                regRes, dataExtLB, dataExtLH, nextPC, PC4, csrOut,
+                mepcOut, mtvecOut, mcauseOut, mepcIn, mcauseIn;
     reg [3:0] mask;
     reg [7:0] dataLB;
-    reg [31:0] regData, memData;
+    reg [31:0] regData, memData, src2;
 
     // module instantiations
     controller controllerInst (
@@ -39,7 +41,8 @@ module cpu (
         .memAddr(memAddr),
         .ALUZero(ALUZero),
         .ALUCtrl(ALUCtrl),
-        .ALUImm(ALUImm),
+        .ALUSrc1(ALUSrc1),
+        .ALUSrc2(ALUSrc2),
         .ALUToPC(ALUToPC),
         .branch(branch),
         .loadSel(loadSel),
@@ -80,6 +83,22 @@ module cpu (
         .rd2(rs2)
     );
 
+    csr csrInst (
+        .reset(reset),
+        .clk(clk),
+        .we(csrWr),
+        .a(imm[11:0]),
+        .di(ALURes),
+        .do(csrOut),
+        .mepcDo(mepcOut),
+        .mtvecDo(mtvecOut),
+        .mcauseDo(mcauseOut),
+        .mepcWe(mepcWr),
+        .mcauseWe(mcauseWr),
+        .mepcDi(mepcIn),
+        .mcauseDi(mcauseIn)
+    );
+
     extend #(
         .DATA_LEN(8),
         .RES_LEN(`XLEN)
@@ -103,8 +122,7 @@ module cpu (
     assign immPC        = imm + PC;
     assign branchTarget = ALUToPC ? ALURes : immPC;
     assign nextPC       = branch ? branchTarget : PC4;
-    assign src1         = rs1;
-    assign src2         = ALUImm ? imm : rs2;
+    assign src1         = ALUSrc1 ? imm : rs1;
     assign rs2Shift     = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
     assign memWriteData = rs2 << rs2Shift;
     assign memAddr      = ALURes;
@@ -121,6 +139,15 @@ module cpu (
         end
     end
 
+    // ALUSrc2 mux
+    always @(*) begin
+        case (ALUSrc2)
+            2'b00:   src2 = rs2;
+            2'b01:   src2 = imm;
+            default: src2 = csrOut;
+        endcase
+    end
+
     // maskSel mux
     always @(*) begin
         case (maskSel)
@@ -133,10 +160,11 @@ module cpu (
     // regDataSel mux
     always @(*) begin
         case (regDataSel)
-            2'b00:   regData = ALURes;
-            2'b01:   regData = immPC;
-            2'b10:   regData = imm;
-            default: regData = PC4;
+            3'b000:  regData = ALURes;
+            3'b001:  regData = immPC;
+            3'b010:  regData = imm;
+            3'b011:  regData = PC4;
+            default: regData = csrOut;
         endcase
     end
 

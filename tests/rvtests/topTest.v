@@ -48,12 +48,13 @@ module topTest();
         //     "immPC: h%h\n", dut.cpuInst.immPC,
         //     "branchTarget: h%h\n", dut.cpuInst.branchTarget,
         //     "branch: %b\n", dut.cpuInst.branch,
-        //     "ALUSrc1: %b (h%h)\n", dut.cpuInst.src1, dut.cpuInst.src1,
-        //     "ALUSrc2: %b (h%h)\n", dut.cpuInst.src2, dut.cpuInst.src2,
+        //     "ALUOp1: %b (h%h)\n", dut.cpuInst.src1, dut.cpuInst.src1,
+        //     "ALUOp2: %b (h%h)\n", dut.cpuInst.src2, dut.cpuInst.src2,
         //     "ALUCtrl: %b\n", dut.cpuInst.ALUCtrl,
         //     "ALURes: %b (h%h)\n", dut.cpuInst.ALURes, dut.cpuInst.ALURes,
         //     "ALUZero: %b\n", dut.cpuInst.ALUZero,
-        //     "ALUImm: %b\n", dut.cpuInst.ALUImm,
+        //     "ALUSrc1: %b\n", dut.cpuInst.ALUSrc1,
+        //     "ALUSrc2: %b\n", dut.cpuInst.ALUSrc2,
         //     "regWr: %b\n", dut.cpuInst.regWr,
         //     "regDataSel: %b\n", dut.cpuInst.regDataSel,
         //     "memToReg: %b", dut.cpuInst.memToReg
@@ -65,18 +66,18 @@ module topTest();
         // end
         // $display("------------------------------------------");
 
-        if (dut.instrBusData == `ECALL) begin
+        if (dut.instrBusData === `ECALL) begin
             $display(`ASSERT_SUCCESS);
             $finish;
         end
 
-        if (dut.instrBusData == `EBREAK) begin
+        if (dut.instrBusData === `EBREAK) begin
             $display(`ASSERT_FAIL);
             $finish;
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpuInst.PC == `PC_STOP) begin
+        // if (dut.cpuInst.PC === `PC_STOP) begin
         //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end

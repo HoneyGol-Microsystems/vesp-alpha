@@ -8,6 +8,7 @@ module immDecoder (
 
     wire [2:0] funct3 = instruction[14:12];
     wire [6:0] opcode = instruction[6:0];
+    wire [4:0] rs1    = instruction[19:15];
 
     always @(*) begin
         casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
@@ -55,7 +56,7 @@ module immDecoder (
                 imm[31:21] = { 11{instruction[31]} };
             end
 
-            default: imm = 0;
+            default: imm = rs1; // CSRRWI, CSRRSI or CSRRCI
         endcase
     end
 
