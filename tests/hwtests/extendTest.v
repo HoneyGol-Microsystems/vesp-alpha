@@ -1,4 +1,5 @@
 `include "src/components/extend.v"
+`include "src/constants.vh"
 
 module extendTest();
 	reg [7:0] data8;
@@ -43,7 +44,7 @@ module extendTest();
         data16 = { data8[7:4], 8'b0, data8[3:0] };
         uext = 0;
 
-		#1; $finish;
+		#1; $display(`ASSERT_SUCCESS); $finish;
 	end
 
 	always @ (*) #1 $display ("data8=%b, uext=%b, res8=%b\ndata16=%b, uext=%b, res16=%b\n", data8, uext, res8, data16, uext, res16);

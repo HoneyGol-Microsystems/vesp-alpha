@@ -1,4 +1,5 @@
 `include "src/components/registerFile32.v"
+`include "src/constants.vh"
 
 module registerFileTest();
 	reg [4:0] a1, a2, a3;
@@ -32,7 +33,7 @@ module registerFileTest();
 		we3 = 1;
 		a1 = a3;
 
-		#10; $finish;
+		#10; $display(`ASSERT_SUCCESS); $finish;
 	end
 
 	// generate clock
