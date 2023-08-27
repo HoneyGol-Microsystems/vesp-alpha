@@ -25,8 +25,7 @@ module cpu (
     wire ALUZero, ALUToPC, branch, memToReg, regWr, rs2ShiftSel,
          uext, csrWr, mcauseWr, mepcWr;
     wire [1:0] loadSel, maskSel, regDataSel, ALUSrc1, ALUSrc2;
-    wire [3:0] ALUCtrl;
-    wire [4:0] rs2Shift;
+    wire [4:0] ALUCtrl, rs2Shift;
     wire [15:0] dataLH;
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
                 regRes, dataExtLB, dataExtLH, nextPC, PC4, csrOut,
