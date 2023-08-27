@@ -2,6 +2,7 @@
 `define __FILE_LEDDEBUGTOP_V
 
 `include "src/components/top.v"
+`include "src/primitives/synchronizer.v"
 
 module ledDebugTop(
     input sysClk,
@@ -9,15 +10,20 @@ module ledDebugTop(
     output [31:16] PCdebug
 );
 
+    wire reset;
     reg clkdiv2;
+
+    synchronizer #(
+        .LEN(1),
+        .STAGES(2)
+    ) resetSync (
+        .clk(clkdiv2),
+        .dataIn(sysRes),
+        .dataOut(reset)
+    );    
     
     always @(posedge sysClk) begin
-        
-        clkdiv2 = ~clkdiv2;
-        
-        if (sysRes == 1) begin
-            clkdiv2 = 0;
-        end
+       clkdiv2 <= ~clkdiv2;
     end
 
     top topInst(
