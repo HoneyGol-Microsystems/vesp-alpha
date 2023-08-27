@@ -32,7 +32,7 @@ def rvtest():
 
     PREPROCESSED_TOP_PATH = os.path.join(BUILD_DIR, "tmp.v")
 
-    testfiles = [file for file in os.listdir(RVTESTS_DIR) if file.endswith(".hex") and "rv32" in file]
+    testfiles = [file for file in os.listdir(RVTESTS_DIR) if file.endswith(".hex")]
     testfiles.sort()
 
     logging.debug(f"Found test files: {testfiles}")
