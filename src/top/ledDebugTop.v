@@ -23,7 +23,7 @@ module ledDebugTop(
     );    
     
     always @(posedge sysClk) begin
-       clkdiv2 = ~clkdiv2;
+       clkdiv2 <= ~clkdiv2;
     end
 
     top topInst(
