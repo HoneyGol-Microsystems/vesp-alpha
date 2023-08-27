@@ -17,7 +17,7 @@ module synchronizer #(
         
         buffer[0] <= dataIn;
         
-        for (i = 1; i < STAGES; i++) begin
+        for (i = 1; i < STAGES; i = i + 1) begin
             buffer[i] <= buffer[i - 1];
         end
     end
