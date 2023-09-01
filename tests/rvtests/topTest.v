@@ -6,10 +6,14 @@
 `define EBREAK              32'b100000000000001110011
 `define PC_STOP             'ha4
 
+`define MAX_QUEUE_SIZE      10
+
 module topTest();
     
     reg clk, reset;
     integer i;
+    integer pcValuesLog [`MAX_QUEUE_SIZE - 1:0];
+    integer pcValuesLogPtr = 0;
 
     top dut(
         .sysClk(clk),
@@ -66,6 +70,13 @@ module topTest();
         // end
         // $display("------------------------------------------");
 
+        if (pcValuesLogPtr >= `MAX_QUEUE_SIZE - 1) begin
+            pcValuesLogPtr = 0;
+        end
+
+        pcValuesLog[pcValuesLogPtr] = dut.cpuInst.PC;
+        pcValuesLogPtr++;
+
         if (dut.instrBusData === `ECALL) begin
             $display(`ASSERT_SUCCESS);
             $finish;
@@ -73,6 +84,13 @@ module topTest();
 
         if (dut.instrBusData === `EBREAK) begin
             $display(`ASSERT_FAIL);
+            
+            $display("Last PC values dump:");
+            for(integer currentPc = pcValuesLogPtr; currentPc < `MAX_QUEUE_SIZE; currentPc++)
+                $display("%x", pcValuesLog[currentPc]);
+            for(integer currentPc = 0; currentPc < pcValuesLogPtr; currentPc++)
+                $display("%x", pcValuesLog[currentPc]);
+
             $finish;
         end
 
