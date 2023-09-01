@@ -27,6 +27,9 @@ module csr (
     // Machine Trap Handling.
     reg [31:0] mepc, mtvec;
 
+    // ====== Machine Trap Handling ======
+    reg [31:0] mscratch;
+
     // ====== Direct register reads ======
     assign mepcDo   = mepc;
     assign mtvecDo  = mtvec;
@@ -38,6 +41,7 @@ module csr (
             // misa :)
             'h301:   do = 'b10000000000000000000000100000000;
             'h305:   do = mtvec;
+            'h340:   do = mscratch;
             'h341:   do = mepc;
             'h342:   do = mcause;
             default: do = 0;
@@ -49,15 +53,18 @@ module csr (
     always @(posedge clk) begin
 
         if (reset) begin
-            mtvec  = 0;
-            mepc   = 0;
-            mcause = 0;
+
+            mtvec       = 0;
+            mepc        = 0;
+            mcause      = 0;
+            mscratch    = 0;
 
         end else begin
             if (we) begin
                 case (a)
                     // Permit MODE only 0, 1 (direct, vectored).
                     'h305: mtvec = {di[31:2], di[1:0] < 2 ? di[1:0] : mtvec[1:0]};
+                    'h340: mscratch = di;
                     'h341: mepc  = di;
                 endcase
             end
