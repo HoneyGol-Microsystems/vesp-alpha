@@ -39,7 +39,7 @@ module csr (
     always @(*) begin
         case (a)
             // misa :)
-            'h301:   do = 'b10000000000000000000000100000000;
+            'h301:   do = 'b01000000000000000000000100000000;
             'h305:   do = mtvec;
             'h340:   do = mscratch;
             'h341:   do = mepc;
