@@ -9,7 +9,7 @@ module controller (
     output reg [1:0]  ALUSrc1,
     output reg [1:0]  ALUSrc2,
     output reg        ALUToPC,
-    output reg        branch,
+    output reg [1:0]  nextPCSel,
     output reg [1:0]  loadSel,
     output reg [1:0]  maskSel,
     output reg        memToReg,
@@ -36,7 +36,7 @@ module controller (
         ALUSrc1     = 0;
         ALUSrc2     = 0;
         ALUToPC     = 0;
-        branch      = 0;
+        nextPCSel   = 0;
         loadSel     = funct3[1:0];
         maskSel     = funct3[1:0];
         memToReg    = 0;
@@ -88,7 +88,7 @@ module controller (
             5'b11001: begin // JALR
                 ALUSrc2    = 2'b01;
                 ALUToPC    = 1;
-                branch     = 1;
+                nextPCSel  = 1;
                 regDataSel = 3'b011;
                 regWr      = 1;
             end
@@ -102,27 +102,27 @@ module controller (
                 case (funct3)
                     3'b000: begin // BEQ
                         ALUCtrl = 4'b0010;
-                        branch  = ALUZero;
+                        nextPCSel  = {1'b0, ALUZero};
                     end
                     3'b001: begin // BNE
                         ALUCtrl = 4'b0010;
-                        branch  = ~ALUZero;
+                        nextPCSel  = {1'b0, ~ALUZero};
                     end
                     3'b100: begin // BLT
                         ALUCtrl = 4'b1010;
-                        branch  = ~ALUZero;
+                        nextPCSel  = {1'b0, ~ALUZero};
                     end
                     3'b101: begin // BGE
                         ALUCtrl = 4'b1010;
-                        branch  = ALUZero;
+                        nextPCSel  = {1'b0, ALUZero};
                     end
                     3'b110: begin // BLTU
                         ALUCtrl = 4'b1011;
-                        branch  = ~ALUZero;
+                        nextPCSel  = {1'b0, ~ALUZero};
                     end
                     3'b111: begin // BGEU
                         ALUCtrl = 4'b1011;
-                        branch  = ALUZero;
+                        nextPCSel  = {1'b0, ALUZero};
                     end
                 endcase
             end
@@ -133,9 +133,9 @@ module controller (
             end
 
             5'b11011: begin // J-type
-                branch     = 1;
-                regDataSel = 3'b011;
-                regWr      = 1;
+                nextPCSel   = 1;
+                regDataSel  = 3'b011;
+                regWr       = 1;
             end
 
             5'b00011: begin end // FENCE or Zifencei standard extension

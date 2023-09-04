@@ -22,19 +22,19 @@ module cpu (
 );
 
     // wire/reg declarations
-    wire ALUZero, ALUToPC, branch, memToReg, regWr, rs2ShiftSel,
+    wire ALUZero, ALUToPC, memToReg, regWr, rs2ShiftSel,
          uext, csrWr, mcauseWr, mepcWr;
-    wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2;
+    wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2, nextPCSel;
     wire [2:0] regDataSel;
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
-                regRes, dataExtLB, dataExtLH, nextPC, PC4, csrOut,
+                regRes, dataExtLB, dataExtLH, PC4, csrOut,
                 mepcOut, mtvecOut, mcauseOut, mepcIn, mcauseIn;
     reg [3:0] mask;
     reg [7:0] dataLB;
-    reg [31:0] regData, memData, src2;
+    reg [31:0] regData, memData, src2, nextPC;
 
     // module instantiations
     controller controllerInst (
@@ -45,7 +45,7 @@ module cpu (
         .ALUSrc1(ALUSrc1),
         .ALUSrc2(ALUSrc2),
         .ALUToPC(ALUToPC),
-        .branch(branch),
+        .nextPCSel(nextPCSel),
         .loadSel(loadSel),
         .maskSel(maskSel),
         .memToReg(memToReg),
@@ -123,7 +123,6 @@ module cpu (
     assign PC4          = PC + 4;
     assign immPC        = imm + PC;
     assign branchTarget = ALUToPC ? ALURes : immPC;
-    assign nextPC       = branch ? branchTarget : PC4;
     assign src1         = ALUSrc1 ? imm : rs1;
     assign rs2Shift     = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
     assign memWriteData = rs2 << rs2Shift;
@@ -140,6 +139,18 @@ module cpu (
             PC <= nextPC;
         end
     end
+
+    // Next PC mux.
+    always @(*) begin
+        case (nextPCSel)
+            // Normal PC increment.
+            2'b00:      nextPC = PC4;
+            // Branch taken.
+            2'b01:      nextPC = branchTarget;
+            // Interrupt.
+            default:    nextPC = 32'h8;
+        endcase
+    end    
 
     // ALUSrc2 mux
     always @(*) begin
