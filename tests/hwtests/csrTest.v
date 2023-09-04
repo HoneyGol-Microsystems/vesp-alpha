@@ -99,47 +99,47 @@ module csrTest();
         a = 'h340;
         we = 0;
         #2;
-        `ASSERT(do == 0, "0x340 unexpected write!");
+        `ASSERT(do === 0, "0x340 unexpected write!");
         
         we = 1;
         di = 45446848;
         #2
-        `ASSERT(do == 45446848, "0x340 write error!");
+        `ASSERT(do === 45446848, "0x340 write error!");
 
         a = 'h341;
         we = 0;
         #2;
-        `ASSERT(do == 0, "0x341 unexpected write!");
+        `ASSERT(do === 0, "0x341 unexpected write!");
         we = 1;
         di = 86492168;
         #2;
-        `ASSERT(do == 86492168, "0x341 write error!");
+        `ASSERT(do === 86492168, "0x341 write error!");
 
         a = 'h342;
         we = 1;
         di = 508943;
         #2;
-        `ASSERT(do == 0, "0x342 unexpected write!");
+        `ASSERT(do === 0, "0x342 unexpected write!");
 
         mepcWe = 1;
         mepcDi = 80;
         #2;
-        `ASSERT(mepcDo == 80, "mempcDo write error!");
+        `ASSERT(mepcDo === 80, "mempcDo write error!");
 
         mepcWe = 0;
         mepcDi = 0;
         #2;
-        `ASSERT(mepcDo == 80, "mempcDo unexpected write!");
+        `ASSERT(mepcDo === 80, "mempcDo unexpected write!");
 
         mcauseWe = 1;
         mcauseDi = 986;
         #2;
-        `ASSERT(mcauseDo == 986, "mcauseDi write error!");
+        `ASSERT(mcauseDo === 986, "mcauseDi write error!");
 
         mcauseWe = 0;
         mcauseDi = 20;
         #2;
-        `ASSERT(mcauseDo == 986, "mcauseDi unexpected write!")
+        `ASSERT(mcauseDo === 986, "mcauseDi unexpected write!")
 
         $display(`ASSERT_SUCCESS);
 		#1; $finish;
