@@ -19,7 +19,8 @@ module controller (
     output reg        regWr,
     output reg        rs2ShiftSel,
     output reg        uext,
-    output reg        csrWr
+    output reg        csrWr,
+    output reg        mret
 );
 
     wire [2:0] funct3 = instruction[14:12];
@@ -48,6 +49,7 @@ module controller (
         rs2ShiftSel = funct3[0];
         uext        = funct3[2];
         csrWr       = 0;
+        mret        = 0;
 
         casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
@@ -142,13 +144,26 @@ module controller (
 
             5'b00011: begin end // FENCE or Zifencei standard extension
 
-            5'b11100: begin // ECALL, EBREAK or Zicsr standard extension
+            5'b11100: begin // SYSTEM: ECALL, EBREAK, MRET or Zicsr standard extension
                 case (funct3)
                     3'b000: begin
-                        if (rs2[0]) begin // ECALL
+
+                        if (funct7[3]) begin // SRET, MRET
+
+                            if(funct7[4]) begin // MRET
+                                mret = 1;
+                            end else begin // SRET
                             
-                        end else begin // EBREAK
+                            end
+
+                        end else begin
                             
+                            if (rs2[0]) begin // ECALL
+                                
+                            end else begin // EBREAK
+                                
+                            end
+
                         end
                     end
                     3'b001: begin // CSRRW

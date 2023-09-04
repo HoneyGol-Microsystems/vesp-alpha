@@ -33,11 +33,11 @@ module cpu (
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
                 regRes, dataExtLB, dataExtLH, PC4, csrOut,
                 mepcOut, mtvecOut, mcauseOut, mcauseIn,
-                nextPC, nextPCInt;
+                nextPC, nextPCInt, branchMretTarget;
     reg [3:0] mask;
     reg [7:0] dataLB;
     reg [31:0] regData, memData, src2;
-
+    wire mret;
     wire interrupt;
     wire irqBus;
 
@@ -59,7 +59,8 @@ module cpu (
         .regWr(regWr),
         .rs2ShiftSel(rs2ShiftSel),
         .uext(uext),
-        .csrWr(csrWr)
+        .csrWr(csrWr),
+        .mret(mret)
     );
 
     alu #(
@@ -131,18 +132,19 @@ module cpu (
     );
 
     // assignments (including 1bit muxes)
-    assign PC4          = PC + 4;
-    assign immPC        = imm + PC;
-    assign branchTarget = ALUToPC ? ALURes : immPC;
-    assign src1         = ALUSrc1 ? imm : rs1;
-    assign rs2Shift     = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
-    assign memWriteData = rs2 << rs2Shift;
-    assign memAddr      = ALURes;
-    assign wrMask       = mask << ALURes[1:0];
-    assign dataLH       = ALURes[1] ? memReadData[31:16] : memReadData[15:0];
-    assign regRes       = memToReg ? memData : regData;
-    assign nextPC       = branch ? branchTarget : PC4;
-    assign nextPCInt    = interrupt ? 'h8 : nextPC;
+    assign PC4              = PC + 4;
+    assign immPC            = imm + PC;
+    assign branchTarget     = ALUToPC ? ALURes : immPC;
+    assign src1             = ALUSrc1 ? imm : rs1;
+    assign rs2Shift         = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
+    assign memWriteData     = rs2 << rs2Shift;
+    assign memAddr          = ALURes;
+    assign wrMask           = mask << ALURes[1:0];
+    assign dataLH           = ALURes[1] ? memReadData[31:16] : memReadData[15:0];
+    assign regRes           = memToReg ? memData : regData;
+    assign branchMretTarget = mret ? mepcOut : branchTarget;
+    assign nextPC           = branch | mret ? branchMretTarget : PC4;
+    assign nextPCInt        = interrupt ? 'h8 : nextPC;
 
     // PCREG
     always @(posedge clk) begin
