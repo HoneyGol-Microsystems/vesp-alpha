@@ -50,7 +50,7 @@ module csrTest();
         $display("- Main I/O reads");
         a = 'h301;
         #0;
-        `ASSERT(do === 'b10000000000000000000000100000000, "0x301 read error!")
+        `ASSERT(do === 'b01000000000000000000000100000000, "0x301 read error!")
 
         a = 'h305;
         #0;
@@ -68,11 +68,11 @@ module csrTest();
         we = 0;
         di = 420;
         #2;
-        `ASSERT(do === 'b10000000000000000000000100000000, "0x301 unexpected write!");
+        `ASSERT(do === 'b01000000000000000000000100000000, "0x301 unexpected write!");
         
         we = 1;
         #2;
-        `ASSERT(do === 'b10000000000000000000000100000000, "0x301 unexpected write!");
+        `ASSERT(do === 'b01000000000000000000000100000000, "0x301 unexpected write!");
         
         a  = 'h305;
         we = 0;
@@ -95,6 +95,16 @@ module csrTest();
         di = 'b1111_1101;
         #2;
         `ASSERT(do === 'b1111_1101, "0x305 write error!");
+
+        a = 'h340;
+        we = 0;
+        #2;
+        `ASSERT(do == 0, "0x340 unexpected write!");
+        
+        we = 1;
+        di = 45446848;
+        #2
+        `ASSERT(do == 45446848, "0x340 write error!");
 
         a = 'h341;
         we = 0;
