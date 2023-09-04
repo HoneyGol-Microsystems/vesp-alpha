@@ -5,12 +5,12 @@ module interruptController # (
     parameter EXT_IRQ_COUNT = 4
 ) (
     input       clk,
-    input       [EXT_IRQ_COUNT-1:0] extIrq,
+    input       [EXT_IRQ_COUNT-1:0] irqBus,
     output reg  interrupt
 );
 
     always @(posedge clk) begin
-        if (extIrq > 0)
+        if (irqBus > 0)
             interrupt = 1;
         else
             interrupt = 0;

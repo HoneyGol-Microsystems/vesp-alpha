@@ -8,6 +8,7 @@
 `include "src/components/registerFile32.v"
 `include "src/components/extend.v"
 `include "src/components/csr.v"
+`include "src/components/interruptController.v"
 
 module cpu (
     input             clk,
@@ -23,18 +24,22 @@ module cpu (
 
     // wire/reg declarations
     wire ALUZero, ALUToPC, memToReg, regWr, rs2ShiftSel,
-         uext, csrWr, mcauseWr, mepcWr;
-    wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2, nextPCSel;
+         uext, csrWr, mcauseWr, branch;
+    wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2;
     wire [2:0] regDataSel;
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
                 regRes, dataExtLB, dataExtLH, PC4, csrOut,
-                mepcOut, mtvecOut, mcauseOut, mepcIn, mcauseIn;
+                mepcOut, mtvecOut, mcauseOut, mcauseIn,
+                nextPC, nextPCInt;
     reg [3:0] mask;
     reg [7:0] dataLB;
-    reg [31:0] regData, memData, src2, nextPC;
+    reg [31:0] regData, memData, src2;
+
+    wire interrupt;
+    wire irqBus;
 
     // module instantiations
     controller controllerInst (
@@ -45,7 +50,7 @@ module cpu (
         .ALUSrc1(ALUSrc1),
         .ALUSrc2(ALUSrc2),
         .ALUToPC(ALUToPC),
-        .nextPCSel(nextPCSel),
+        .branch(branch),
         .loadSel(loadSel),
         .maskSel(maskSel),
         .memToReg(memToReg),
@@ -85,6 +90,12 @@ module cpu (
         .rd2(rs2)
     );
 
+    interruptController #(1) interruptControllerInst(
+        .clk(clk),
+        .irqBus(irqBus),
+        .interrupt(interrupt)
+    );
+
     csr csrInst (
         .reset(reset),
         .clk(clk),
@@ -95,9 +106,9 @@ module cpu (
         .mepcDo(mepcOut),
         .mtvecDo(mtvecOut),
         .mcauseDo(mcauseOut),
-        .mepcWe(mepcWr),
+        .mepcWe(interrupt),
         .mcauseWe(mcauseWr),
-        .mepcDi(mepcIn),
+        .mepcDi(nextPC),
         .mcauseDi(mcauseIn)
     );
 
@@ -130,27 +141,17 @@ module cpu (
     assign wrMask       = mask << ALURes[1:0];
     assign dataLH       = ALURes[1] ? memReadData[31:16] : memReadData[15:0];
     assign regRes       = memToReg ? memData : regData;
+    assign nextPC       = branch ? branchTarget : PC4;
+    assign nextPCInt    = interrupt ? 'h8 : nextPC;
 
     // PCREG
     always @(posedge clk) begin
         if (reset) begin
             PC <= 0;
         end else begin
-            PC <= nextPC;
+            PC <= nextPCInt;
         end
     end
-
-    // Next PC mux.
-    always @(*) begin
-        case (nextPCSel)
-            // Normal PC increment.
-            2'b00:      nextPC = PC4;
-            // Branch taken.
-            2'b01:      nextPC = branchTarget;
-            // Interrupt.
-            default:    nextPC = 32'h8;
-        endcase
-    end    
 
     // ALUSrc2 mux
     always @(*) begin
