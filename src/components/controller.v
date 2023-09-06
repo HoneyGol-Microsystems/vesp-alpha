@@ -20,7 +20,9 @@ module controller (
     output reg        rs2ShiftSel,
     output reg        uext,
     output reg        csrWr,
-    output reg        mret
+    output reg        mret,
+    output reg        exception,
+    output reg [30:0] excCode
 );
 
     wire [2:0] funct3 = instruction[14:12];
@@ -50,6 +52,8 @@ module controller (
         uext        = funct3[2];
         csrWr       = 0;
         mret        = 0;
+        exception   = 0;
+        excCode     = 0;
 
         casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
