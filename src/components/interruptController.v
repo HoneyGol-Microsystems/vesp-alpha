@@ -8,7 +8,7 @@ module interruptController # (
     input               [EXT_IRQ_COUNT-1:0] irqBus,
     
     output reg          interrupt,
-    output reg  [31:0]  intCode
+    output reg  [30:0]  intCode
 );
 
     always @(posedge clk) begin

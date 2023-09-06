@@ -30,10 +30,11 @@ module cpu (
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
+    wire [30:0] intCode;
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
                 regRes, dataExtLB, dataExtLH, PC4, csrOut,
                 mepcOut, mtvecOut, mcauseOut, mcauseIn,
-                nextPC, nextPCInt, branchMretTarget;
+                nextPC, nextPCInt, branchMretTarget, intExcCode;
     reg [3:0] mask;
     reg [7:0] dataLB;
     reg [31:0] regData, memData, src2;
@@ -94,7 +95,8 @@ module cpu (
     interruptController #(1) interruptControllerInst(
         .clk(clk),
         .irqBus(irqBus),
-        .interrupt(interrupt)
+        .interrupt(interrupt),
+        .intCode(intCode)
     );
 
     csr csrInst (
@@ -108,9 +110,9 @@ module cpu (
         .mtvecDo(mtvecOut),
         .mcauseDo(mcauseOut),
         .mepcWe(interrupt),
-        .mcauseWe(mcauseWr),
+        .mcauseWe(interrupt),
         .mepcDi(nextPC),
-        .mcauseDi(mcauseIn)
+        .mcauseDi(intExcCode)
     );
 
     extend #(
@@ -145,6 +147,8 @@ module cpu (
     assign branchMretTarget = mret ? mepcOut : branchTarget;
     assign nextPC           = branch | mret ? branchMretTarget : PC4;
     assign nextPCInt        = interrupt ? 'h8 : nextPC;
+
+    assign intExcCode       = {interrupt, intCode};
 
     // PCREG
     always @(posedge clk) begin
