@@ -30,23 +30,30 @@ module cpu (
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
-    wire [30:0] intCode;
+    wire [30:0] intCode, excCode;
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
                 regRes, dataExtLB, dataExtLH, PC4, csrOut,
                 mepcOut, mtvecOut, mcauseOut, mcauseIn,
-                nextPC, nextPCInt, branchMretTarget, intExcCode;
+                nextPC, nextPCInt, branchMretTarget, intExcCode, nextMepc,
+                ISRAddress;
     reg [3:0] mask;
     reg [7:0] dataLB;
     reg [31:0] regData, memData, src2;
     wire mret;
     wire interrupt;
     wire irqBus;
+    wire exception;
+    wire intExc;
 
     // module instantiations
     controller controllerInst (
         .instruction(instruction),
         .memAddr(memAddr),
         .ALUZero(ALUZero),
+        .interrupt(interrupt),
+        .clk(clk),
+        .reset(reset),
+
         .ALUCtrl(ALUCtrl),
         .ALUSrc1(ALUSrc1),
         .ALUSrc2(ALUSrc2),
@@ -61,7 +68,8 @@ module cpu (
         .rs2ShiftSel(rs2ShiftSel),
         .uext(uext),
         .csrWr(csrWr),
-        .mret(mret)
+        .mret(mret),
+        .exception(exception)
     );
 
     alu #(
@@ -109,9 +117,9 @@ module cpu (
         .mepcDo(mepcOut),
         .mtvecDo(mtvecOut),
         .mcauseDo(mcauseOut),
-        .mepcWe(interrupt),
-        .mcauseWe(interrupt),
-        .mepcDi(nextPC),
+        .mepcWe(intExc),
+        .mcauseWe(intExc),
+        .mepcDi(nextMepc),
         .mcauseDi(intExcCode)
     );
 
@@ -146,9 +154,17 @@ module cpu (
     assign regRes           = memToReg ? memData : regData;
     assign branchMretTarget = mret ? mepcOut : branchTarget;
     assign nextPC           = branch | mret ? branchMretTarget : PC4;
-    assign nextPCInt        = interrupt ? 'h8 : nextPC;
+    assign nextPCInt        = intExc ? ISRAddress : nextPC;
 
-    assign intExcCode       = {interrupt, intCode};
+    assign intExcCode       = {interrupt, interrupt ? intCode : excCode};
+    assign intExc           = interrupt || exception;
+    assign nextMepc         = exception ? PC : nextPC;
+
+    // ISR decoder block
+    assign ISRAddress       = (mcauseOut[31] && mtvecOut[0]) ? 
+                                    mtvecOut[31:2] + (mcauseOut << 2)
+                                    :
+                                    mtvecOut[31:2];
 
     // PCREG
     always @(posedge clk) begin

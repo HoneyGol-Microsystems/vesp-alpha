@@ -5,6 +5,9 @@ module controller (
     input      [31:0] instruction,
     input      [31:0] memAddr,
     input             ALUZero,
+    input             clk,
+    input             reset,
+    input             interrupt,
 
     output reg [3:0]  ALUCtrl,
     output reg [1:0]  ALUSrc1,
@@ -32,6 +35,18 @@ module controller (
     wire [4:0] rs2    = instruction[24:20];
     wire [4:0] rd     = instruction[11:7];
     wire [6:0] opcode = instruction[6:0];
+
+    reg [1:0] privilegeLevel;
+
+    // store current privilege level
+    // only two (machine and user) are supported for now
+    always @(posedge clk) begin
+        
+        if (mret)
+            privilegeLevel = 2'b00; // user mode
+        else if (reset || interrupt || exception)
+            privilegeLevel = 2'b11; // machine mode
+    end
 
     // decode instructions and set control signals
     always @(*) begin
@@ -155,7 +170,13 @@ module controller (
                         if (funct7[3]) begin // SRET, MRET
 
                             if(funct7[4]) begin // MRET
-                                mret = 1;
+                                
+                                if (privilegeLevel === 2'b11) begin
+                                    // TODO throw exception
+                                end else begin
+                                    branch  = 1;
+                                    mret    = 1;
+                                end
                             end else begin // SRET
                             
                             end
