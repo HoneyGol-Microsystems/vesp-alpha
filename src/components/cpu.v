@@ -24,7 +24,8 @@ module cpu (
     // wire/reg declarations
     wire ALUZero, ALUToPC, branch, memToReg, regWr, rs2ShiftSel,
          uext, csrWr, mcauseWr, mepcWr;
-    wire [1:0] loadSel, maskSel, regDataSel, ALUSrc1, ALUSrc2;
+    wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2;
+    wire [2:0] regDataSel;
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
@@ -52,7 +53,8 @@ module cpu (
         .regDataSel(regDataSel),
         .regWr(regWr),
         .rs2ShiftSel(rs2ShiftSel),
-        .uext(uext)
+        .uext(uext),
+        .csrWr(csrWr)
     );
 
     alu #(
@@ -87,7 +89,7 @@ module cpu (
         .reset(reset),
         .clk(clk),
         .we(csrWr),
-        .a(imm[11:0]),
+        .a(instruction[31:20]),
         .di(ALURes),
         .do(csrOut),
         .mepcDo(mepcOut),

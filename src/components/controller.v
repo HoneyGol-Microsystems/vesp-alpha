@@ -14,15 +14,17 @@ module controller (
     output reg [1:0]  maskSel,
     output reg        memToReg,
     output reg        memWr,
-    output reg [1:0]  regDataSel,
+    output reg [2:0]  regDataSel,
     output reg        regWr,
     output reg        rs2ShiftSel,
-    output reg        uext
+    output reg        uext,
+    output reg        csrWr
 );
 
     wire [2:0] funct3 = instruction[14:12];
     wire [6:0] funct7 = instruction[31:25];
     wire [4:0] rs1    = instruction[19:15];
+    wire [4:0] uimm   = instruction[19:15];
     wire [4:0] rs2    = instruction[24:20];
     wire [4:0] rd     = instruction[11:7];
     wire [6:0] opcode = instruction[6:0];
@@ -43,6 +45,7 @@ module controller (
         regWr       = 0;
         rs2ShiftSel = funct3[0];
         uext        = funct3[2];
+        csrWr       = 0;
 
         casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
@@ -150,18 +153,21 @@ module controller (
                         ALUCtrl    = 0;
                         regDataSel = 3'b100;
                         regWr      = 1;
+                        csrWr      = 1;
                     end
                     3'b010: begin // CSRRS
                         ALUCtrl    = 4'b0101;
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
                         regWr      = 1;
+                        csrWr      = rs1 != 0;
                     end
                     3'b011: begin // CSRRC
                         ALUCtrl    = 4'b0100;
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
                         regWr      = 1;
+                        csrWr      = rs1 != 0;
                     end
                     3'b100: begin end // reserved
                     3'b101: begin // CSRRWI
@@ -170,6 +176,7 @@ module controller (
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
                         regWr      = 1;
+                        csrWr      = 1;
                     end
                     3'b110: begin // CSRRSI
                         ALUCtrl    = 4'b0101;
@@ -177,6 +184,7 @@ module controller (
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
                         regWr      = 1;
+                        csrWr      = uimm != 0;
                     end
                     3'b111: begin // CSRRCI
                         ALUCtrl    = 4'b0100;
@@ -184,6 +192,7 @@ module controller (
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
                         regWr      = 1;
+                        csrWr      = uimm != 0;
                     end
                 endcase
             end

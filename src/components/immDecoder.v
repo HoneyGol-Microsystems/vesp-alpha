@@ -56,7 +56,7 @@ module immDecoder (
                 imm[31:21] = { 11{instruction[31]} };
             end
 
-            default: imm = rs1; // CSRRWI, CSRRSI or CSRRCI
+            default: imm = { { 27{1'b0} }, rs1 }; // CSRRWI, CSRRSI or CSRRCI
         endcase
     end
 
