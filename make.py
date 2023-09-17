@@ -262,8 +262,13 @@ TEST_SUITES = {
 }
 
 def test(args):
-    for testName in args.suite:
-        TEST_SUITES[testName]()
+
+    if "suite" in args:
+        for testName in args.suite:
+            TEST_SUITES[testName]()
+    else:
+        for name,func in TEST_SUITES.items():
+            func()
 
 if __name__ == "__main__":
 
@@ -290,10 +295,7 @@ if __name__ == "__main__":
         "--suite",
         help = "Manually specify test suites to run.",
         choices = list(TEST_SUITES.keys()),
-        action = "append",
-
-        # By default, proccess all tests.
-        default = list(TEST_SUITES.keys())
+        action = "append"
     )
 
     # ============= Convert subcommand =============
