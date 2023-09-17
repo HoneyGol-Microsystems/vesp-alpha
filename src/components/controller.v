@@ -1,6 +1,8 @@
 `ifndef __FILE_CONTROLLER_V
 `define __FILE_CONTROLLER_V
 
+`define EXCEPTIONCODE_BREAKPOINT 3
+
 module controller (
     input      [31:0] instruction,
     input      [31:0] memAddr,
@@ -183,10 +185,10 @@ module controller (
 
                         end else begin
                             
-                            if (rs2[0]) begin // ECALL
-                                
-                            end else begin // EBREAK
-                                
+                            if (rs2[0]) begin // EBREAK
+                                exception = 1;
+                                excCode   = 3;
+                            end else begin // ECALL
                             end
 
                         end
