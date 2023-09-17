@@ -286,11 +286,11 @@ if __name__ == "__main__":
     testParser.add_argument(
         "--suite",
         help = "Manually specify test suites to run.",
-        choices = TEST_SUITES.keys(),
+        choices = list(TEST_SUITES.keys()),
         action = "append",
 
         # By default, proccess all tests.
-        default = TEST_SUITES.keys()
+        default = list(TEST_SUITES.keys())
     )
 
     # ============= Convert subcommand =============
