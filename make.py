@@ -240,8 +240,11 @@ def convert(args):
         sourceFiles = getRVExecsFromPath(sourcePath)
         
         for fileName in sourceFiles:
+
+            tempObjFilePath = os.path.join(BUILD_DIR, "temp.obj")
+
             ret = subprocess.run(
-                ["riscv64-unknown-elf-objcopy", os.path.join(sourcePath, fileName), "-Obinary", os.path.join(BUILD_DIR, "temp.obj")],
+                ["riscv64-unknown-elf-objcopy", os.path.join(sourcePath, fileName), "-Obinary", tempObjFilePath],
                 stdout = sys.stdout,
                 stderr = subprocess.STDOUT
             )
@@ -250,7 +253,7 @@ def convert(args):
                 print(f"Warning: '{fileName}' can't be converted (possibly malformed?).")
                 continue
                 
-            bin2hex(32, os.path.join(sourcePath, fileName), os.path.join(outputPath, fileName + ".hex"))
+            bin2hex(32, tempObjFilePath, os.path.join(outputPath, fileName + ".hex"))
             print(f"Converted '{fileName}' to hex.")
 
 TEST_SUITES = {
