@@ -187,8 +187,10 @@ module controller (
                             
                             if (rs2[0]) begin // EBREAK
                                 exception = 1;
-                                excCode   = 3;
+                                excCode   = `EXCEPTIONCODE_BREAKPOINT;
                             end else begin // ECALL
+                                exception = 1;
+                                excCode   = { { 28{1'b0} }, 2'b10, privilegeLevel }; // ECALL exception code = 8 + privilege level.
                             end
 
                         end
