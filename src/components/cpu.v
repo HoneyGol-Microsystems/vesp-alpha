@@ -69,7 +69,8 @@ module cpu (
         .uext(uext),
         .csrWr(csrWr),
         .mret(mret),
-        .exception(exception)
+        .exception(exception),
+        .excCode(excCode)
     );
 
     alu #(
@@ -162,9 +163,9 @@ module cpu (
 
     // ISR decoder block
     assign ISRAddress       = (mcauseOut[31] && mtvecOut[0]) ? 
-                                    mtvecOut[31:2] + (mcauseOut << 2)
+                                    {mtvecOut[31:2], 2'b00} + (mcauseOut << 2)
                                     :
-                                    mtvecOut[31:2];
+                                    {mtvecOut[31:2], 2'b00};
 
     // PCREG
     always @(posedge clk) begin
