@@ -1,7 +1,26 @@
 # RISC-V Student CPU
 This repository contains summer student project: RISC-V compatible processor.
 
-## Testing
+## The build script (`make.py`)
+
+### Setup
+To use the script, install all required dependencies.
+
+1. RISC-V toolchain
+2. iverilog
+3. Python version >=3.8
+4. `pyelftools` Python library. This library can be installed using your system's package manager, e.g. on Ubuntu:
+
+```sh
+apt install python3-pyelftools
+```
+
+Or manually with pip:
+```sh
+pip3 install pyelftools
+```
+
+### Testing
 Testing is done using Icarus Verilog and provided Python 3 script: `make.py`.
 
 Run `python3 make.py test` to run all tests.
