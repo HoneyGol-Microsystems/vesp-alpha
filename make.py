@@ -263,7 +263,7 @@ TEST_SUITES = {
 
 def test(args):
 
-    if "suite" in args:
+    if "suite" in args and args.suite:
         for testName in args.suite:
             TEST_SUITES[testName]()
     else:
