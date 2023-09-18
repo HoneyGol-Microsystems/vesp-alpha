@@ -8,6 +8,7 @@
 `include "src/components/registerFile32.v"
 `include "src/components/extend.v"
 `include "src/components/csr.v"
+`include "src/components/interruptController.v"
 
 module cpu (
     input             clk,
@@ -22,25 +23,37 @@ module cpu (
 );
 
     // wire/reg declarations
-    wire ALUZero, ALUToPC, branch, memToReg, regWr, rs2ShiftSel,
-         uext, csrWr, mcauseWr, mepcWr;
+    wire ALUZero, ALUToPC, memToReg, regWr, rs2ShiftSel,
+         uext, csrWr, mcauseWr, branch;
     wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2;
     wire [2:0] regDataSel;
     wire [3:0] ALUCtrl;
     wire [4:0] rs2Shift;
     wire [15:0] dataLH;
+    wire [30:0] intCode, excCode;
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
-                regRes, dataExtLB, dataExtLH, nextPC, PC4, csrOut,
-                mepcOut, mtvecOut, mcauseOut, mepcIn, mcauseIn;
+                regRes, dataExtLB, dataExtLH, PC4, csrOut,
+                mepcOut, mtvecOut, mcauseOut, mcauseIn,
+                nextPC, nextPCInt, branchMretTarget, intExcCode, nextMepc,
+                ISRAddress;
     reg [3:0] mask;
     reg [7:0] dataLB;
     reg [31:0] regData, memData, src2;
+    wire mret;
+    wire interrupt;
+    wire irqBus;
+    wire exception;
+    wire intExc;
 
     // module instantiations
     controller controllerInst (
         .instruction(instruction),
         .memAddr(memAddr),
         .ALUZero(ALUZero),
+        .interrupt(interrupt),
+        .clk(clk),
+        .reset(reset),
+
         .ALUCtrl(ALUCtrl),
         .ALUSrc1(ALUSrc1),
         .ALUSrc2(ALUSrc2),
@@ -54,7 +67,10 @@ module cpu (
         .regWr(regWr),
         .rs2ShiftSel(rs2ShiftSel),
         .uext(uext),
-        .csrWr(csrWr)
+        .csrWr(csrWr),
+        .mret(mret),
+        .exception(exception),
+        .excCode(excCode)
     );
 
     alu #(
@@ -85,6 +101,13 @@ module cpu (
         .rd2(rs2)
     );
 
+    interruptController #(1) interruptControllerInst(
+        .clk(clk),
+        .irqBus(irqBus),
+        .interrupt(interrupt),
+        .intCode(intCode)
+    );
+
     csr csrInst (
         .reset(reset),
         .clk(clk),
@@ -95,10 +118,10 @@ module cpu (
         .mepcDo(mepcOut),
         .mtvecDo(mtvecOut),
         .mcauseDo(mcauseOut),
-        .mepcWe(mepcWr),
-        .mcauseWe(mcauseWr),
-        .mepcDi(mepcIn),
-        .mcauseDi(mcauseIn)
+        .mepcWe(intExc),
+        .mcauseWe(intExc),
+        .mepcDi(nextMepc),
+        .mcauseDi(intExcCode)
     );
 
     extend #(
@@ -120,24 +143,36 @@ module cpu (
     );
 
     // assignments (including 1bit muxes)
-    assign PC4          = PC + 4;
-    assign immPC        = imm + PC;
-    assign branchTarget = ALUToPC ? ALURes : immPC;
-    assign nextPC       = branch ? branchTarget : PC4;
-    assign src1         = ALUSrc1 ? imm : rs1;
-    assign rs2Shift     = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
-    assign memWriteData = rs2 << rs2Shift;
-    assign memAddr      = ALURes;
-    assign wrMask       = mask << ALURes[1:0];
-    assign dataLH       = ALURes[1] ? memReadData[31:16] : memReadData[15:0];
-    assign regRes       = memToReg ? memData : regData;
+    assign PC4              = PC + 4;
+    assign immPC            = imm + PC;
+    assign branchTarget     = ALUToPC ? ALURes : immPC;
+    assign src1             = ALUSrc1 ? imm : rs1;
+    assign rs2Shift         = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
+    assign memWriteData     = rs2 << rs2Shift;
+    assign memAddr          = ALURes;
+    assign wrMask           = mask << ALURes[1:0];
+    assign dataLH           = ALURes[1] ? memReadData[31:16] : memReadData[15:0];
+    assign regRes           = memToReg ? memData : regData;
+    assign branchMretTarget = mret ? mepcOut : branchTarget;
+    assign nextPC           = branch | mret ? branchMretTarget : PC4;
+    assign nextPCInt        = intExc ? ISRAddress : nextPC;
+
+    assign intExcCode       = {interrupt, interrupt ? intCode : excCode};
+    assign intExc           = interrupt || exception;
+    assign nextMepc         = exception ? PC : nextPC;
+
+    // ISR decoder block
+    assign ISRAddress       = (mcauseOut[31] && mtvecOut[0]) ? 
+                                    {mtvecOut[31:2], 2'b00} + (mcauseOut << 2)
+                                    :
+                                    {mtvecOut[31:2], 2'b00};
 
     // PCREG
     always @(posedge clk) begin
         if (reset) begin
             PC <= 0;
         end else begin
-            PC <= nextPC;
+            PC <= nextPCInt;
         end
     end
 

@@ -1,10 +1,16 @@
 `ifndef __FILE_CONTROLLER_V
 `define __FILE_CONTROLLER_V
 
+`define EXCEPTIONCODE_BREAKPOINT 3
+
 module controller (
     input      [31:0] instruction,
     input      [31:0] memAddr,
     input             ALUZero,
+    input             clk,
+    input             reset,
+    input             interrupt,
+
     output reg [3:0]  ALUCtrl,
     output reg [1:0]  ALUSrc1,
     output reg [1:0]  ALUSrc2,
@@ -18,7 +24,10 @@ module controller (
     output reg        regWr,
     output reg        rs2ShiftSel,
     output reg        uext,
-    output reg        csrWr
+    output reg        csrWr,
+    output reg        mret,
+    output reg        exception,
+    output reg [30:0] excCode
 );
 
     wire [2:0] funct3 = instruction[14:12];
@@ -29,8 +38,21 @@ module controller (
     wire [4:0] rd     = instruction[11:7];
     wire [6:0] opcode = instruction[6:0];
 
+    reg [1:0] privilegeLevel;
+
+    // store current privilege level
+    // only two (machine and user) are supported for now
+    always @(posedge clk) begin
+        
+        if (mret)
+            privilegeLevel = 2'b00; // user mode
+        else if (reset || interrupt || exception)
+            privilegeLevel = 2'b11; // machine mode
+    end
+
     // decode instructions and set control signals
     always @(*) begin
+        
         // init control signals to default values
         ALUCtrl     = 4'b0001;
         ALUSrc1     = 0;
@@ -46,6 +68,9 @@ module controller (
         rs2ShiftSel = funct3[0];
         uext        = funct3[2];
         csrWr       = 0;
+        mret        = 0;
+        exception   = 0;
+        excCode     = 0;
 
         casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
@@ -133,20 +158,41 @@ module controller (
             end
 
             5'b11011: begin // J-type
-                branch     = 1;
-                regDataSel = 3'b011;
-                regWr      = 1;
+                branch      = 1;
+                regDataSel  = 3'b011;
+                regWr       = 1;
             end
 
             5'b00011: begin end // FENCE or Zifencei standard extension
 
-            5'b11100: begin // ECALL, EBREAK or Zicsr standard extension
+            5'b11100: begin // SYSTEM: ECALL, EBREAK, MRET or Zicsr standard extension
                 case (funct3)
                     3'b000: begin
-                        if (rs2[0]) begin // ECALL
+
+                        if (funct7[3]) begin // SRET, MRET
+
+                            if(funct7[4]) begin // MRET
+                                
+                                if (privilegeLevel === 2'b11) begin
+                                    // TODO throw exception
+                                end else begin
+                                    branch  = 1;
+                                    mret    = 1;
+                                end
+                            end else begin // SRET
                             
-                        end else begin // EBREAK
+                            end
+
+                        end else begin
                             
+                            if (rs2[0]) begin // EBREAK
+                                exception = 1;
+                                excCode   = `EXCEPTIONCODE_BREAKPOINT;
+                            end else begin // ECALL
+                                exception = 1;
+                                excCode   = { { 28{1'b0} }, 2'b10, privilegeLevel }; // ECALL exception code = 8 + privilege level.
+                            end
+
                         end
                     end
                     3'b001: begin // CSRRW

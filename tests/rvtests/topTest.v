@@ -2,8 +2,8 @@
 `include "src/constants.vh"
 
 `define __MKPY_CURRENT_TEST "PATH_TO_HEX"
-`define ECALL               32'b1110011
-`define EBREAK              32'b100000000000001110011
+`define OPCODE_PASS               32'b1
+`define OPCODE_FAIL               32'b0
 `define PC_STOP             'ha4
 
 `define MAX_QUEUE_SIZE      10
@@ -77,12 +77,12 @@ module topTest();
         pcValuesLog[pcValuesLogPtr] = dut.cpuInst.PC;
         pcValuesLogPtr++;
 
-        if (dut.instrBusData === `ECALL) begin
+        if (dut.instrBusData === `OPCODE_PASS) begin
             $display(`ASSERT_SUCCESS);
             $finish;
         end
 
-        if (dut.instrBusData === `EBREAK) begin
+        if (dut.instrBusData === `OPCODE_FAIL) begin
             $display(`ASSERT_FAIL);
             
             $display("Last PC values dump:");
