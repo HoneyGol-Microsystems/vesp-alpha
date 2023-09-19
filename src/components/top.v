@@ -16,8 +16,7 @@ module top (
                 dataBusDataRead;
     
     ram #(
-        .WORD_CNT(`RAM_WORD_CNT),
-        .MEM_FILE("asm/led.hex")
+        .WORD_CNT(`RAM_WORD_CNT)
     ) ramInst (
         .a1(instrBusAddr),
         .do1(instrBusData),
