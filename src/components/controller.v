@@ -1,7 +1,12 @@
 `ifndef __FILE_CONTROLLER_V
 `define __FILE_CONTROLLER_V
 
+`define EXCEPTIONCODE_ILLEGAL_INSTR 2
 `define EXCEPTIONCODE_BREAKPOINT 3
+
+`define ILLEGAL_INSTR_HANDLER                \
+    exception = 1;                           \
+    excCode = `EXCEPTIONCODE_ILLEGAL_INSTR;
 
 module controller (
     input      [31:0] instruction,
@@ -149,6 +154,9 @@ module controller (
                         ALUCtrl = 4'b1011;
                         branch  = ALUZero;
                     end
+                    default: begin
+                        //`ILLEGAL_INSTR_HANDLER
+                    end
                 endcase
             end
 
@@ -180,7 +188,7 @@ module controller (
                                     mret    = 1;
                                 end
                             end else begin // SRET
-                            
+                                //`ILLEGAL_INSTR_HANDLER
                             end
 
                         end else begin
@@ -215,7 +223,9 @@ module controller (
                         regWr      = 1;
                         csrWr      = rs1 != 0;
                     end
-                    3'b100: begin end // reserved
+                    3'b100: begin
+                       //`ILLEGAL_INSTR_HANDLER 
+                    end // reserved
                     3'b101: begin // CSRRWI
                         ALUCtrl    = 0;
                         ALUSrc1    = 1;
@@ -241,6 +251,10 @@ module controller (
                         csrWr      = uimm != 0;
                     end
                 endcase
+            end
+
+            default: begin
+                //`ILLEGAL_INSTR_HANDLER
             end
         endcase
     end
