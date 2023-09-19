@@ -155,7 +155,7 @@ module controller (
                         branch  = ALUZero;
                     end
                     default: begin
-                        //`ILLEGAL_INSTR_HANDLER
+                        `ILLEGAL_INSTR_HANDLER
                     end
                 endcase
             end
@@ -188,7 +188,7 @@ module controller (
                                     mret    = 1;
                                 end
                             end else begin // SRET
-                                //`ILLEGAL_INSTR_HANDLER
+                                `ILLEGAL_INSTR_HANDLER
                             end
 
                         end else begin
@@ -224,7 +224,7 @@ module controller (
                         csrWr      = rs1 != 0;
                     end
                     3'b100: begin
-                       //`ILLEGAL_INSTR_HANDLER 
+                       `ILLEGAL_INSTR_HANDLER 
                     end // reserved
                     3'b101: begin // CSRRWI
                         ALUCtrl    = 0;
@@ -254,7 +254,7 @@ module controller (
             end
 
             default: begin
-                //`ILLEGAL_INSTR_HANDLER
+                `ILLEGAL_INSTR_HANDLER
             end
         endcase
     end
