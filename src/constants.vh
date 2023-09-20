@@ -8,7 +8,9 @@
 
 /* other constants */
 `define REG_CNT 32 // number of registers in a register file
-`define RAM_WORD_CNT 1024 // number of words in RAM
+`define INSTR_MEM_WORD_CNT 512 // number of words in instruction memory
+`define DATA_MEM_WORD_CNT 512 // number of words in data memory
+`define RAM_WORD_CNT `INSTR_MEM_WORD_CNT + `DATA_MEM_WORD_CNT // number of words in RAM
 
 /* assertion values */
 `define ASSERT_FAIL "ASSERT_FAIL"
