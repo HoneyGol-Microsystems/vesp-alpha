@@ -24,14 +24,14 @@ module top (
     
     `ifdef SPLIT_MEMORY
         instructionMemory #(
-            .WORD_CNT(16)
+            .WORD_CNT(`INSTR_MEM_WORD_CNT)
         ) instrMemInst (
             .a(instrBusAddr),
             .d(instrBusData)
         );
 
         dataMemory #(
-            .WORD_CNT(16)
+            .WORD_CNT(`DATA_MEM_WORD_CNT)
         ) dataMemInst (
             .clk(sysClk),
             .reset(sysRes),

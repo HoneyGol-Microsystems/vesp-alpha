@@ -9,10 +9,10 @@ ENTRY(_start)
 MEMORY
 {
     /* section 'CODE' can be read and executed, starts at address ORIGIN and is LENGTH bytes long */
-    CODE(rx): ORIGIN = 0x00000000, LENGTH = 1K
+    CODE(rx): ORIGIN = 0x00000000, LENGTH = 2K
 
     /* section 'DATA' can be read, written and executed, starts at address ORIGIN and is LENGTH bytes long */
-    DATA(rwx): ORIGIN = 0x00000000, LENGTH = 500
+    DATA(rwx): ORIGIN = 0x00000000, LENGTH = 2K
 }
 
 /* define the placement of the sections */
