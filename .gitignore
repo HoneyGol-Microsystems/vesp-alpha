@@ -2,3 +2,4 @@ project/
 a.out
 build/
 *.vcd
+__pycache__
