@@ -4,3 +4,7 @@ _start:
 L:
     addi x1, x1, 1
     beq x0, x0, L
+
+.section .data
+test_data:
+    .4byte 0xdeadbeef
