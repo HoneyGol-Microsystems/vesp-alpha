@@ -16,5 +16,5 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "medek-latest"
           prerelease: false
-          draft: true
+          draft: false
           title: "Medek article latest version"
