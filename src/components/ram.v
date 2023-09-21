@@ -3,8 +3,7 @@
 
 // Dual port RAM.
 module ram #(
-    parameter WORD_CNT = 16,       // number of words (32b) in RAM
-    parameter MEM_FILE = "mem.hex" // hex file for memory initialization
+    parameter WORD_CNT = 16 // number of words (32b) in RAM
 ) (
     // Addresses.
     input  [31:0] a1, a2,
@@ -19,10 +18,6 @@ module ram #(
 );
 
     (*rom_style = "block"*) reg [31:0] RAM [WORD_CNT-1:0];
-
-    initial begin
-        $readmemh(MEM_FILE, RAM, 0, WORD_CNT-1);
-    end
 
     assign do1 = RAM[a1[31:2]];
     assign do2 = RAM[a2[31:2]];
