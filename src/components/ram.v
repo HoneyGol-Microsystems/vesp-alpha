@@ -1,9 +1,12 @@
 `ifndef __FILE_RAM_V
 `define __FILE_RAM_V
 
+`include "src/constants.vh"
+
 // Dual port RAM.
 module ram #(
-    parameter WORD_CNT = 16 // number of words (32b) in RAM
+    parameter WORD_CNT = 16, // number of words (32b) in RAM
+    parameter MEM_DATA = "mem.hex"
 ) (
     // Addresses.
     input  [31:0] a1, a2,
@@ -18,6 +21,10 @@ module ram #(
 );
 
     (*rom_style = "block"*) reg [31:0] RAM [WORD_CNT-1:0];
+
+    initial begin
+        $readmemh(MEM_DATA, RAM, 0, `RAM_WORD_CNT-1);
+    end
 
     assign do1 = RAM[a1[31:2]];
     assign do2 = RAM[a2[31:2]];
