@@ -2,29 +2,51 @@
 `define __FILE_GPIO_V
 
 module gpio (
-    input  [1:0]  regSel, // select register
-    input         we,
-    input         reset,
-    input         clk,
-    input  [31:0] di, // data to write to selected register
-    output [31:0] do, // data to read from selected register
-    inout         ports // TODO: specify bit width
+    input  [2:0]      regSel,   // select register
+    input             we,
+    input             reset,
+    input             clk,
+    input      [31:0] di,       // data to write to selected register
+    output reg [31:0] do,       // data to read from selected register
+    inout      [15:0] ports     // to/from external ports
 );
 
-    reg [31:0] GPIODATA [3:0];
-    reg [31:0] GPIODIR [3:0];
-    reg [31:0] GPIOMODE [3:0];
+    reg [7:0] GPIOWR_A, GPIODIR_A, GPIOWR_B, GPIODIR_B;
 
-    assign do = GPIODATA[regSel];
+    always @(*) begin
+        case (regSel)
+            3'b000:  do = { {24{1'b0}}, GPIOWR_A    };
+            3'b001:  do = { {24{1'b0}}, GPIODIR_A   };
+            3'b010:  do = { {24{1'b0}}, ports[7:0]  };
+            3'b011:  do = { {24{1'b0}}, GPIOWR_B    };
+            3'b100:  do = { {24{1'b0}}, GPIODIR_B   };
+            default: do = { {24{1'b0}}, ports[15:8] };
+        endcase    
+    end
 
     always @(posedge clk) begin
-        if (we) begin
-            if (reset) begin
-                GPIODATA[regSel] <= 0;
-            end else begin
-                GPIODATA[regSel] <= di;
-            end
+        if (reset) begin
+            GPIOWR_A  = 0;
+            GPIODIR_A = 0;
+            GPIOWR_B  = 0;
+            GPIODIR_B = 0;
+        end else if (we) begin
+            case (regSel)
+                3'b000:  GPIOWR_A  = di[7:0];
+                3'b001:  GPIODIR_A = di[7:0];
+                // 010: ignore reads to GPIORD
+                3'b011:  GPIOWR_B  = di[7:0];
+                3'b100:  GPIODIR_A = di[7:0];
+                // 101: ignore reads to GPIORD
+                default: begin end
+            endcase    
         end
+    end
+
+    genvar i;  
+    for (i = 0; i < 8; i = i + 1) begin
+        assign ports[i]     = GPIODIR_A[i]     ? GPIOWR_A[i]     : 1'bZ;
+        assign ports[i + 8] = GPIODIR_B[i + 8] ? GPIOWR_B[i + 8] : 1'bZ;
     end
     
 endmodule
