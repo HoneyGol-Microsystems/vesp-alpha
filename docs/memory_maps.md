@@ -15,3 +15,4 @@ For now there is only one platform supporting only bare-metal programs.
 | 0xF000_0003 | GPIOWR_B   |
 | 0xF000_0004 | GPIODIR_B  |
 | 0xF000_0005 | GPIORD_B   |
+| 0xF000_0006-0xF000_000F | reserved |
