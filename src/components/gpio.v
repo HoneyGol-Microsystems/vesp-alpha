@@ -43,12 +43,13 @@ module gpio (
         end
     end
 
-    genvar i;  
+    // writing to GPIO pins
+    genvar i;
     for (i = 0; i < 8; i = i + 1) begin
-        assign ports[i]     = GPIODIR_A[i]     ? GPIOWR_A[i]     : 1'bZ;
-        assign ports[i + 8] = GPIODIR_B[i + 8] ? GPIOWR_B[i + 8] : 1'bZ;
+        assign ports[i]     = GPIODIR_A[i] ? GPIOWR_A[i] : 1'bZ;
+        assign ports[i + 8] = GPIODIR_B[i] ? GPIOWR_B[i] : 1'bZ;
     end
-    
+
 endmodule
 
 `endif // __FILE_GPIO_V
