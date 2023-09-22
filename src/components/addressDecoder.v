@@ -2,19 +2,17 @@
 `define __FILE_ADDRESSDECODER_V
 
 module addressDecoder (
-    input         we,
-    input  [31:0] a,
-
-    output [2:0]  outsel,
-    output        wemem,
-    output        wegpio,
-    output        weuart0,
-    output        wepwm,
-    output        wetmr0
+    input             we,
+    input      [31:0] a,
+    output reg [2:0]  outsel,
+    output reg        wemem,
+    output reg        wegpio,
+    output reg        weuart0,
+    output reg        wepwm,
+    output reg        wetmr0
 );
 
     always @(*) begin
-        
         wemem   = 0;
         wegpio  = 0;
         weuart0 = 0;
@@ -31,7 +29,7 @@ module addressDecoder (
             weuart0 = we;
             outsel  = 3'b010;
         end else begin
-            // Noting connected. Throw an exception?
+            // Nothing connected. Throw an exception?
         end
     end
 
