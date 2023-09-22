@@ -22,12 +22,9 @@ module addressDecoder (
         if (a < 32'hF000_0000) begin
             wemem   = we;
             outsel  = 3'b000;
-        end else if (a < 32'hF000_0004) begin
+        end else if (a < 32'hF000_0006) begin
             wegpio  = we;
             outsel  = 3'b001;
-        end else if (a < 32'hF000_0008) begin
-            weuart0 = we;
-            outsel  = 3'b010;
         end else begin
             // Nothing connected. Throw an exception?
         end
