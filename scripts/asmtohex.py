@@ -21,8 +21,9 @@ def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
         ret = subprocess.run(
             [
                 "riscv64-unknown-elf-gcc",
+                "-Wall",
+                "-pedantic",
                 "-static",
-                "-mcmodel=medany",
                 "-fvisibility=hidden",
                 "-nostdlib",
                 "-nostartfiles",
