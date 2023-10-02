@@ -1,6 +1,8 @@
+#include "header.h"
+
 int main ( void )
 {
-    int a = 5;
+    GPIORD_B |= 0x1;
 
     return 0;
 }
