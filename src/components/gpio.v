@@ -2,7 +2,7 @@
 `define __FILE_GPIO_V
 
 module gpio (
-    input  [2:0]      regSel,   // select register
+    input      [2:0]  regSel,   // select register
     input             we,
     input             reset,
     input             clk,
