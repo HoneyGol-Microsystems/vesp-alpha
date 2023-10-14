@@ -24,10 +24,11 @@ def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
                 "-static",
                 "-mcmodel=medany",
                 "-fvisibility=hidden",
-                "-nostdlib",
                 "-nostartfiles",
                 "-march=rv32i",
                 "-mabi=ilp32",
+                "-std=c11", "-O2",
+                "-nostdlib",
                 "-T", str(LINKER_SCRIPT_PATH),
                 str(fPath),
                 "-o", fPath.stem
