@@ -13,7 +13,7 @@ from elftools.common import exceptions as elfexceptions
 RVTESTS_SOURCE = os.path.join("tests", "riscv-tests", "isa")
 HWTESTS_DIR = os.path.join("tests", "hwtests")
 RVTESTS_HEX_DIR = os.path.join("tests", "riscv-tests-hex")
-RVTESTS_TOP_TEMPLATE = os.path.join("tests", "topTest.v")
+RVTESTS_TOP_TEMPLATE = os.path.join("tests", "riscvTopTest.v")
 BUILD_DIR = "build"
 IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
 

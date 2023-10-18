@@ -22,7 +22,7 @@ module topTest();
 
     initial begin
 
-        $dumpfile("topTest");
+        $dumpfile("riscvTopTest");
 		$dumpvars;
         $readmemh(`__MKPY_CURRENT_TEST, dut.ramInst.RAM, 0, `RAM_WORD_CNT-1);
 
