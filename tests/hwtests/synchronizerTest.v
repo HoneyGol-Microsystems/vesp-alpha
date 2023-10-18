@@ -1,4 +1,4 @@
-`include "src/primitives/synchronizer.v"
+`include "rtl/primitives/synchronizer.v"
 `include "tests/testConstants.vh"
 
 module synchronizerTest();

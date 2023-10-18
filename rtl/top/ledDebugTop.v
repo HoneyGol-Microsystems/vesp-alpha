@@ -1,8 +1,8 @@
 `ifndef __FILE_LEDDEBUGTOP_V
 `define __FILE_LEDDEBUGTOP_V
 
-`include "src/components/top.v"
-`include "src/primitives/synchronizer.v"
+`include "rtl/components/top.v"
+`include "rtl/primitives/synchronizer.v"
 
 module ledDebugTop(
     input sysClk,

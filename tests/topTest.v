@@ -1,5 +1,5 @@
-`include "src/components/top.v"
-`include "src/constants.vh"
+`include "rtl/components/top.v"
+`include "rtl/constants.vh"
 
 `define __MKPY_CURRENT_TEST "PATH_TO_HEX"
 `define OPCODE_PASS               32'b1
@@ -22,7 +22,7 @@ module topTest();
 
     initial begin
 
-        $dumpfile("test");
+        $dumpfile("topTest");
 		$dumpvars;
         $readmemh(`__MKPY_CURRENT_TEST, dut.ramInst.RAM, 0, `RAM_WORD_CNT-1);
 

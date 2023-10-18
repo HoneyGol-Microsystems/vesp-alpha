@@ -1,5 +1,5 @@
-`include "src/components/alu.v"
-`include "src/constants.vh"
+`include "rtl/components/alu.v"
+`include "rtl/constants.vh"
 
 module aluTest();
 	reg [31:0] op1, op2;

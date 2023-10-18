@@ -1,5 +1,5 @@
-`include "src/components/registerFile32.v"
-`include "src/constants.vh"
+`include "rtl/components/registerFile32.v"
+`include "rtl/constants.vh"
 
 module registerFileTest();
 	reg [4:0] a1, a2, a3;

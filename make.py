@@ -12,8 +12,8 @@ from elftools.common import exceptions as elfexceptions
 
 RVTESTS_SOURCE = os.path.join("tests", "riscv-tests", "isa")
 HWTESTS_DIR = os.path.join("tests", "hwtests")
-RVTESTS_DIR = os.path.join("tests", "rvtests", "hex")
-RVTESTS_TOP_TEMPLATE = os.path.join("tests", "rvtests", "topTest.v")
+RVTESTS_HEX_DIR = os.path.join("tests", "riscv-tests-hex")
+RVTESTS_TOP_TEMPLATE = os.path.join("tests", "topTest.v")
 BUILD_DIR = "build"
 IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
 
@@ -33,7 +33,7 @@ def rvtest():
 
     PREPROCESSED_TOP_PATH = os.path.join(BUILD_DIR, "tmp.v")
 
-    testfiles = [file for file in os.listdir(RVTESTS_DIR) if file.endswith(".hex")]
+    testfiles = [file for file in os.listdir(RVTESTS_HEX_DIR) if file.endswith(".hex")]
     testfiles.sort()
 
     logging.debug(f"Found test files: {testfiles}")
@@ -66,7 +66,7 @@ def rvtest():
 
     print("Compiling top entity...")
     ret = subprocess.run(
-        ["iverilog", PREPROCESSED_TOP_PATH, "-o" + IVERILOG_OUTPUT, "-Isrc/components"],
+        ["iverilog", PREPROCESSED_TOP_PATH, "-o" + IVERILOG_OUTPUT, "-Irtl/components"],
         stdout = sys.stdout,
         stderr = subprocess.STDOUT
     )
@@ -83,7 +83,7 @@ def rvtest():
         
         print(f"Begin test [{testId + 1}/{len(testfiles)}]: {testName}")
         logging.debug("Copying binary...")
-        shutil.copy2(os.path.join(RVTESTS_DIR, testName), os.path.join(BUILD_DIR, "tmp.hex"))
+        shutil.copy2(os.path.join(RVTESTS_HEX_DIR, testName), os.path.join(BUILD_DIR, "tmp.hex"))
         
         print("Running test...")
         output = subprocess.check_output(
