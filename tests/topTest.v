@@ -2,8 +2,8 @@
 `include "rtl/constants.vh"
 
 `define __MKPY_CURRENT_TEST "PATH_TO_HEX"
-`define OPCODE_PASS               32'b1
-`define OPCODE_FAIL               32'b0
+`define OPCODE_PASS         32'b1
+`define OPCODE_FAIL         32'b0
 `define PC_STOP             'ha4
 
 `define MAX_QUEUE_SIZE      10
