@@ -4,7 +4,7 @@ import sys
 import pathlib
 import elftohex
 
-LINKER_SCRIPT_PATH = pathlib.Path(__file__).resolve().parent.parent.joinpath("asm/mem_ls.ld")
+LINKER_SCRIPT_PATH = pathlib.Path(__file__).resolve().parent.parent.joinpath("sw/mem.ld")
 
 def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
     # Check what memory architecture was specified
@@ -21,8 +21,9 @@ def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
         ret = subprocess.run(
             [
                 "riscv64-unknown-elf-gcc",
+                "-Wall",
+                "-pedantic",
                 "-static",
-                "-mcmodel=medany",
                 "-fvisibility=hidden",
                 "-nostartfiles",
                 "-march=rv32i",
