@@ -1,8 +1,8 @@
 `ifndef __FILE_LEDDEBUGTOP_V
 `define __FILE_LEDDEBUGTOP_V
 
-`include "src/components/top.v"
-`include "src/primitives/synchronizer.v"
+`include "rtl/components/top.v"
+`include "rtl/primitives/synchronizer.v"
 
 module ledDebugTop(
     input sysClk,
@@ -16,10 +16,10 @@ module ledDebugTop(
     // write data to ram
     initial begin
         `ifdef SPLIT_MEMORY
-            $readmemh("asm/led_text.hex", topInst.instrMemInst, 0, `INSTR_MEM_WORD_CNT-1);
-            $readmemh("asm/led_data.hex", topInst.dataMemInst, 0, `DATA_MEM_WORD_CNT-1);
+            $readmemh("firmware/led_text.hex", topInst.instrMemInst, 0, `INSTR_MEM_WORD_CNT-1);
+            $readmemh("firmware/led_data.hex", topInst.dataMemInst, 0, `DATA_MEM_WORD_CNT-1);
         `else
-            $readmemh("asm/led.hex", topInst.ramInst.RAM, 0, `RAM_WORD_CNT-1);
+            $readmemh("firmware/led.hex", topInst.ramInst.RAM, 0, `RAM_WORD_CNT-1);
         `endif // SPLIT_MEMORY
     end
 

@@ -1,5 +1,5 @@
-`include "src/components/extend.v"
-`include "src/constants.vh"
+`include "rtl/components/extend.v"
+`include "rtl/constants.vh"
 
 module extendTest();
 	reg [7:0] data8;
