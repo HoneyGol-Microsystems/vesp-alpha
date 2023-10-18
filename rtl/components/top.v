@@ -34,7 +34,6 @@ module top (
             .WORD_CNT(`DATA_MEM_WORD_CNT)
         ) dataMemInst (
             .clk(sysClk),
-            .reset(sysRes),
             .we(dataBusWE),
             .mask(writeMask),
             .a(dataBusAddr),
