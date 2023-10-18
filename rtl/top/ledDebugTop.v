@@ -11,7 +11,6 @@ module ledDebugTop(
 );
 
     wire reset;
-    reg clkdiv2;
 
     // write data to ram
     initial begin
@@ -23,22 +22,19 @@ module ledDebugTop(
         `endif // SPLIT_MEMORY
     end
 
+    // synchronize reset signal
     synchronizer #(
         .LEN(1),
         .STAGES(2)
     ) resetSync (
-        .clk(clkdiv2),
+        .clk(sysClk),
         .dataIn(sysRes),
         .dataOut(reset)
-    );    
-    
-    always @(posedge sysClk) begin
-       clkdiv2 <= ~clkdiv2;
-    end
+    );
 
     top topInst(
-        .sysClk(clkdiv2),
-        .sysRes(sysRes)
+        .sysClk(sysClk),
+        .sysRes(reset)
     );
     
     assign PCdebug = topInst.cpuInst.registerFile32Inst.rf[1][31:16];
