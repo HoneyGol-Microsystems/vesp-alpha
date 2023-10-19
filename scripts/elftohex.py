@@ -53,6 +53,9 @@ def convert(srcPath: pathlib.Path, destPath: pathlib.Path):
             print(f"Warning: '{fPath.name}' can't be converted (possibly malformed?).")
             continue
 
+        # Create destination directory if it doesn't exist yet
+        destPath.mkdir(parents=True, exist_ok=True)
+
         # Convert elf file to .hex format
         bin2hex(32, fTmpBinPath, destPath.joinpath(fPath.name).with_suffix(".hex"))
 
@@ -62,20 +65,20 @@ def convert(srcPath: pathlib.Path, destPath: pathlib.Path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog = "elftohex.py",
-        description = "Converts elf files to .hex format."
+        description = "Converts ELF files to .hex format."
     )
 
     parser.add_argument(
         "-s", "--src-path",
-        help = "Specify the source path to the elf files.",
+        help = "Specify a path to an ELF file or the source directory with ELF files.",
         action = "store",
         type = pathlib.Path,
         required = True
     )
 
     parser.add_argument(
-        "-d", "--dest-path",
-        help = "Specify the destination path for the created .hex files.",
+        "-d", "--dest-dir",
+        help = "Specify a destination directory for the .hex files.",
         action = "store",
         type = pathlib.Path,
         required = True
@@ -83,4 +86,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    convert(args.src_path, args.dest_path)
+    convert(args.src_path, args.dest_dir)

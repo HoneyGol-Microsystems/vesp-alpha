@@ -3,14 +3,14 @@
 
 // `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
-`include "src/components/cpu.v"
+`include "rtl/components/cpu.v"
 `ifdef SPLIT_MEMORY
-    `include "src/components/instructionMemory.v"
-    `include "src/components/dataMemory.v"
+    `include "rtl/components/instructionMemory.v"
+    `include "rtl/components/dataMemory.v"
 `else
-    `include "src/components/ram.v"
+    `include "rtl/components/ram.v"
 `endif // SPLIT_MEMORY
-`include "src/constants.vh"
+`include "rtl/constants.vh"
 
 module top (
     input sysClk,
@@ -34,7 +34,6 @@ module top (
             .WORD_CNT(`DATA_MEM_WORD_CNT)
         ) dataMemInst (
             .clk(sysClk),
-            .reset(sysRes),
             .we(dataBusWE),
             .mask(writeMask),
             .a(dataBusAddr),

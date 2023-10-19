@@ -4,7 +4,7 @@ import sys
 import pathlib
 import elftohex
 
-LINKER_SCRIPT_PATH = pathlib.Path(__file__).resolve().parent.parent.joinpath("asm/mem_ls.ld")
+LINKER_SCRIPT_PATH = pathlib.Path(__file__).resolve().parent.parent.joinpath("firmware/mem.ld")
 
 def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
     # Check what memory architecture was specified
@@ -21,13 +21,15 @@ def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
         ret = subprocess.run(
             [
                 "riscv64-unknown-elf-gcc",
+                "-Wall",
+                "-pedantic",
                 "-static",
-                "-mcmodel=medany",
                 "-fvisibility=hidden",
-                "-nostdlib",
                 "-nostartfiles",
                 "-march=rv32i",
                 "-mabi=ilp32",
+                "-std=c11", "-O2",
+                "-nostdlib",
                 "-T", str(LINKER_SCRIPT_PATH),
                 str(fPath),
                 "-o", fPath.stem
@@ -40,7 +42,7 @@ def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
         toRemove: list[pathlib.Path] = []
         toRemove.append(pathlib.Path(fPath.stem))  # Add compiled elf
 
-        # Create dest directory if it doesn't exist yet
+        # Create destination directory if it doesn't exist yet
         destPath.mkdir(parents=True, exist_ok=True)
 
         # Separate .text and .data according to the specified memory architecture
@@ -96,15 +98,15 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "-s", "--src-path",
-        help = "Specify the source path to the assembly source code files.",
+        help = "Specify a path to .asm file or the source directory with .asm files.",
         action = "store",
         type = pathlib.Path,
         required = True
     )
 
     parser.add_argument(
-        "-d", "--dest-path",
-        help = "Specify the destination path for the created .hex files.",
+        "-d", "--dest-dir",
+        help = "Specify a destination directory for the .hex files.",
         action = "store",
         type = pathlib.Path,
         required = True
@@ -120,4 +122,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    compile(args.src_path, args.dest_path, args.mem_arch)
+    compile(args.src_path, args.dest_dir, args.mem_arch)

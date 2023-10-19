@@ -3,3 +3,6 @@ a.out
 build/
 *.vcd
 __pycache__
+*.o
+*.elf
+*.map
