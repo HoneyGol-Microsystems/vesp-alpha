@@ -5,7 +5,6 @@ module dataMemory #(
     parameter WORD_CNT = 16 // number of words (32b) in memory
 ) (
     input         clk,
-    input         reset,
     input         we,
     input  [3:0]  mask,
     input  [31:0] a,

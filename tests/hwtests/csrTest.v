@@ -1,4 +1,4 @@
-`include "src/components/csr.v"
+`include "rtl/components/csr.v"
 `include "tests/testConstants.vh"
 
 module csrTest();

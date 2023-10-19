@@ -1,4 +1,4 @@
-`include "src/components/gpio.v"
+`include "rtl/components/gpio.v"
 `include "tests/testConstants.vh"
 
 module gpioTest();
