@@ -2,7 +2,8 @@
 `define __FILE_DATA_MEMORY_V
 
 module dataMemory #(
-    parameter WORD_CNT = 16 // number of words (32b) in memory
+    parameter WORD_CNT = 16, // number of words (32b) in memory
+    parameter MEM_FILE = ""
 ) (
     input         clk,
     input         we,
@@ -13,6 +14,12 @@ module dataMemory #(
 );
 
     reg [31:0] ram [WORD_CNT-1:0];
+
+    initial begin
+        if (MEM_FILE != "") begin
+            $readmemh(MEM_FILE, ram, 0, WORD_CNT-1);
+        end
+    end
 
     assign do = ram[a[31:2]];
 
