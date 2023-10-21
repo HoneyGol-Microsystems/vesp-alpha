@@ -1,14 +1,10 @@
 `ifndef __FILE_DATA_MEMORY_V
 `define __FILE_DATA_MEMORY_V
 
-`include "src/constants.vh"
-
 module dataMemory #(
-    parameter WORD_CNT = 16, // number of words (32b) in memory
-    parameter MEM_DATA = "data.hex"
+    parameter WORD_CNT = 16 // number of words (32b) in memory
 ) (
     input         clk,
-    input         reset,
     input         we,
     input  [3:0]  mask,
     input  [31:0] a,
@@ -17,10 +13,6 @@ module dataMemory #(
 );
 
     reg [31:0] ram [WORD_CNT-1:0];
-
-    initial begin
-        $readmemh(MEM_DATA, ram, 0, `DATA_MEM_WORD_CNT-1);
-    end
 
     assign do = ram[a[31:2]];
 

@@ -3,14 +3,14 @@
 
 // `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
-`include "src/components/cpu.v"
+`include "rtl/components/cpu.v"
 `ifdef SPLIT_MEMORY
-    `include "src/components/instructionMemory.v"
-    `include "src/components/dataMemory.v"
+    `include "rtl/components/instructionMemory.v"
+    `include "rtl/components/dataMemory.v"
 `else
-    `include "src/components/ram.v"
+    `include "rtl/components/ram.v"
 `endif // SPLIT_MEMORY
-`include "src/constants.vh"
+`include "rtl/constants.vh"
 
 module top (
     input sysClk,
@@ -24,19 +24,16 @@ module top (
     
     `ifdef SPLIT_MEMORY
         instructionMemory #(
-            .WORD_CNT(`INSTR_MEM_WORD_CNT),
-            .MEM_DATA("asm/led_text.hex")
+            .WORD_CNT(`INSTR_MEM_WORD_CNT)
         ) instrMemInst (
             .a(instrBusAddr),
             .d(instrBusData)
         );
 
         dataMemory #(
-            .WORD_CNT(`DATA_MEM_WORD_CNT),
-            .MEM_DATA("asm/led_data.hex")
+            .WORD_CNT(`DATA_MEM_WORD_CNT)
         ) dataMemInst (
             .clk(sysClk),
-            .reset(sysRes),
             .we(dataBusWE),
             .mask(writeMask),
             .a(dataBusAddr),
@@ -46,8 +43,7 @@ module top (
 
     `else
         ram #(
-            .WORD_CNT(`RAM_WORD_CNT),
-            .MEM_DATA("asm/led.hex")
+            .WORD_CNT(`RAM_WORD_CNT)
         ) ramInst (
             .a1(instrBusAddr),
             .do1(instrBusData),
