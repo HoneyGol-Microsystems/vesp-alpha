@@ -1,4 +1,4 @@
-name: Release Medek version
+name: Article Medek release version
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "medek-latest"
+          automatic_release_tag: "article-medek-latest"
           prerelease: false
           draft: false
-          title: "Medek article latest version"
+          title: "Article Medek version"
