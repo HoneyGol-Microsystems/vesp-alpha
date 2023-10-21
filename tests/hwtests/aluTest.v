@@ -24,7 +24,7 @@ module aluTest();
 
         op1 = -16;
         op2 = -5;
-        ctrl = 1; // +
+        ctrl = 0; // +
         #1;
         if (res != -21) begin
             $display("ADD error: op1=%b, op2=%b, zero=%b, res=%b", op1, op2, zero, res);
@@ -36,7 +36,7 @@ module aluTest();
 
         op1 = -16;
         op2 = 5;
-        ctrl = 1; // +
+        ctrl = 0; // +
         #1;
         if (res != -11) begin
             $display("ADD error: op1=%b, op2=%b, zero=%b, res=%b", op1, op2, zero, res);
@@ -48,7 +48,7 @@ module aluTest();
 
         op1 = 16;
         op2 = 5;
-        ctrl = 2; // -
+        ctrl = 1; // -
         #1;
         if (res != 11) begin
             $display("SUB error: op1=%b, op2=%b, zero=%b, res=%b", op1, op2, zero, res);
@@ -60,7 +60,7 @@ module aluTest();
 
         op1 = -5;
         op2 = -16;
-        ctrl = 2; // -
+        ctrl = 1; // -
         #1;
         if (res != 11) begin
             $display("SUB error: op1=%b, op2=%b, zero=%b, res=%b", op1, op2, zero, res);
@@ -72,7 +72,7 @@ module aluTest();
 
         op1 = 16;
         op2 = -5;
-        ctrl = 10; // <s
+        ctrl = 8; // <s
         #1;
         if (res != 0) begin
             $display("SLT error: op1=%b, op2=%b, zero=%b, res=%b", op1, op2, zero, res);
@@ -84,7 +84,7 @@ module aluTest();
 
         op1 = 16;
         op2 = 16;
-        ctrl = 2; // -
+        ctrl = 1; // -
         #1;
         if (res != 0 || zero != 1) begin
             $display("SUB error: op1=%b, op2=%b, zero=%b, res=%b", op1, op2, zero, res);
