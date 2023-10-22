@@ -5,7 +5,10 @@ metadata:
 recipe:
   name: "Hardware Test"
   comment: "This test recipe compiles and runs Verilog test files using iverilog."
-  print_logs: "always"
+  print_logs: "all"
+  # halt_on_error: true
+  sources:
+    - "tests/hwtests"
   steps:
     - make_directory: "build"
     - run:
