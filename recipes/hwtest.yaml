@@ -5,23 +5,30 @@ metadata:
 recipe:
   name: "Hardware Test"
   comment: "This test recipe compiles and runs Verilog test files using iverilog."
-  print_logs: "all"
-  # halt_on_error: true
   sources:
-    - "tests/hwtests"
+    - path: "tests/hwtests"
+      type: "verilog"
+      
+  # halt_on_step_error: true
+  # halt_on_source_error
   steps:
-    - make_directory: "build"
+    - make_directory:
+        name: "build"
     - run:
         executable: "iverilog"
         params:
-          - TEST_SOURCE,
-          - "-o build/tmp.out"
+          - mpysource
+          - "-obuild/tmp.out"
         assert:
           return_code: 0
           output:
-            not_contains: "ERROR"
+            not_contains:
+              - "ERROR"
     - run:
         executable: "build/tmp.out"
         assert:
           output:
-            contains: "ASSERT_SUCCESS"
+            contains:
+              - "ASSERT_SUCCESS"
+            not_contains:
+              - "ASSERT_FAIL"
