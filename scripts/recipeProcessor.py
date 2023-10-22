@@ -16,7 +16,7 @@ class RecipeProcessor:
 
     # Check if the file version is compatible.
     def __checkVersion(versionDict : dict) -> bool:
-        return "type" in versionDict and versionDict.type == "makepy recipe" and "version" in versionDict and versionDict.version == 0.1:
+        return "type" in versionDict and versionDict.type == "makepy recipe" and "version" in versionDict and versionDict.version == 0.1
         
     def process(self) -> bool:
         try:
