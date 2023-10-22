@@ -5,10 +5,15 @@ import os
 import logging
 import shutil
 from itertools import zip_longest
+from pathlib import Path
+import yaml
+from scripts.recipeProcessor import RecipeProcessor
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf import descriptions
 from elftools.common import exceptions as elfexceptions
+
+_LOGGER = logging.getLogger(__name__)
 
 RVTESTS_SOURCE = os.path.join("tests", "riscv-tests", "isa")
 HWTESTS_DIR = os.path.join("tests", "hwtests")
@@ -262,13 +267,20 @@ TEST_SUITES = {
 }
 
 def test(args):
-
-    if "suite" in args and args.suite:
-        for testName in args.suite:
-            TEST_SUITES[testName]()
+    
+    if "recipe" in args and len(args.recipe) > 0:
+        print("custom recipe")
     else:
-        for name,func in TEST_SUITES.items():
-            func()
+        path = Path("recipes")
+        if not path.exists():
+            print("No default recipe folder found. Exiting.")
+            exit(1)
+        recipes = [recipe for recipe in path.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]
+        _LOGGER.debug(f"Found recipes: {recipes}")
+
+        for recipe in recipes:
+            processor = RecipeProcessor(recipe)
+            processor.process()
 
 if __name__ == "__main__":
 
@@ -292,10 +304,11 @@ if __name__ == "__main__":
     )
     testParser.set_defaults(func = test)
     testParser.add_argument(
-        "--suite",
-        help = "Manually specify test suites to run.",
+        "--recipe",
+        help = "Manually specify recipe to run.",
         choices = list(TEST_SUITES.keys()),
-        action = "append"
+        action = "append",
+        default = []
     )
 
     # ============= Convert subcommand =============
