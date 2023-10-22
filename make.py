@@ -197,11 +197,6 @@ def convert(args):
             bin2hex(32, tempObjFilePath, os.path.join(outputPath, fileName + ".hex"))
             print(f"Converted '{fileName}' to hex.")
 
-TEST_SUITES = {
-    "official": rvtest,
-    "hardware": hwtest
-}
-
 def test(args):
     
     if "recipe" in args and len(args.recipe) > 0:
@@ -255,7 +250,7 @@ if __name__ == "__main__":
     testParser.add_argument(
         "--recipe",
         help = "Manually specify recipe to run.",
-        choices = list(TEST_SUITES.keys()),
+        # choices = ,
         action = "append",
         default = []
     )
