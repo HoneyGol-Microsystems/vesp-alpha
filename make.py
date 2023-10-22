@@ -9,9 +9,9 @@ from pathlib import Path
 import yaml
 from scripts.recipeProcessor import RecipeProcessor
 
-from elftools.elf.elffile import ELFFile
-from elftools.elf import descriptions
-from elftools.common import exceptions as elfexceptions
+# from elftools.elf.elffile import ELFFile
+# from elftools.elf import descriptions
+# from elftools.common import exceptions as elfexceptions
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -191,27 +191,27 @@ def getRVExecsFromPath(sourcePath):
 
     execs = []
 
-    for fileName in os.listdir(sourcePath):
+    # for fileName in os.listdir(sourcePath):
 
-        filePath = os.path.join(sourcePath, fileName)
-        if not os.path.isfile(filePath):
-            continue
+    #     filePath = os.path.join(sourcePath, fileName)
+    #     if not os.path.isfile(filePath):
+    #         continue
 
-        with open(filePath, "rb") as file:
-            try:
-                elffile = ELFFile(file)
-            except elfexceptions.ELFError as e:
-                # Skip non-ELF files.
-                continue
-            else:
-                architecture = elffile.get_machine_arch()
-                eType = elffile.header["e_type"]
-                if architecture != "RISC-V" or eType != "ET_EXEC":
-                    # Skip non-RISC-V executables.
-                    continue 
+    #     with open(filePath, "rb") as file:
+    #         try:
+    #             elffile = ELFFile(file)
+    #         except elfexceptions.ELFError as e:
+    #             # Skip non-ELF files.
+    #             continue
+    #         else:
+    #             architecture = elffile.get_machine_arch()
+    #             eType = elffile.header["e_type"]
+    #             if architecture != "RISC-V" or eType != "ET_EXEC":
+    #                 # Skip non-RISC-V executables.
+    #                 continue 
 
-        # File passed all checks, add to list.
-        execs.append(fileName)
+    #     # File passed all checks, add to list.
+    #     execs.append(fileName)
     
     return execs
     
