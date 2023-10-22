@@ -278,9 +278,22 @@ def test(args):
         recipes = [recipe for recipe in path.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]
         _LOGGER.debug(f"Found recipes: {recipes}")
 
+        failedRecipes = []
+
         for recipe in recipes:
             processor = RecipeProcessor(recipe)
-            processor.process()
+            if not processor.process():
+                failedRecipes.append(recipe)
+
+        if len(failedRecipes) > 0:
+            print("Finished with errors! Rerun with -v or -vv to get more information.")
+        else:
+            print("Finished successfully!")
+
+        print("Details:")
+        print(f"- count of test suites: {len(recipes)}")
+        print(f"- # failed: {len(failedRecipes)}")
+        print(f"- failed suites: {[str(recName) for recName in failedRecipes]}")
 
 if __name__ == "__main__":
 
@@ -344,12 +357,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "-v",
         help = "Print debug data.",
-        action = "store_true"
+        action = "count",
+        default = 0
     )
 
     args = parser.parse_args()
 
-    if args.v:
+    if args.v == 1:
+        logging.basicConfig(level = logging.INFO)
+    elif args.v > 1:
         logging.basicConfig(level = logging.DEBUG)
 
     args.func(args)
