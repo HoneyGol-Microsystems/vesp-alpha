@@ -199,8 +199,9 @@ def convert(args):
 
 def test(args):
     
-    if "recipe" in args and len(args.recipe) > 0:
-        print("custom recipe")
+    if "recipe" in args and args.recipe:
+        print(args)
+        print("custom recipe not implemented yet")
     else:
         path = Path("recipes")
         if not path.exists():
@@ -249,11 +250,12 @@ if __name__ == "__main__":
     testParser.set_defaults(func = test)
     testParser.add_argument(
         "--recipe",
-        help = "Manually specify recipe to run.",
-        # choices = ,
-        action = "append",
-        default = []
+        help = "Manually specify a recipe (or directory with recipes) to run.",
+        action = "store",
+        type = Path,
     )
+
+    # add custom source files definition
 
     # ============= Convert subcommand =============
     convertParser = subparsers.add_parser(
