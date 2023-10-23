@@ -23,13 +23,19 @@ class RecipeProcessor:
         _LOGGER.debug(f"Loading recipe: {recipePath}")
         self.fileName = str(recipePath)
         with recipePath.open() as file:
-            self.recipe = yaml.safe_load(file)
+            try:
+                self.recipe = yaml.safe_load(file)
+            except yaml.parser.ParserError as e:
+                _LOGGER.error("Failed to parse YAML structure of the recipe. Check for YAML format related errors - indentation etc. Check the log below, it should tell you which lines caused the error.")
+                raise e # Reraise to provide more information.
 
     # Creates a directory.
     # Returns true if successful.
     # Throws MissingRequiredKey if there is directory name missing (or not string).
     def stepMakeDirectory(self, stepData) -> bool:
         
+        _LOGGER.info("Starting make directory step...")
+
         try:
             dirName = stepData["name"]
         except KeyError:
@@ -43,6 +49,7 @@ class RecipeProcessor:
         _LOGGER.debug(f"Creating directory '{dirName}'")
         Path(dirName).mkdir(exist_ok = True)
         
+        _LOGGER.info("Step passed.")
         return True
 
     def stepRun(self, stepData) -> bool:
@@ -75,16 +82,20 @@ class RecipeProcessor:
             assertReturnCode = stepData["assert"]["return_code"] 
         except KeyError:
             assertReturnCode = None
+        _LOGGER.debug(f"Assert return code: {assertReturnCode}")
 
         try:
             assertOutputNotCont = stepData["assert"]["output"]["not_contains"]
         except KeyError:
             assertOutputNotCont = []
+        _LOGGER.debug(f"Assert output notcont: {assertOutputNotCont}")
         
         try:
             assertOutputCont    = stepData["assert"]["output"]["contains"]
         except KeyError:
             assertOutputCont    = []
+        _LOGGER.debug(f"Assert output cont: {assertOutputCont}")
+
 
         _LOGGER.debug(f"Elaborated params: {params}")
         
@@ -104,7 +115,8 @@ class RecipeProcessor:
         if stdout: _LOGGER.info(f"STDOUT: {stdout}")
         if stderr: _LOGGER.info(f"STDERR: {stderr}")
 
-        if assertReturnCode:
+        # There needs to be != None, because if the return code is 0, simple 'if assertReturnCode' will obviously evaluate to false.
+        if assertReturnCode != None:
             if pipes.returncode != assertReturnCode:
                 _LOGGER.info(f"Assertion for return code failed. Expected {assertReturnCode} got {pipes.returncode}")
                 return False
@@ -124,9 +136,76 @@ class RecipeProcessor:
         _LOGGER.info("Step passed.")
         return True
 
+    # Finds and replace specified string in a specified file, then writes result into a specified file.
+    def stepFindReplace(self, stepData) -> bool:
+        
+        _LOGGER.info("Starting make directory step...")
+
+        try:
+            sourceFilePath = Path(stepData["source_file"])
+            destFilePath   = Path(stepData["dest_file"])
+            findStr    = stepData["find"]
+            replaceStr = stepData["replace"]
+        except KeyError:
+            _LOGGER.error("Missing required key found during elaboration of find and replace step. Halting.")
+            return False
+        
+        if not sourceFilePath.exists():
+            _LOGGER.error("Source file for find and replace not exists!")
+            return False
+        
+        if destFilePath.exists():
+            _LOGGER.info("Destination file already exists, will be overwritten.")
+        
+        _LOGGER.debug(f"Loading source file '{sourceFilePath}'...")
+        sourceText = sourceFilePath.read_text()
+        
+        _LOGGER.debug(f"Replacing '{findStr}' with '{replaceStr}'.")
+        destText   = sourceText.replace(findStr, replaceStr)
+
+        _LOGGER.debug(f"Writing to dest file '{destFilePath}'...")
+        destFilePath.write_text(destText)
+
+        _LOGGER.info("Step passed.")
+        return True
+
+    def stepCopy(self, stepData) -> bool:
+
+        _LOGGER.info("Starting step copy...")
+
+        try:
+            sourcePath = Path(stepData["source"])
+            destPath   = Path(stepData["dest"])
+        except KeyError:
+            _LOGGER.error("Missing required key found during elaboration of find and copy step. Halting.")
+            return False
+        
+        _LOGGER.debug(f"Will copy {sourcePath} to {destPath}")
+
+        try:
+            recursive = stepData["recursive"]
+            if type(recursive) != bool:
+                _LOGGER.error("'Recursive' parameter is not boolean. Halting.")
+                return False
+        except KeyError:
+            recursive = False
+
+        if sourcePath.is_dir() and not recursive:
+            _LOGGER.error("Source is a directory but 'recursive' mode not enabled.")
+            return False
+
+        if sourcePath.is_file and recursive:
+            _LOGGER.warning("Recursive parameter specified but source is a file.")
+
+        return False
+        _LOGGER.info("Step passed.")
+
+
     stepParsers : dict = {
         "make_directory" : stepMakeDirectory,
-        "run" : stepRun
+        "run" : stepRun,
+        "find_and_replace" : stepFindReplace,
+        "copy" : stepCopy
     }
 
     # Check if the file version is compatible.
@@ -153,6 +232,8 @@ class RecipeProcessor:
     def __validateType(self, file : Path, fileType : str) -> bool:
         if fileType == "verilog":
             return file.suffix == ".v"
+        elif fileType == "hex":
+            return file.suffix == ".hex"
         else:
             return False
 
@@ -208,10 +289,14 @@ class RecipeProcessor:
                 print(f"📜📄 Running steps for source file '{source}'")
 
             if not self.__elaborateSteps(source):
-                print(f"📜❌ File '{source}' failed")
+                if source != None:
+                    print(f"📜❌ File '{source}' failed")
+                else:
+                    print("📜❌ Failed!")
                 return False
             
-            print(f"📜✅ File '{source}' passed")
+            if source != None:
+                print(f"📜✅ File '{source}' passed")
             
         print(f"✅ Recipe '{self.name}' passed successfully.")
         return True
