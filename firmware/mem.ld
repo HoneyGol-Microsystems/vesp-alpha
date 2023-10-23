@@ -21,11 +21,11 @@ SECTIONS
     .text :
     {
         *(.startup) /* put here the .startup section of all of the input files (there's only one in startup.S) */
-        *(.text) /* put here the .text section of all of the input files */
+        *(.*text*) /* put here the .text section of all of the input files */
     } > CODE /* VMA (virtual memory address) and LMA (load memory address) are the same */
 
     .data :
     {
-        *(.data) /* put here the .data section of all of the input files */
+        *(.*data*) /* put here the .data section of all of the input files */
     } > DATA AT> CODE /* VMA is the ORIGIN address of DATA, but LMA is a address inside CODE (after all it's segments) */
 }
