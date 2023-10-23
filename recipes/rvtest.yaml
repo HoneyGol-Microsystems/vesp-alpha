@@ -1,0 +1,33 @@
+metadata:
+  type: "makepy recipe"
+  version: 0.1
+
+recipe:
+  name: "Official RICV-V Test"
+  comment: "This test recipe runs pre-compiled official RISC-V tests."
+  sources:
+    - path: "tests/riscv-tests-hex"
+      type: "hex"
+  steps:
+    - make_directory:
+        name: "build"
+    - find_and_replace:
+        source_file: "tests/riscvTopTest.v"
+        dest_file: "build/tmp.v"
+        find: "\"PATH_TO_HEX\""
+        replace: "\"build/tmp.hex\""
+    - run:
+        executable: "iverilog"
+        params:
+          - "build/tmp.v"
+          - "-obuild/tmp.out"
+          - "-Irtl/components"
+        assert:
+          return_code: 0
+          output:
+            not_contains:
+              - "ERROR"
+    - copy:
+        source: mpysource
+        dest: "build/tmp.hex"
+        #recursive: false
