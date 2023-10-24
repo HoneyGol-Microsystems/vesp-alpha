@@ -1,7 +1,8 @@
 import logging
 import yaml
-from pathlib import Path
 import subprocess
+import shutil
+from pathlib import Path
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -180,6 +181,10 @@ class RecipeProcessor:
             _LOGGER.error("Missing required key found during elaboration of find and copy step. Halting.")
             return False
         
+        if not sourcePath.exists():
+            _LOGGER.error("Source does not exist!")
+            return False
+
         _LOGGER.debug(f"Will copy {sourcePath} to {destPath}")
 
         try:
@@ -199,12 +204,15 @@ class RecipeProcessor:
 
         # Copying directory. We will create full path as necessary.
         if sourcePath.is_dir():
-            pass          
+            shutil.copytree(str(sourcePath), str(destPath), dirs_exist_ok = True)
+        elif sourcePath.is_file():
+            shutil.copy2(str(sourcePath), str(destPath))
+        else:
+            _LOGGER.error("Source path is neither a file nor directory.")
+            return False
 
-
-        return False
         _LOGGER.info("Step passed.")
-
+        return True
 
     stepParsers : dict = {
         "make_directory" : stepMakeDirectory,
