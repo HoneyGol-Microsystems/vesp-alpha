@@ -172,6 +172,17 @@ class RecipeProcessor:
         
         if not sourcePath.exists():
             _LOGGER.error("Source does not exist!")
+            return False
+
+        # Directories will be copied using copytree which creates whole structure automatically => caring only about files.
+        if not destPath.exists() and not sourcePath.is_dir():
+            _LOGGER.info("Dest path not exists, trying to create it...")
+            # If destination ends with "/" it means it should be a directory, otherwise it is a file name and we will create dir structure only to the penultimate element.
+            # We use stepData instead destPath, because pathlib does not preserve trailing slashes.
+            if stepData["dest"].endswith("/"):
+                destPath.mkdir(exist_ok = True, parents = True)
+            else:
+                destPath.parents[0].mkdir(exist_ok = True, parents = True)
 
         _LOGGER.debug(f"Will copy {sourcePath} to {destPath}")
 
