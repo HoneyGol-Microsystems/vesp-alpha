@@ -26,7 +26,6 @@ class RecipeProcessor:
         with recipePath.open() as file:
             try:
                 self.recipe = yaml.safe_load(file)
-                print(type(self.recipe))
             except yaml.error.YAMLError as e:
                 _LOGGER.error("Failed to parse YAML structure of the recipe. Check for YAML format related errors - indentation etc. Check the log below, it should tell you which lines caused the error.")
                 raise e # Reraise to provide more information.
@@ -60,25 +59,14 @@ class RecipeProcessor:
 
         try:
             execName             = stepData["executable"]
-            globalSource : Path  = stepData["global_source"]
-
         except KeyError:
             _LOGGER.error("Missing required key found during elaboration of run step. Halting.")
             return False
         
-        params = []
         try:
-            # Check if there is a source placeholder in params and replace accordingly.
-            for par in stepData["params"]:
-                if par == self.PLACEHOLDER_CURRENT_SOURCE:
-                    if globalSource == None:
-                        _LOGGER.warning(f"Using placeholder {self.PLACEHOLDER_CURRENT_SOURCE} even when no global sources are specified. Parameter ignored.")
-                    else:
-                        params.append(str(globalSource.resolve()))
-                else:
-                    params.append(par)
+            params = stepData["params"]
         except KeyError:
-            pass
+            params = []
 
         try:
             assertReturnCode = stepData["assert"]["return_code"] 
@@ -184,7 +172,6 @@ class RecipeProcessor:
         
         if not sourcePath.exists():
             _LOGGER.error("Source does not exist!")
-            return False
 
         _LOGGER.debug(f"Will copy {sourcePath} to {destPath}")
 
@@ -228,13 +215,12 @@ class RecipeProcessor:
     
     # Elaborate all steps in recipe.
     # Throws RecipeProcessingFailed exception if there is a syntax error in the recipe.
-    def __elaborateSteps(self, currentSource) -> bool:
-        for step in self.steps:
+    def __elaborateSteps(self, steps) -> bool:
+        for step in steps:
             try:
                 stepName = list(step.keys())[0]
                 # Merge step's parameters with current source from list (if specified).
-                stepParams = step[stepName] | {"global_source" : currentSource}
-                if not self.stepParsers[stepName](self, stepParams):
+                if not self.stepParsers[stepName](self, step[stepName]):
                     _LOGGER.info(f"Step '{stepName}' failed, returning false.")
                     return False
             except KeyError:
@@ -293,16 +279,23 @@ class RecipeProcessor:
         except KeyError:
             self.sources = [ None ]
             _LOGGER.debug(f"No sources specified, inserted dummy one: {self.sources}")
-        
+
+        # Running the recipe.
         print(f"📜 Running recipe '{self.name}' ({self.fileName})...")
         _LOGGER.debug(f"Recipe comment: {self.comment}")
 
         for source in self.sources:
 
-            if source != None:
-                print(f"📜📄 Running steps for source file '{source}'")
 
-            if not self.__elaborateSteps(source):
+            if source != None:
+                # Replacing source file placeholders with real paths.
+                replacedStepsString : str = yaml.safe_dump(self.steps).replace(self.PLACEHOLDER_CURRENT_SOURCE, str(source.resolve()))
+                replacedSteps : dict      = yaml.safe_load(replacedStepsString)
+                print(f"📜📄 Running steps for source file '{source}'")
+            else:
+                replacedSteps = self.steps
+
+            if not self.__elaborateSteps(replacedSteps):
                 if source != None:
                     print(f"📜❌ File '{source}' failed")
                 else:
