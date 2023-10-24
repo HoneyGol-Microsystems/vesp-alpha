@@ -194,8 +194,13 @@ class RecipeProcessor:
             _LOGGER.error("Source is a directory but 'recursive' mode not enabled.")
             return False
 
-        if sourcePath.is_file and recursive:
+        if sourcePath.is_file() and recursive:
             _LOGGER.warning("Recursive parameter specified but source is a file.")
+
+        # Copying directory. We will create full path as necessary.
+        if sourcePath.is_dir():
+            pass          
+
 
         return False
         _LOGGER.info("Step passed.")
