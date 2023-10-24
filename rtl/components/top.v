@@ -60,12 +60,8 @@ module top (
             .WORD_CNT(`DATA_MEM_WORD_CNT)
         ) dataMemInst (
             .clk(sysClk),
-<<<<<<< HEAD:src/components/top.v
             .reset(sysRes),
-            .we(weMem),
-=======
             .we(dataBusWE),
->>>>>>> e7c9e9772e721ac7f006dbb3baf399180a0c3272:rtl/components/top.v
             .mask(writeMask),
             .a(dataBusAddr),
             .di(dataBusDataWrite),
