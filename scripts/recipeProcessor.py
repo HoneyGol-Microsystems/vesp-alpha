@@ -17,7 +17,7 @@ class RecipeProcessor:
     A class to process tasks defined in recipe YAML file.
     """
 
-    recipe : yaml
+    recipe : dict
     PLACEHOLDER_CURRENT_SOURCE = "mpysource"
 
     def __init__(self, recipePath):
@@ -26,7 +26,8 @@ class RecipeProcessor:
         with recipePath.open() as file:
             try:
                 self.recipe = yaml.safe_load(file)
-            except yaml.parser.ParserError as e:
+                print(type(self.recipe))
+            except yaml.error.YAMLError as e:
                 _LOGGER.error("Failed to parse YAML structure of the recipe. Check for YAML format related errors - indentation etc. Check the log below, it should tell you which lines caused the error.")
                 raise e # Reraise to provide more information.
 
