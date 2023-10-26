@@ -23,8 +23,9 @@ module cpu (
 );
 
     // wire/reg declarations
-    wire ALUZero, ALUToPC, memToReg, regWr, rs2ShiftSel,
-         uext, csrWr, mcauseWr, branch;
+    wire ALUZero, ALUToPC, memToReg, regWr, rs2ShiftSel, uext,
+         csrWr, mcauseWr, branch, mret, interrupt, irqBus,
+         exception, intExc;
     wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2;
     wire [2:0] regDataSel;
     wire [3:0] ALUCtrl;
@@ -34,16 +35,11 @@ module cpu (
     wire [31:0] src1, rs1, rs2, ALURes, imm, immPC, branchTarget,
                 regRes, dataExtLB, dataExtLH, PC4, csrOut,
                 mepcOut, mtvecOut, mcauseOut, mcauseIn,
-                nextPC, nextPCInt, branchMretTarget, intExcCode, nextMepc,
-                ISRAddress;
+                nextPC, nextPCInt, branchMretTarget, intExcCode,
+                nextMepc, ISRAddress;
     reg [3:0] mask;
     reg [7:0] dataLB;
     reg [31:0] regData, memData, src2;
-    wire mret;
-    wire interrupt;
-    wire irqBus;
-    wire exception;
-    wire intExc;
 
     // module instantiations
     controller controllerInst (
@@ -101,7 +97,9 @@ module cpu (
         .rd2(rs2)
     );
 
-    interruptController #(1) interruptControllerInst(
+    interruptController #(
+        .EXT_IRQ_COUNT(1)
+    ) interruptControllerInst (
         .clk(clk),
         .irqBus(irqBus),
         .interrupt(interrupt),
