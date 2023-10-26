@@ -7,8 +7,6 @@ import elftohex
 LINKER_SCRIPT_PATH = pathlib.Path(__file__).resolve().parent.parent.joinpath("firmware/mem.ld")
 
 def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
-    # Check what memory architecture was specified
-    memHarvard = (memArch == "harvard")
     # Get all .S files
     asmFilesPaths: list[pathlib.Path] = []
     if srcPath.suffix == ".S":  # If only one file was passed
@@ -16,8 +14,9 @@ def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
     else:
         asmFilesPaths = list(srcPath.glob("*.S"))
 
-    for fPath in asmFilesPaths:
+    for asmPath in asmFilesPaths:
         # Compile source file
+        elfPath = pathlib.Path(asmPath.stem)
         ret = subprocess.run(
             [
                 "riscv64-unknown-elf-gcc",
@@ -31,64 +30,20 @@ def compile(srcPath: pathlib.Path, destPath: pathlib.Path, memArch: str):
                 "-std=c11", "-O2",
                 "-nostdlib",
                 "-T", str(LINKER_SCRIPT_PATH),
-                str(fPath),
-                "-o", fPath.stem
+                str(asmPath),
+                "-o", elfPath.name
             ],
             stdout = sys.stdout,
             stderr = subprocess.STDOUT
         )
 
-        # Create list of elf files to remove at the end
-        toRemove: list[pathlib.Path] = []
-        toRemove.append(pathlib.Path(fPath.stem))  # Add compiled elf
-
-        # Create destination directory if it doesn't exist yet
-        destPath.mkdir(parents=True, exist_ok=True)
-
-        # Separate .text and .data according to the specified memory architecture
-        if memHarvard:
-            # Create paths for the .text and .data elf files
-            dataSectionElfPath = pathlib.Path(fPath.stem + "_data")
-            textSectionElfPath = pathlib.Path(fPath.stem + "_text")
-            # Remove them at the end
-            toRemove.append(dataSectionElfPath)
-            toRemove.append(textSectionElfPath)
-
-            # Separate .data
-            subprocess.run(
-                [
-                    "riscv64-unknown-elf-objcopy",
-                    "-O", "elf32-littleriscv",
-                    "--only-section=.data",
-                    fPath.stem,
-                    str(dataSectionElfPath)
-                ],
-                stdout = sys.stdout,
-                stderr = subprocess.STDOUT
-            )
-            # Separate .text
-            subprocess.run(
-                [
-                    "riscv64-unknown-elf-objcopy",
-                    "-O", "elf32-littleriscv",
-                    "--only-section=.text",
-                    fPath.stem,
-                    str(textSectionElfPath)
-                ],
-                stdout = sys.stdout,
-                stderr = subprocess.STDOUT
-            )
-
-            # Create .hex files from the elf
-            elftohex.convert(dataSectionElfPath, destPath)
-            elftohex.convert(textSectionElfPath, destPath)
-        else:
-            # Create .hex files from the elf
-            elftohex.convert(fPath.stem, destPath)
+        if ret.returncode != 0:
+            raise SystemExit("Compilation error.")
         
-        # Remove the elf files
-        for fPath in toRemove:
-            fPath.unlink()
+        # Convert the elf to .hex
+        elftohex.convert(elfPath, destPath, memArch == "harvard")
+        # Remove the elf
+        elfPath.unlink()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

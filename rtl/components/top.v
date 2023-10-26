@@ -50,14 +50,16 @@ module top (
 
     `ifdef SPLIT_MEMORY
         instructionMemory #(
-            .WORD_CNT(`INSTR_MEM_WORD_CNT)
+            .WORD_CNT(`INSTR_MEM_WORD_CNT),
+            .MEM_FILE("")
         ) instrMemInst (
             .a(instrBusAddr),
             .d(instrBusData)
         );
 
         dataMemory #(
-            .WORD_CNT(`DATA_MEM_WORD_CNT)
+            .WORD_CNT(`DATA_MEM_WORD_CNT),
+            .MEM_FILE("")
         ) dataMemInst (
             .clk(sysClk),
             .reset(sysRes),
@@ -70,7 +72,8 @@ module top (
 
     `else
         ram #(
-            .WORD_CNT(`RAM_WORD_CNT)
+            .WORD_CNT(`RAM_WORD_CNT),
+            .MEM_FILE("")
         ) ramInst (
             .a1(instrBusAddr),
             .do1(instrBusData),

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import sys
 import subprocess
@@ -5,10 +7,6 @@ import os
 import logging
 import shutil
 from itertools import zip_longest
-
-from elftools.elf.elffile import ELFFile
-from elftools.elf import descriptions
-from elftools.common import exceptions as elfexceptions
 
 RVTESTS_SOURCE = os.path.join("tests", "riscv-tests", "isa")
 HWTESTS_DIR = os.path.join("tests", "hwtests")
@@ -185,29 +183,6 @@ def hwtest():
 def getRVExecsFromPath(sourcePath):
 
     execs = []
-
-    for fileName in os.listdir(sourcePath):
-
-        filePath = os.path.join(sourcePath, fileName)
-        if not os.path.isfile(filePath):
-            continue
-
-        with open(filePath, "rb") as file:
-            try:
-                elffile = ELFFile(file)
-            except elfexceptions.ELFError as e:
-                # Skip non-ELF files.
-                continue
-            else:
-                architecture = elffile.get_machine_arch()
-                eType = elffile.header["e_type"]
-                if architecture != "RISC-V" or eType != "ET_EXEC":
-                    # Skip non-RISC-V executables.
-                    continue 
-
-        # File passed all checks, add to list.
-        execs.append(fileName)
-    
     return execs
     
 # Copied from https://docs.python.org/3/library/itertools.html
@@ -282,7 +257,8 @@ if __name__ == "__main__":
 
     subparsers = parser.add_subparsers(
         help = "Action to do.",
-        required = True
+        required = True,
+        dest = "command"
     )
 
     # ============= Test subcommand =============
