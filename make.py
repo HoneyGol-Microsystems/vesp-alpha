@@ -15,16 +15,6 @@ from scripts.recipeProcessor import RecipeProcessor
 
 _LOGGER = logging.getLogger(__name__)
 
-RVTESTS_SOURCE = os.path.join("tests", "riscv-tests", "isa")
-HWTESTS_DIR = os.path.join("tests", "hwtests")
-RVTESTS_HEX_DIR = os.path.join("tests", "riscv-tests-hex")
-RVTESTS_TOP_TEMPLATE = os.path.join("tests", "riscvTopTest.v")
-BUILD_DIR = "build"
-IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
-
-ASSERT_FAIL_MSG = "ASSERT_FAIL"
-ASSERT_SUCC_MSG = "ASSERT_SUCCESS"
-
 def test(args):
     
     if "recipe" in args and args.recipe:
@@ -86,33 +76,33 @@ if __name__ == "__main__":
     # add custom source files definition
 
     # ============= Convert subcommand =============
-    convertParser = subparsers.add_parser(
-        "convert",
-        help = "Convert different executable formats."
-    )
-    convertParser.set_defaults(func = convert)
+    # convertParser = subparsers.add_parser(
+    #     "convert",
+    #     help = "Convert different executable formats."
+    # )
+    # convertParser.set_defaults(func = convert)
     
-    convertParser.add_argument(
-        "sourceDir",
-        help = "Source directory."
-    )
-    convertParser.add_argument(
-        "outputDir",
-        help = "Output directory."
-    )    
+    # convertParser.add_argument(
+    #     "sourceDir",
+    #     help = "Source directory."
+    # )
+    # convertParser.add_argument(
+    #     "outputDir",
+    #     help = "Output directory."
+    # )    
     
-    convertParser.add_argument(
-        "--iformat",
-        help = "Input file format.",
-        choices = ["binary"],
-        required = True
-    )
-    convertParser.add_argument(
-        "--oformat",
-        help = "Output file format.",
-        choices = ["hex"],
-        required = True
-    )
+    # convertParser.add_argument(
+    #     "--iformat",
+    #     help = "Input file format.",
+    #     choices = ["binary"],
+    #     required = True
+    # )
+    # convertParser.add_argument(
+    #     "--oformat",
+    #     help = "Output file format.",
+    #     choices = ["hex"],
+    #     required = True
+    # )
     
     # ============= Other arguments =============
     parser.add_argument(
