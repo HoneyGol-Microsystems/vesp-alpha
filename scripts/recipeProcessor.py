@@ -179,10 +179,14 @@ class RecipeProcessor:
             _LOGGER.info("Dest path not exists, trying to create it...")
             # If destination ends with "/" it means it should be a directory, otherwise it is a file name and we will create dir structure only to the penultimate element.
             # We use stepData instead destPath, because pathlib does not preserve trailing slashes.
-            if stepData["dest"].endswith("/"):
-                destPath.mkdir(exist_ok = True, parents = True)
-            else:
-                destPath.parents[0].mkdir(exist_ok = True, parents = True)
+            try:
+                if stepData["dest"].endswith("/"):
+                    destPath.mkdir(exist_ok = True, parents = True)
+                else:
+                    destPath.parents[0].mkdir(exist_ok = True, parents = True)
+            except FileExistsError:
+                _LOGGER.error("Dest path contains an existing file, can't create required directory structure.")
+                return False
 
         _LOGGER.debug(f"Will copy {sourcePath} to {destPath}")
 
