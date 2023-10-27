@@ -5,6 +5,8 @@ import logging
 from pathlib import Path
 from scripts.recipeProcessor import RecipeProcessor
 
+DEFAULT_RECIPE_PATH = "recipes"
+
 _LOGGER = logging.getLogger(__name__)
 
 def test(args):
@@ -29,7 +31,8 @@ def test(args):
             print("Specified path is neither file nor directory.")
             exit(1)
     else:
-        path = Path("recipes")
+        print("No recipe path specified, using default...")
+        path = Path(DEFAULT_RECIPE_PATH)
         if not path.exists() or not path.is_dir():
             print("No default recipe folder found. Exiting.")
             exit(1)
