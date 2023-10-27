@@ -13,34 +13,45 @@ def test(args):
     
     recipes = []
     failedRecipes = []
+    customSourcePath = None
 
     if "recipe" in args and args.recipe:
         if not args.recipe.exists():
             print("Specified recipe (or folder) does not exist.")
-            return 1
+            return True
         if args.recipe.is_file():
             if args.recipe.suffix == ".yaml" or args.recipe.suffix == ".yml":
                 recipes.append(args.recipe)
             else:
                 print("Specified file is not YAML!")
-                return 1
+                return True
         elif args.recipe.is_dir():
             recipes = [recipe for recipe in args.recipe.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]    
         else:
             print("Specified path is neither file nor directory.")
-            return 1
+            return True
+        
+        if "sources" in args and args.sources:
+            if not args.sources.exists():
+                _LOGGER.error("Specified source path does not exist.")
+                return True
+            else:
+                customSourcePath = args.sources
     else:
+        if "sources" in args and args.sources:
+            _LOGGER.warning("You specified custom sources but not recipe path, ignoring")
+
         print("No recipe path specified, using default...")
         path = Path(DEFAULT_RECIPE_PATH)
         if not path.exists() or not path.is_dir():
             print("No default recipe folder found. Exiting.")
-            return 1
+            return True
         recipes = [recipe for recipe in path.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]
     
     _LOGGER.debug(f"Running recipes: {recipes}")
 
     for recipe in recipes:
-        processor = RecipeProcessor(recipe)
+        processor = RecipeProcessor(recipe, customSourcePath)
         if not processor.process():
             failedRecipes.append(recipe)
 
@@ -82,6 +93,12 @@ if __name__ == "__main__":
         help = "Manually specify a recipe (or directory with recipes) to run.",
         action = "store",
         type = Path,
+    )
+    testParser.add_argument(
+        "--sources",
+        help = "Manually specify a sources to be used with manually specified recipe.",
+        action = "store",
+        type = Path
     )
 
     # add custom source files definition
