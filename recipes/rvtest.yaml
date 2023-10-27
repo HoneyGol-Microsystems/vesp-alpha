@@ -30,4 +30,12 @@ recipe:
     - copy:
         source: mpysource
         dest: "build/tmp.hex"
-        #recursive: false
+        recursive: false
+    - run:
+        executable: "build/tmp.out"
+        assert:
+          output:
+            contains:
+              - "ASSERT_SUCCESS"
+            not_contains:
+              - "ASSERT_FAIL"
