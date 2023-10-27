@@ -20,7 +20,7 @@ class RecipeProcessor:
     recipe : dict
     PLACEHOLDER_CURRENT_SOURCE = "mpysource"
 
-    def __init__(self, recipePath):
+    def __init__(self, recipePath, customSourcePath : Path):
         _LOGGER.debug(f"Loading recipe: {recipePath}")
         self.fileName = str(recipePath)
         with recipePath.open() as file:
@@ -29,6 +29,8 @@ class RecipeProcessor:
             except yaml.error.YAMLError as e:
                 _LOGGER.error("Failed to parse YAML structure of the recipe. Check for YAML format related errors - indentation etc. Check the log below, it should tell you which lines caused the error.")
                 raise e # Reraise to provide more information.
+        
+        self.customSourcePath = customSourcePath
 
     # Creates a directory.
     # Returns true if successful.
@@ -283,17 +285,26 @@ class RecipeProcessor:
         except KeyError:
             self.printLogs = "error"
         
-        try:
-            for source in self.recipe["recipe"]["sources"]:
-                srcPath = Path(source["path"])
-                if srcPath.is_dir():
-                    self.sources = [file for file in srcPath.iterdir() if file.is_file() and self.__validateType(file, source["type"])]
-                else:
-                    self.sources = [srcPath]
-            _LOGGER.debug(f"Loaded sources: {self.sources}")
-        except KeyError:
-            self.sources = [ None ]
-            _LOGGER.debug(f"No sources specified, inserted dummy one: {self.sources}")
+        if self.customSourcePath:
+            if self.customSourcePath.is_dir():
+                self.sources = [file for file in self.customSourcePath.iterdir() if file.is_file()]
+            elif self.customSourcePath.is_file():
+                self.sources = [self.customSourcePath]
+            else:
+                _LOGGER.error("Custom source path not file nor directory.")
+                return False
+        else:
+            try:
+                for source in self.recipe["recipe"]["sources"]:
+                    srcPath = Path(source["path"])
+                    if srcPath.is_dir():
+                        self.sources = [file for file in srcPath.iterdir() if file.is_file() and self.__validateType(file, source["type"])]
+                    else:
+                        self.sources = [srcPath]
+                _LOGGER.debug(f"Loaded sources: {self.sources}")
+            except KeyError:
+                self.sources = [ None ]
+                _LOGGER.debug(f"No sources specified, inserted dummy one: {self.sources}")
 
         # Running the recipe.
         print(f"📜 Running recipe '{self.name}' ({self.fileName})...")
