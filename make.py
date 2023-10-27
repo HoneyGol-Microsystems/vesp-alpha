@@ -1,17 +1,9 @@
 import argparse
 import sys
-import subprocess
 import os
 import logging
-import shutil
-from itertools import zip_longest
 from pathlib import Path
-import yaml
 from scripts.recipeProcessor import RecipeProcessor
-
-# from elftools.elf.elffile import ELFFile
-# from elftools.elf import descriptions
-# from elftools.common import exceptions as elfexceptions
 
 _LOGGER = logging.getLogger(__name__)
 
