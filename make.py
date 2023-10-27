@@ -17,25 +17,24 @@ def test(args):
     if "recipe" in args and args.recipe:
         if not args.recipe.exists():
             print("Specified recipe (or folder) does not exist.")
-            exit(1)
-
+            return 1
         if args.recipe.is_file():
             if args.recipe.suffix == ".yaml" or args.recipe.suffix == ".yml":
                 recipes.append(args.recipe)
             else:
                 print("Specified file is not YAML!")
-                exit(1)
+                return 1
         elif args.recipe.is_dir():
             recipes = [recipe for recipe in args.recipe.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]    
         else:
             print("Specified path is neither file nor directory.")
-            exit(1)
+            return 1
     else:
         print("No recipe path specified, using default...")
         path = Path(DEFAULT_RECIPE_PATH)
         if not path.exists() or not path.is_dir():
             print("No default recipe folder found. Exiting.")
-            exit(1)
+            return 1
         recipes = [recipe for recipe in path.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]
     
     _LOGGER.debug(f"Running recipes: {recipes}")
@@ -54,6 +53,8 @@ def test(args):
     print(f"- count of test suites: {len(recipes)}")
     print(f"- # failed: {len(failedRecipes)}")
     print(f"- failed suites: {[str(recName) for recName in failedRecipes]}")
+
+    return len(failedRecipes) > 0
 
 if __name__ == "__main__":
 
@@ -129,5 +130,6 @@ if __name__ == "__main__":
     elif args.v > 1:
         logging.basicConfig(level = logging.DEBUG)
 
-    args.func(args)
+    subcommandReturnCode = args.func(args)
+    sys.exit(subcommandReturnCode) # Pass return code to system. Handy e.g. when evaluating the result in GitHub actions.
     
