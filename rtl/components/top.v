@@ -62,7 +62,6 @@ module top (
             .MEM_FILE("")
         ) dataMemInst (
             .clk(sysClk),
-            .reset(sysRes),
             .we(dataBusWE),
             .mask(writeMask),
             .a(dataBusAddr),
