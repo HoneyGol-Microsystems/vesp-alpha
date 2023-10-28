@@ -15,7 +15,7 @@ module topTest();
     integer pcValuesLog [`MAX_QUEUE_SIZE - 1:0];
     integer pcValuesLogPtr = 0;
 
-    top dut(
+    top dut (
         .sysClk(clk),
         .sysRes(reset)
     );
