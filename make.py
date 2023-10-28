@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import sys
 import os
@@ -79,7 +81,8 @@ if __name__ == "__main__":
 
     subparsers = parser.add_subparsers(
         help = "Action to do.",
-        required = True
+        required = True,
+        dest = "command"
     )
 
     # ============= Test subcommand =============
