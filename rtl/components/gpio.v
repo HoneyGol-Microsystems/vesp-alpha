@@ -34,16 +34,16 @@ module gpio (
             case (regSel)
                 3'b000:  GPIOWR_A  = di[7:0];
                 3'b001:  GPIODIR_A = di[7:0];
-                // 010: ignore reads to GPIORD
+                // 010: ignore writes to GPIORD
                 3'b011:  GPIOWR_B  = di[7:0];
                 3'b100:  GPIODIR_A = di[7:0];
-                // 101: ignore reads to GPIORD
+                // 101: ignore writes to GPIORD
                 default: begin end
             endcase    
         end
     end
 
-    // writing to GPIO pins
+    // writing to ports
     genvar i;
     for (i = 0; i < 8; i = i + 1) begin
         // 1 -> output, 0 -> input
