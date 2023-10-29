@@ -10,13 +10,17 @@
 module topTest();
     
     reg clk, reset;
+    wire [15:0] ports;
+    reg [15:0] portsReg;
+    assign ports = portsReg;
     integer i;
     integer pcValuesLog [`MAX_QUEUE_SIZE - 1:0];
     integer pcValuesLogPtr = 0;
 
     top dut(
         .clk(clk),
-        .reset(reset)
+        .reset(reset),
+        .gpioPorts(ports)
     );
 
     initial begin
@@ -25,6 +29,8 @@ module topTest();
 		$dumpvars;
         $readmemh("firmware/program_text.hex", dut.instrMemInst.ram, 0, `INSTR_MEM_WORD_CNT-1);
         $readmemh("firmware/program_data.hex", dut.dataMemInst.ram, 0, `DATA_MEM_WORD_CNT-1);
+
+        portsReg = 16'hBBAA;
 
         reset <= 0;
         #5;

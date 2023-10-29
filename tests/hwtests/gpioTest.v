@@ -73,6 +73,22 @@ module gpioTest();
         // check if data was written to A ports
         `ASSERT(dut.ports[7:0] === dataIn[7:0], "A ports do not match GPIOWR_A values.")
 
+        /* test writing to B ports */
+        portsReg = {16{1'bZ}}; // third state has to be simulated
+        // write data to GPIOWR_B that will be written to ports in the next step
+        dataIn = 32'hFFFF_FFFF;
+        regSel = 3'b011;
+        we = 1;
+        #2;
+        `ASSERT(dataIn[7:0] === dut.GPIOWR_B, "dataIn was not written to GPIOWR_B.");
+        // make GPIO_B outputs
+        regSel = 3'b100;
+        #2;
+        `ASSERT(dataIn[7:0] === dut.GPIODIR_B, "dataIn was not written to GPIODIR_B.");
+        we = 0;
+        // check if data was written to B ports
+        `ASSERT(dut.ports[15:8] === dataIn[7:0], "A ports do not match GPIOWR_B values.")
+
         #5;
         $display(`ASSERT_SUCCESS);
         $finish;
