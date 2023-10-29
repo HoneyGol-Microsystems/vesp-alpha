@@ -77,15 +77,15 @@ Using special opcodes instead of the `tohost` mechanism is fine for all other te
         .WORD_CNT(`RAM_WORD_CNT),
         .MEM_FILE("INSERT THE PATH HERE")
     ) ramInst (
-        .a1(instrBusAddr),
-        .do1(instrBusData),
+        .a1(iAddr),
+        .do1(iRead),
 
-        .a2(dataBusAddr),
-        .di2(dataBusDataWrite),
-        .do2(dataBusDataRead),
-        .m2(writeMask),
-        .we2(dataBusWE),
-        .clk(sysClk)
+        .a2(dAddr),
+        .di2(dWrite),
+        .do2(dRead),
+        .m2(dMask),
+        .we2(dWE),
+        .clk(clk)
     );
    ```
    Now, the module `src/components/top.v`, including the CPU and RAM is ready for deploying onto the FPGA with the specified `.S` program.

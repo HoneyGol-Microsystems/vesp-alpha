@@ -15,35 +15,33 @@
 `include "rtl/components/gpio.v"
 
 module top (
-    input sysClk,
-    input sysRes,
+    input clk,
+    input reset,
     inout [15:0] gpioPorts
 );
 
-    wire dataBusWE, weMem, weGpio;
-    wire [2:0] outSel;
-    wire [3:0] writeMask;
-    wire [31:0] instrBusAddr, instrBusData, dataBusAddr, dataBusDataWrite,
-                dataMemDO, gpioDO;
-    
-    reg  [31:0] dataBusDataRead;
-    
-    addressDecoder addressDecoderInst(
-        .we(dataBusWE),
-        .a(dataBusAddr),
+    wire dWE, dataMemWE, gpioWE;
+    wire [2:0] dReadSel;
+    wire [3:0] dMask;
+    wire [31:0] iAddr, iRead, dAddr, dWrite, dataMemDO, gpioDO;
+    reg [31:0] dRead;
 
-        .outsel(outSel),
-        .wemem(weMem),
-        .wegpio(weGpio)
+    addressDecoder addressDecoderInst(
+        .we(dWE),
+        .a(dAddr),
+
+        .outsel(dReadSel),
+        .wemem(dataMemWE),
+        .wegpio(gpioWE)
     );
 
     gpio gpioInst(
-        .regSel(dataBusAddr[2:0]),
-        .we(weGpio),
-        .reset(sysRes),
-        .clk(sysClk),
+        .regSel(dAddr[2:0]),
+        .we(gpioWE),
+        .reset(reset),
+        .clk(clk),
         
-        .di(dataBusDataWrite),
+        .di(dWrite),
         .do(gpioDO),
         .ports(gpioPorts)
     );
@@ -53,19 +51,19 @@ module top (
             .WORD_CNT(`INSTR_MEM_WORD_CNT),
             .MEM_FILE("")
         ) instrMemInst (
-            .a(instrBusAddr),
-            .d(instrBusData)
+            .a(iAddr),
+            .d(iRead)
         );
 
         dataMemory #(
             .WORD_CNT(`DATA_MEM_WORD_CNT),
             .MEM_FILE("")
         ) dataMemInst (
-            .clk(sysClk),
-            .we(dataBusWE),
-            .mask(writeMask),
-            .a(dataBusAddr),
-            .di(dataBusDataWrite),
+            .clk(clk),
+            .we(dWE),
+            .mask(dMask),
+            .a(dAddr),
+            .di(dWrite),
             .do(dataMemDO)
         );
 
@@ -74,37 +72,37 @@ module top (
             .WORD_CNT(`RAM_WORD_CNT),
             .MEM_FILE("")
         ) ramInst (
-            .a1(instrBusAddr),
-            .do1(instrBusData),
+            .a1(iAddr),
+            .do1(iRead),
 
-            .a2(dataBusAddr),
-            .di2(dataBusDataWrite),
+            .a2(dAddr),
+            .di2(dWrite),
             .do2(dataMemDO),
-            .m2(writeMask),
-            .we2(weMem),
-            .clk(sysClk)
+            .m2(dMask),
+            .we2(dWE),
+            .clk(clk)
         );
     `endif // SPLIT_MEMORY
 
     cpu cpuInst (
-        .clk(sysClk),
-        .reset(sysRes),
+        .clk(clk),
+        .reset(reset),
 
-        .instruction(instrBusData),
-        .PC(instrBusAddr),
+        .instruction(iRead),
+        .PC(iAddr),
 
-        .memAddr(dataBusAddr),
-        .memReadData(dataBusDataRead),
-        .memWriteData(dataBusDataWrite),
-        .memWr(dataBusWE),
-        .wrMask(writeMask)
+        .memAddr(dAddr),
+        .memRdData(dRead),
+        .memWrData(dWrite),
+        .memWE(dWE),
+        .memMask(dMask)
     );
 
     // CPU data read source select.
     always @(*) begin
-        case (outSel)
-            3'b000:  dataBusDataRead = dataMemDO;
-            default: dataBusDataRead = gpioDO;
+        case (dReadSel)
+            3'b000:  dRead = dataMemDO;
+            default: dRead = gpioDO;
         endcase
     end
 

@@ -15,8 +15,8 @@ module topTest();
     integer pcValuesLogPtr = 0;
 
     top dut(
-        .sysClk(clk),
-        .sysRes(reset)
+        .clk(clk),
+        .reset(reset)
     );
 
     initial begin
@@ -50,12 +50,12 @@ module topTest();
         pcValuesLog[pcValuesLogPtr] = dut.cpuInst.PC;
         pcValuesLogPtr++;
 
-        if (dut.instrBusData === `OPCODE_PASS) begin
+        if (dut.iRead === `OPCODE_PASS) begin
             $display(`ASSERT_SUCCESS);
             $finish;
         end
 
-        if (dut.instrBusData === `OPCODE_FAIL) begin
+        if (dut.iRead === `OPCODE_FAIL) begin
             $display(`ASSERT_FAIL);
             
             $display("Last PC values dump:");
