@@ -26,21 +26,19 @@ module top (
     wire [31:0] iAddr, iRead, dAddr, dWrite, dWriteSh, dataMemDO, gpioDO;
     reg [31:0] dRead;
 
-    addressDecoder addressDecoderInst(
+    addressDecoder addressDecoderInst (
         .we(dWE),
         .a(dAddr),
-
         .outsel(dReadSel),
         .wemem(dataMemWE),
         .wegpio(gpioWE)
     );
 
-    gpio gpioInst(
+    gpio gpioInst (
         .regSel(dAddr[2:0]),
         .we(gpioWE),
         .reset(reset),
         .clk(clk),
-        
         .di(dWrite),
         .do(gpioDO),
         .ports(gpioPorts)
