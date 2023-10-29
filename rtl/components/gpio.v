@@ -15,12 +15,12 @@ module gpio (
 
     always @(*) begin
         case (regSel)
-            3'b000:  do = { {24{1'b0}}, GPIOWR_A    };
-            3'b001:  do = { {24{1'b0}}, GPIODIR_A   };
-            3'b010:  do = { {24{1'b0}}, ports[7:0]  };
-            3'b011:  do = { {24{1'b0}}, GPIOWR_B    };
-            3'b100:  do = { {24{1'b0}}, GPIODIR_B   };
-            default: do = { {24{1'b0}}, ports[15:8] };
+            3'b000:  do = { {24{1'b0}}, GPIOWR_A                };
+            3'b001:  do = { {16{1'b0}}, GPIODIR_A,   {8{1'b0}}  };
+            3'b010:  do = { {8{1'b0}} , ports[7:0] , {16{1'b0}} };
+            3'b011:  do = { GPIOWR_B  , {8{1'b0}}               };
+            3'b100:  do = { {24{1'b0}}, GPIODIR_B               };
+            default: do = { {16{1'b0}}, ports[15:8], {8{1'b0}}  };
         endcase    
     end
 
