@@ -14,17 +14,17 @@ module cpu (
     input             clk,
     input             reset,
     input      [31:0] instruction,
-    input      [31:0] memReadData,
-    output            memWr,  // write enable to data memory
-    output     [3:0]  wrMask,
+    input      [31:0] memRdData,
+    output            memWE,  // write enable to data memory
+    output     [3:0]  memMask,
     output reg [31:0] PC,
     output     [31:0] memAddr,
-    output     [31:0] memWriteData
+    output     [31:0] memWrData
 );
 
     // wire/reg declarations
-    wire ALUZero, ALUToPC, memToReg, regWr, rs2ShiftSel,
-         uext, csrWr, mcauseWr, branch;
+    wire ALUZero, ALUToPC, memToReg, regWE, rs2ShiftSel,
+         uext, csrWE, branch;
     wire [1:0] loadSel, maskSel, ALUSrc1, ALUSrc2;
     wire [2:0] regDataSel;
     wire [3:0] ALUCtrl;
@@ -62,12 +62,12 @@ module cpu (
         .loadSel(loadSel),
         .maskSel(maskSel),
         .memToReg(memToReg),
-        .memWr(memWr),
+        .memWE(memWE),
         .regDataSel(regDataSel),
-        .regWr(regWr),
+        .regWE(regWE),
         .rs2ShiftSel(rs2ShiftSel),
         .uext(uext),
-        .csrWr(csrWr),
+        .csrWE(csrWE),
         .mret(mret),
         .exception(exception),
         .excCode(excCode)
@@ -95,7 +95,7 @@ module cpu (
         .a2(instruction[24:20]),
         .a3(instruction[11:7]),
         .di3(regRes),
-        .we3(regWr),
+        .we3(regWE),
         .clk(clk),
         .rd1(rs1),
         .rd2(rs2)
@@ -111,7 +111,7 @@ module cpu (
     csr csrInst (
         .reset(reset),
         .clk(clk),
-        .we(csrWr),
+        .we(csrWE),
         .a(instruction[31:20]),
         .di(ALURes),
         .do(csrOut),
@@ -148,10 +148,10 @@ module cpu (
     assign branchTarget     = ALUToPC ? ALURes : immPC;
     assign src1             = ALUSrc1 ? imm : rs1;
     assign rs2Shift         = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
-    assign memWriteData     = rs2 << rs2Shift;
+    assign memWrData     = rs2 << rs2Shift;
     assign memAddr          = ALURes;
-    assign wrMask           = mask << ALURes[1:0];
-    assign dataLH           = ALURes[1] ? memReadData[31:16] : memReadData[15:0];
+    assign memMask           = mask << ALURes[1:0];
+    assign dataLH           = ALURes[1] ? memRdData[31:16] : memRdData[15:0];
     assign regRes           = memToReg ? memData : regData;
     assign branchMretTarget = mret ? mepcOut : branchTarget;
     assign nextPC           = branch | mret ? branchMretTarget : PC4;
@@ -208,10 +208,10 @@ module cpu (
     // dataLB mux
     always @(*) begin
         case (ALURes[1:0])
-            2'b00:   dataLB = memReadData[7:0];
-            2'b01:   dataLB = memReadData[15:8];
-            2'b10:   dataLB = memReadData[23:16];
-            default: dataLB = memReadData[31:24];
+            2'b00:   dataLB = memRdData[7:0];
+            2'b01:   dataLB = memRdData[15:8];
+            2'b10:   dataLB = memRdData[23:16];
+            default: dataLB = memRdData[31:24];
         endcase
     end
 
@@ -220,7 +220,7 @@ module cpu (
         case (loadSel)
             2'b00:   memData = dataExtLB;
             2'b01:   memData = dataExtLH;
-            default: memData = memReadData;
+            default: memData = memRdData;
         endcase
     end
 

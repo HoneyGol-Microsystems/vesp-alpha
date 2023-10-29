@@ -24,12 +24,12 @@ module controller (
     output reg [1:0]  loadSel,
     output reg [1:0]  maskSel,
     output reg        memToReg,
-    output reg        memWr,
+    output reg        memWE,
     output reg [2:0]  regDataSel,
-    output reg        regWr,
+    output reg        regWE,
     output reg        rs2ShiftSel,
     output reg        uext,
-    output reg        csrWr,
+    output reg        csrWE,
     output reg        mret,
     output reg        exception,
     output reg [30:0] excCode
@@ -67,12 +67,12 @@ module controller (
         loadSel     = funct3[1:0];
         maskSel     = funct3[1:0];
         memToReg    = 0;
-        memWr       = 0;
+        memWE       = 0;
         regDataSel  = 0;
-        regWr       = 0;
+        regWE       = 0;
         rs2ShiftSel = funct3[0];
         uext        = funct3[2];
-        csrWr       = 0;
+        csrWE       = 0;
         mret        = 0;
         exception   = 0;
         excCode     = 0;
@@ -80,7 +80,7 @@ module controller (
         casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
                 // set matching signals
-                regWr = 1;
+                regWE = 1;
 
                 case (funct3)
                     3'b000: ALUCtrl = {2'b00, funct7[5], ~funct7[5]}; // ADD or SUB
@@ -97,7 +97,7 @@ module controller (
             5'b00x00: begin // I-type without JALR
                 // set matching signals
                 ALUSrc2 = 2'b01;
-                regWr   = 1;
+                regWE   = 1;
 
                 if (opcode[4]) begin // immediate register-register
                     case (funct3)
@@ -120,12 +120,12 @@ module controller (
                 ALUToPC    = 1;
                 branch     = 1;
                 regDataSel = 3'b011;
-                regWr      = 1;
+                regWE      = 1;
             end
 
             5'b01000: begin // S-type
                 ALUSrc2 = 2'b01;
-                memWr  = 1;
+                memWE  = 1;
             end
 
             5'b11000: begin // B-type
@@ -162,13 +162,13 @@ module controller (
 
             5'b0x101: begin // U-type
                 regDataSel = opcode[5] ? 3'b010 : 3'b001;
-                regWr      = 1;
+                regWE      = 1;
             end
 
             5'b11011: begin // J-type
                 branch      = 1;
                 regDataSel  = 3'b011;
-                regWr       = 1;
+                regWE       = 1;
             end
 
             5'b00011: begin end // FENCE or Zifencei standard extension
@@ -206,22 +206,22 @@ module controller (
                     3'b001: begin // CSRRW
                         ALUCtrl    = 0;
                         regDataSel = 3'b100;
-                        regWr      = 1;
-                        csrWr      = 1;
+                        regWE      = 1;
+                        csrWE      = 1;
                     end
                     3'b010: begin // CSRRS
                         ALUCtrl    = 4'b0101;
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
-                        regWr      = 1;
-                        csrWr      = rs1 != 0;
+                        regWE      = 1;
+                        csrWE      = rs1 != 0;
                     end
                     3'b011: begin // CSRRC
                         ALUCtrl    = 4'b0100;
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
-                        regWr      = 1;
-                        csrWr      = rs1 != 0;
+                        regWE      = 1;
+                        csrWE      = rs1 != 0;
                     end
                     3'b100: begin
                        `ILLEGAL_INSTR_HANDLER 
@@ -231,24 +231,24 @@ module controller (
                         ALUSrc1    = 1;
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
-                        regWr      = 1;
-                        csrWr      = 1;
+                        regWE      = 1;
+                        csrWE      = 1;
                     end
                     3'b110: begin // CSRRSI
                         ALUCtrl    = 4'b0101;
                         ALUSrc1    = 1;
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
-                        regWr      = 1;
-                        csrWr      = uimm != 0;
+                        regWE      = 1;
+                        csrWE      = uimm != 0;
                     end
                     3'b111: begin // CSRRCI
                         ALUCtrl    = 4'b0100;
                         ALUSrc1    = 1;
                         ALUSrc2    = 2'b10;
                         regDataSel = 3'b100;
-                        regWr      = 1;
-                        csrWr      = uimm != 0;
+                        regWE      = 1;
+                        csrWE      = uimm != 0;
                     end
                 endcase
             end
