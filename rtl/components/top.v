@@ -38,7 +38,7 @@ module top (
             .we(dWE),
             .mask(dMask),
             .a(dAddr),
-            .di(dWrite),
+            .di(dWriteSh),
             .do(dRead)
         );
 
