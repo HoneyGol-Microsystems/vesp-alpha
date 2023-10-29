@@ -19,7 +19,8 @@ module cpu (
     output     [3:0]  memMask,
     output reg [31:0] PC,
     output     [31:0] memAddr,
-    output     [31:0] memWrData
+    output     [31:0] memWrData,
+    output     [31:0] memWrDataSh
 );
 
     // wire/reg declarations
@@ -145,9 +146,10 @@ module cpu (
     assign branchTarget     = ALUToPC ? ALURes : immPC;
     assign src1             = ALUSrc1 ? imm : rs1;
     assign rs2Shift         = rs2ShiftSel ? {ALURes[1], 4'b0} : {ALURes[1:0], 3'b0};
-    assign memWrData     = rs2 << rs2Shift;
+    assign memWrData        = rs2;
+    assign memWrDataSh      = rs2 << rs2Shift;
     assign memAddr          = ALURes;
-    assign memMask           = mask << ALURes[1:0];
+    assign memMask          = mask << ALURes[1:0];
     assign dataLH           = ALURes[1] ? memRdData[31:16] : memRdData[15:0];
     assign regRes           = memToReg ? memData : regData;
     assign branchMretTarget = mret ? mepcOut : branchTarget;
