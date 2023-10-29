@@ -13,34 +13,34 @@
 `include "rtl/constants.vh"
 
 module top (
-    input sysClk,
-    input sysRes
+    input clk,
+    input reset
 );
 
-    wire dataBusWE;
-    wire [3:0] writeMask;
-    wire [31:0] instrBusAddr, instrBusData, dataBusAddr, dataBusDataWrite,
-                dataBusDataRead;
+    wire dWE;
+    wire [3:0] dMask;
+    wire [31:0] iAddr, iRead, dAddr, dWrite,
+                dRead;
     
     `ifdef SPLIT_MEMORY
         instructionMemory #(
             .WORD_CNT(`INSTR_MEM_WORD_CNT),
             .MEM_FILE("")
         ) instrMemInst (
-            .a(instrBusAddr),
-            .d(instrBusData)
+            .a(iAddr),
+            .d(iRead)
         );
 
         dataMemory #(
             .WORD_CNT(`DATA_MEM_WORD_CNT),
             .MEM_FILE("")
         ) dataMemInst (
-            .clk(sysClk),
-            .we(dataBusWE),
-            .mask(writeMask),
-            .a(dataBusAddr),
-            .di(dataBusDataWrite),
-            .do(dataBusDataRead)
+            .clk(clk),
+            .we(dWE),
+            .mask(dMask),
+            .a(dAddr),
+            .di(dWrite),
+            .do(dRead)
         );
 
     `else
@@ -48,30 +48,30 @@ module top (
             .WORD_CNT(`RAM_WORD_CNT),
             .MEM_FILE("")
         ) ramInst (
-            .a1(instrBusAddr),
-            .do1(instrBusData),
+            .a1(iAddr),
+            .do1(iRead),
 
-            .a2(dataBusAddr),
-            .di2(dataBusDataWrite),
-            .do2(dataBusDataRead),
-            .m2(writeMask),
-            .we2(dataBusWE),
-            .clk(sysClk)
+            .a2(dAddr),
+            .di2(dWrite),
+            .do2(dRead),
+            .m2(dMask),
+            .we2(dWE),
+            .clk(clk)
         );
     `endif // SPLIT_MEMORY
 
     cpu cpuInst (
-        .clk(sysClk),
-        .reset(sysRes),
+        .clk(clk),
+        .reset(reset),
 
-        .instruction(instrBusData),
-        .PC(instrBusAddr),
+        .instruction(iRead),
+        .PC(iAddr),
 
-        .memAddr(dataBusAddr),
-        .memReadData(dataBusDataRead),
-        .memWriteData(dataBusDataWrite),
-        .memWr(dataBusWE),
-        .wrMask(writeMask)
+        .memAddr(dAddr),
+        .memRdData(dRead),
+        .memWrData(dWrite),
+        .memWE(dWE),
+        .memMask(dMask)
     );
 
 endmodule
