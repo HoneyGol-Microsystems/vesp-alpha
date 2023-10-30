@@ -23,7 +23,7 @@ module top (
     wire dWE, dataMemWE, gpioWE;
     wire [2:0] dReadSel;
     wire [3:0] dMask;
-    wire [31:0] iAddr, iRead, dAddr, dWrite, dWriteSh, dataMemDO, gpioDO;
+    wire [31:0] iAddr, iRead, dAddr, dWrite, dataMemDO, gpioDO;
     reg [31:0] dRead;
 
     addressDecoder addressDecoderInst (
@@ -61,7 +61,7 @@ module top (
             .we(dWE),
             .mask(dMask),
             .a(dAddr),
-            .di(dWriteSh),
+            .di(dWrite),
             .do(dataMemDO)
         );
 
@@ -74,7 +74,7 @@ module top (
             .do1(iRead),
 
             .a2(dAddr),
-            .di2(dWriteSh),
+            .di2(dWrite),
             .do2(dataMemDO),
             .m2(dMask),
             .we2(dWE),
@@ -92,7 +92,6 @@ module top (
         .memAddr(dAddr),
         .memRdData(dRead),
         .memWrData(dWrite),
-        .memWrDataSh(dWriteSh),
         .memWE(dWE),
         .memMask(dMask)
     );
