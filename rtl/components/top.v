@@ -19,7 +19,7 @@ module top (
 
     wire dWE;
     wire [3:0] dMask;
-    wire [31:0] iAddr, iRead, dAddr, dWrite, dWriteSh, dRead;
+    wire [31:0] iAddr, iRead, dAddr, dWrite, dRead;
     
     `ifdef SPLIT_MEMORY
         instructionMemory #(
@@ -38,7 +38,7 @@ module top (
             .we(dWE),
             .mask(dMask),
             .a(dAddr),
-            .di(dWriteSh),
+            .di(dWrite),
             .do(dRead)
         );
 
@@ -51,7 +51,7 @@ module top (
             .do1(iRead),
 
             .a2(dAddr),
-            .di2(dWriteSh),
+            .di2(dWrite),
             .do2(dRead),
             .m2(dMask),
             .we2(dWE),
@@ -69,7 +69,6 @@ module top (
         .memAddr(dAddr),
         .memRdData(dRead),
         .memWrData(dWrite),
-        .memWrDataSh(dWriteSh),
         .memWE(dWE),
         .memMask(dMask)
     );
