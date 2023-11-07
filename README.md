@@ -60,7 +60,7 @@ Using special opcodes instead of the `tohost` mechanism is fine for all other te
   - In Vivado GUI: `Tools > Settings > General > Verilog options > Verilog Include Files Search Paths`
   - See [help article](https://support.xilinx.com/s/article/54006?language=en_US)
 
-## Compiling assembly source code to hex format and deploying to FPGA
+## (IS NOT CURRENT - WILL BE REDONE) Compiling assembly source code to hex format and deploying to FPGA
 1. Create `.S` source file starting with `_start`:
    ```asm
    .global _start
