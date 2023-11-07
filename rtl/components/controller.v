@@ -77,7 +77,7 @@ module controller (
         exception   = 0;
         excCode     = 0;
 
-        casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
+        casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
                 // set matching signals
                 regWE = 1;
@@ -94,7 +94,7 @@ module controller (
                 endcase
             end
             
-            5'b00x00: begin // I-type without JALR
+            5'b00?00: begin // I-type without JALR
                 // set matching signals
                 ALUSrc2 = 2'b01;
                 regWE   = 1;
@@ -160,7 +160,7 @@ module controller (
                 endcase
             end
 
-            5'b0x101: begin // U-type
+            5'b0?101: begin // U-type
                 regDataSel = opcode[5] ? 3'b010 : 3'b001;
                 regWE      = 1;
             end
