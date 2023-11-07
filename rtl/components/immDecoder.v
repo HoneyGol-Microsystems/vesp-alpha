@@ -11,8 +11,8 @@ module immDecoder (
     wire [4:0] rs1    = instruction[19:15];
 
     always @(*) begin
-        casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
-            5'b00x00: begin // I-type without JALR
+        casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
+            5'b00?00: begin // I-type without JALR
                 if (opcode[4] && funct3[1:0] == 2'b01) begin // SLLI, SRLI or SRAI instruction
                     imm[4:0]  = instruction[24:20];
                     imm[31:5] = 0;
@@ -42,7 +42,7 @@ module immDecoder (
                 imm[31:13] = { 19{instruction[31]} };
             end
 
-            5'b0x101: begin // U-type
+            5'b0?101: begin // U-type
                 imm[11:0]  = 0;
                 imm[31:12] = instruction[31:12];
             end
