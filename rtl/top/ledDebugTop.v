@@ -5,26 +5,26 @@
 `include "rtl/primitives/synchronizer.v"
 
 module ledDebugTop(
-    input sysClk,
-    input sysRes,
+    input clk,
+    input reset,
     output [31:16] PCdebug
 );
 
-    wire reset;
+    wire syncReset;
 
     // synchronize reset signal
     synchronizer #(
         .LEN(1),
         .STAGES(2)
     ) resetSync (
-        .clk(sysClk),
-        .dataIn(sysRes),
-        .dataOut(reset)
+        .clk(clk),
+        .dataIn(reset),
+        .dataOut(syncReset)
     );
 
     top topInst(
-        .sysClk(sysClk),
-        .sysRes(reset)
+        .clk(clk),
+        .reset(syncReset)
     );
     
     assign PCdebug = topInst.cpuInst.registerFile32Inst.rf[1][31:16];

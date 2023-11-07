@@ -12,9 +12,9 @@ module controller (
     output reg [1:0]  loadSel,
     output reg [1:0]  maskSel,
     output reg        memToReg,
-    output reg        memWr,
     output reg [1:0]  regDataSel,
-    output reg        regWr,
+    output reg        memWE,
+    output reg        regWE,
     output reg        rs2ShiftSel,
     output reg        uext
 );
@@ -36,16 +36,16 @@ module controller (
         loadSel     = funct3[1:0];
         maskSel     = funct3[1:0];
         memToReg    = 0;
-        memWr       = 0;
+        memWE       = 0;
         regDataSel  = 0;
-        regWr       = 0;
+        regWE       = 0;
         rs2ShiftSel = funct3[0];
         uext        = funct3[2];
 
-        casex (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
+        casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b01100: begin // R-type
                 // set matching signals
-                regWr = 1;
+                regWE = 1;
 
                 case (funct3)
                     3'b000: ALUCtrl = {3'b000, funct7[5]}; // ADD or SUB
@@ -59,10 +59,10 @@ module controller (
                 endcase
             end
             
-            5'b00x00: begin // I-type without JALR
+            5'b00?00: begin // I-type without JALR
                 // set matching signals
                 ALUImm = 1;
-                regWr  = 1;
+                regWE   = 1;
 
                 if (opcode[4]) begin // immediate register-register
                     case (funct3)
@@ -85,12 +85,12 @@ module controller (
                 ALUToPC    = 1;
                 branch     = 1;
                 regDataSel = 2'b11;
-                regWr      = 1;
+                regWE      = 1;
             end
 
             5'b01000: begin // S-type
                 ALUImm = 1;
-                memWr  = 1;
+                memWE  = 1;
             end
 
             5'b11000: begin // B-type
@@ -122,15 +122,15 @@ module controller (
                 endcase
             end
 
-            5'b0x101: begin // U-type
+            5'b0?101: begin // U-type
                 regDataSel = opcode[5] ? 2'b10 : 2'b01;
-                regWr      = 1;
+                regWE      = 1;
             end
 
             5'b11011: begin // J-type
                 branch     = 1;
                 regDataSel = 2'b11;
-                regWr      = 1;
+                regWE       = 1;
             end
 
             5'b00011: begin end // FENCE or Zifencei standard extension

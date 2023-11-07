@@ -15,9 +15,9 @@ module topTest();
     integer pcValuesLog [`MAX_QUEUE_SIZE - 1:0];
     integer pcValuesLogPtr = 0;
 
-    top dut(
-        .sysClk(clk),
-        .sysRes(reset)
+    top dut (
+        .clk(clk),
+        .reset(reset)
     );
 
     initial begin
@@ -59,7 +59,7 @@ module topTest();
         //     "ALUZero: %b\n", dut.cpuInst.ALUZero,
         //     "ALUSrc1: %b\n", dut.cpuInst.ALUSrc1,
         //     "ALUSrc2: %b\n", dut.cpuInst.ALUSrc2,
-        //     "regWr: %b\n", dut.cpuInst.regWr,
+        //     "regWE: %b\n", dut.cpuInst.regWE,
         //     "regDataSel: %b\n", dut.cpuInst.regDataSel,
         //     "memToReg: %b", dut.cpuInst.memToReg
         // );
@@ -77,12 +77,12 @@ module topTest();
         pcValuesLog[pcValuesLogPtr] = dut.cpuInst.PC;
         pcValuesLogPtr++;
 
-        if (dut.instrBusData === `OPCODE_PASS) begin
+        if (dut.iRead === `OPCODE_PASS) begin
             $display(`ASSERT_SUCCESS);
             $finish;
         end
 
-        if (dut.instrBusData === `OPCODE_FAIL) begin
+        if (dut.iRead === `OPCODE_FAIL) begin
             $display(`ASSERT_FAIL);
             
             $display("Last PC values dump:");
