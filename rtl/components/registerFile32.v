@@ -12,7 +12,7 @@ module registerFile32 #(
     output [XLEN-1:0] rd1, rd2    // src registers
 );
 
-    reg [XLEN-1:0] rf [31:0]; // register file
+    reg [XLEN-1:0] rf [31:1]; // register file
 
     // output from src registers
     assign rd1 = (a1 == 0) ? 0 : rf[a1];
