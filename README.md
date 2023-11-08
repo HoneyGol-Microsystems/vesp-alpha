@@ -1,29 +1,45 @@
 # RISC-V Student CPU
 This repository contains summer student project: RISC-V compatible processor.
 
-## The build script (`make.py`)
+## The main script (`make.py`)
+This script is (for now) used mainly for launching tests.
 
 ### Setup
 To use the script, install all required dependencies.
 
 1. RISC-V toolchain
 2. iverilog
-3. Python version >=3.8
-4. `pyelftools` Python library. This library can be installed using your system's package manager, e.g. on Ubuntu:
+3. Python version >=3.10 (older versions not officially supported)
 
+### Usage
+
+Launch this script directly:
 ```sh
-apt install python3-pyelftools
+./make.py
 ```
 
-Or manually with pip:
+or using Python
 ```sh
-pip3 install pyelftools
+python3 make.py
 ```
 
 ### Testing
-Testing is done using Icarus Verilog and provided Python 3 script: `make.py`.
+All tests can be launched using
+```sh
+./make.py test
+```
+This command will run all tests on current version of the CPU located in the repository.
 
-Run `python3 make.py test` to run all tests.
+Test routines are defined using a *recipe*, which is a custom YAML-based file describing all steps that should be performed and how are test results interpreted (how to recognize success or failure). A manual on creating a recipe is located in [docs/recipes.md](docs/recipes.md). 
+
+To run specific recipe, use the `--recipe` switch. You can also pass custom sources to be used with the recipe instead default ones (which are specified in the recipe) using `--sources`. For example, if you want to run a single official RISC-V test, use the `rvtest.yaml` recipe and specify your desired hex file like this:
+```sh
+./make.py test --recipe recipes/rvtest.yaml --sources tests/riscv-tests-hex/rv32ui-p-add.hex
+```
+
+Of course, only files compatible with the selected recipe will work. Trying to run hex files using Hardware Test (hwtest.yaml) recipe will obviously not work. See list below for currently available recipes:
+- `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using iverilog.
+- `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
 
 ## Official test suite - handling success/failure
 *This section is mainly meant as a documentation of the official tests' inner workings for our future reference, because there is none in the official repository.*
