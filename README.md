@@ -28,9 +28,9 @@ All tests can be launched using
 ```sh
 ./make.py test
 ```
-This command will run all tests on current version of the CPU located in the repository.
+This command will run all tests (using all the *recipes* in the `recipes` directory) on current version of the CPU located in the repository.
 
-Test routines are defined using a *recipe*, which is a custom YAML-based file describing all steps that should be performed and how are test results interpreted (how to recognize success or failure). A manual on creating a recipe is located in [docs/recipes.md](docs/recipes.md). 
+Test routines are defined using a *recipe*, which is a custom YAML-based file describing all steps that should be performed and how are test results interpreted (how to recognize success or failure). A tutorial on creating a recipe is located in [docs/recipes.md](docs/recipes.md). 
 
 To run specific recipe, use the `--recipe` switch. You can also pass custom sources to be used with the recipe instead default ones (which are specified in the recipe) using `--sources`. For example, if you want to run a single official RISC-V test, use the `rvtest.yaml` recipe and specify your desired hex file like this:
 ```sh
