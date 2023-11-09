@@ -3,7 +3,7 @@ metadata:
   version: 0.1
 
 recipe:
-  name: "Official RICV-V Test"
+  name: "Official RISCV-V Test"
   comment: "This test recipe runs pre-compiled official RISC-V tests."
   sources:
     - path: "tests/riscv-tests-hex"
