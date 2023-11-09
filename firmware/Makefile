@@ -10,18 +10,27 @@ CODE_GEN_OPTIONS = -fvisibility=hidden
 CFLAGS = $(OVERALL_OPTIONS) $(C_OPTIONS) $(WARNING_OPTIONS) $(OPTIMIZE_OPTIONS) \
 			  $(CODE_GEN_OPTIONS) $(RISCV_OPTIONS)
 
-LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static -T mem.ld -Wl,-Map=program.map
+LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static -T mem.ld -Wl,-Map=memory.map
 
-all: startup.o main.o program.elf
+SRC_OBJ = $(addsuffix .o, $(basename $(SRC)))  # create name of .o file from "SRC" cmd argument
+
+# for compiling standalone programs
+standalone: $(SRC_OBJ) standalone.elf
+
+# for compiling firmware in C with startup, headers etc.
+firmware: startup.o $(SRC_OBJ) firmware.elf
 
 startup.o: startup.S
 	$(CC) $(CFLAGS) $^ -o $@
 
-main.o: main.c
+$(SRC_OBJ): $(SRC)
 	$(CC) $(CFLAGS) $^ -o $@
 
-program.elf: startup.o main.o
+standalone.elf: $(SRC_OBJ)
+	$(CC) $(LDFLAGS) $^ -o $@
+
+firmware.elf: startup.o $(SRC_OBJ)
 	$(CC) $(LDFLAGS) $^ -o $@
 
 clean:
-	rm -rf startup.o main.o program.map program.elf
+	rm -rf *.o memory.map standalone.elf firmware.elf
