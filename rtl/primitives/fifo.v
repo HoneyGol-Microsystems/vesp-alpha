@@ -12,8 +12,8 @@ module fifo #(
     output [XLEN-1:0]     do
 );
 
-reg [$clog2(LENGTH) - 1:0] frontPointer, backPointer;
-reg [XLEN-1:0] memory [LENGTH-1:0];
+reg  [$clog2(LENGTH) - 1:0] frontPointer, backPointer;
+reg  [XLEN-1:0]             memory [LENGTH-1:0];
 
 wire [$clog2(LENGTH) - 1:0] frontPointerInc, backPointerInc;
 
