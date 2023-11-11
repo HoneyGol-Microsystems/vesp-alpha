@@ -1,27 +1,36 @@
 CC = riscv64-unknown-elf-gcc
 
-RISCV_GCC_OPTIONS = -mabi=ilp32 -mno-fdiv -mno-div -misa-spec=20191213 -march=rv32i -mstrict-align
+RISCV_OPTIONS = -mabi=ilp32 -mno-fdiv -mno-div -misa-spec=20191213 -march=rv32i -mstrict-align
+OVERALL_OPTIONS = -c
+C_OPTIONS = -ffreestanding -std=c11
+WARNING_OPTIONS = -Wall -pedantic
+OPTIMIZE_OPTIONS = -fno-function-sections -fno-data-sections -fno-zero-initialized-in-bss -O2
+CODE_GEN_OPTIONS = -fvisibility=hidden
 
-GCC_OVERALL_OPTIONS = -c
-GCC_C_OPTIONS = -ffreestanding -std=c11
-GCC_WARNING_OPTIONS = -Wall -pedantic
-GCC_OPTIMIZE_OPTIONS = -fno-function-sections -fno-data-sections -fno-zero-initialized-in-bss -O2
-GCC_CODE_GEN_OPTIONS = -fvisibility=hidden
-GCC_OPTIONS = $(GCC_OVERALL_OPTIONS) $(GCC_C_OPTIONS) $(GCC_WARNING_OPTIONS) $(GCC_OPTIMIZE_OPTIONS) \
-			  $(GCC_CODE_GEN_OPTIONS) $(RISCV_GCC_OPTIONS)
+CFLAGS = $(OVERALL_OPTIONS) $(C_OPTIONS) $(WARNING_OPTIONS) $(OPTIMIZE_OPTIONS) \
+			  $(CODE_GEN_OPTIONS) $(RISCV_OPTIONS)
 
-LINKER_OPTIONS = -nostartfiles -nodefaultlibs -nostdlib -static -T mem.ld -Wl,-Map=program.map
+LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static -T mem.ld -Wl,-Map=memory.map
 
-all: startup.o main.o program.elf
+SRC_OBJ = $(addsuffix .o, $(basename $(SRC)))  # create name of .o file from "SRC" cmd argument
+
+# for compiling standalone programs
+standalone: $(SRC_OBJ) standalone.elf
+
+# for compiling firmware in C with startup, headers etc.
+firmware: startup.o $(SRC_OBJ) firmware.elf
 
 startup.o: startup.S
-	$(CC) $(GCC_OPTIONS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
-main.o: main.c
-	$(CC) $(GCC_OPTIONS) $^ -o $@
+$(SRC_OBJ): $(SRC)
+	$(CC) $(CFLAGS) $^ -o $@
 
-program.elf: startup.o main.o
-	$(CC) $(LINKER_OPTIONS) $^ -o $@
+standalone.elf: $(SRC_OBJ)
+	$(CC) $(LDFLAGS) $^ -o $@
+
+firmware.elf: startup.o $(SRC_OBJ)
+	$(CC) $(LDFLAGS) $^ -o $@
 
 clean:
-	rm -rf startup.o main.o program.map program.elf
+	rm -rf *.o memory.map standalone.elf firmware.elf
