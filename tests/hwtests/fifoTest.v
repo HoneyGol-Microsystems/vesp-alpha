@@ -24,8 +24,8 @@ module fifoTest();
     );
     
     initial begin
-		$dumpfile("test");
-		$dumpvars;
+		// $dumpfile("test");
+		// $dumpvars;
 
         clk   = 0;
         we    = 0;
