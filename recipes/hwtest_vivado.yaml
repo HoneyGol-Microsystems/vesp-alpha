@@ -1,0 +1,30 @@
+metadata:
+  type: "makepy recipe"
+  version: 0.1
+
+recipe:
+  name: "Hardware Test"
+  comment: "This test recipe compiles and runs Verilog test files using Vivado XSIM."
+  sources:
+    - path: "tests/hwtests"
+      type: "verilog"
+      
+  # halt_on_step_error: true
+  # halt_on_source_error
+  steps:
+    - make_directory:
+        name: "build"
+    - run:
+        executable: "vivado"
+        params:
+          - "-mode"
+          - "batch"
+          - "-source"
+          - "sim/simulation.tcl"
+          - "-tclargs"
+          - "test_top=./tests/hwtests/fifoTest.v"          
+        assert:
+          return_code: 0
+          output:
+            not_contains:
+              - "ERROR"
