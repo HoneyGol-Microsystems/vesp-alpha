@@ -24,7 +24,9 @@ recipe:
           - mpysource
           - mpysourcestem
         assert:
-          return_code: 0
           output:
             not_contains:
               - "ERROR"
+            contains:
+              - "ASSERT_SUCCESS"
+        kill_on: "# quit"
