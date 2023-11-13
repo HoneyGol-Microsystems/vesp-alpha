@@ -4,31 +4,33 @@ metadata:
 
 recipe:
   name: "Hardware Test"
-  comment: "This test recipe compiles and runs Verilog test files using iverilog."
+  comment: "This test recipe compiles and runs Verilog test files using Vivado XSIM."
   sources:
     - path: "tests/hwtests"
       type: "verilog"
-      
   # halt_on_step_error: true
   # halt_on_source_error
   steps:
     - make_directory:
-        name: "build"
+        name: "build/vivado"
     - run:
-        executable: "iverilog"
+        executable: "vivado"
         params:
+          - "-mode"
+          - "batch"
+          - "-source"
+          - "sim/simulation.tcl"
+          - "-log"
+          - "build/vivado/vivado.log"
+          - "-journal"
+          - "build/vivado/vivado.jou"
+          - "-tclargs"
           - mpysource
-          - "-obuild/tmp.out"
+          - mpysourcestem
         assert:
-          return_code: 0
           output:
             not_contains:
               - "ERROR"
-    - run:
-        executable: "build/tmp.out"
-        assert:
-          output:
             contains:
               - "ASSERT_SUCCESS"
-            not_contains:
-              - "ASSERT_FAIL"
+        kill_on: "# quit"
