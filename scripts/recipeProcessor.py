@@ -2,6 +2,7 @@ import logging
 import yaml
 import subprocess
 import shutil
+import re
 from pathlib import Path
 
 _LOGGER = logging.getLogger(__name__)
@@ -18,7 +19,8 @@ class RecipeProcessor:
     """
 
     recipe : dict
-    PLACEHOLDER_CURRENT_SOURCE = "mpysource"
+    PLACEHOLDER_CURRENT_SOURCE = r"\bmpysource\b"
+    PLACEHOLDER_CURRENT_SOURCE_STEM = r"\bmpysourcestem\b"
 
     def __init__(self, recipePath, customSourcePath : Path):
         _LOGGER.debug(f"Loading recipe: {recipePath}")
@@ -328,8 +330,12 @@ class RecipeProcessor:
 
 
             if source != None:
+                
                 # Replacing source file placeholders with real paths.
-                replacedStepsString : str = yaml.safe_dump(self.steps).replace(self.PLACEHOLDER_CURRENT_SOURCE, str(source.resolve()))
+                replacedStepsString : str = yaml.safe_dump(self.steps)
+                replacedStepsString       = re.sub(self.PLACEHOLDER_CURRENT_SOURCE, rf"{str(source.resolve())}",  replacedStepsString)
+                replacedStepsString       = re.sub(self.PLACEHOLDER_CURRENT_SOURCE_STEM, rf"{str(source.stem)}", replacedStepsString)
+                
                 replacedSteps : dict      = yaml.safe_load(replacedStepsString)
                 print(f"📜📄 Running steps for source file '{source}'")
             else:
