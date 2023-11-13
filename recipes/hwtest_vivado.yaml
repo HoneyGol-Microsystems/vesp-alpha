@@ -12,7 +12,7 @@ recipe:
   # halt_on_source_error
   steps:
     - make_directory:
-        name: "build"
+        name: "build/vivado"
     - run:
         executable: "vivado"
         params:
@@ -20,6 +20,10 @@ recipe:
           - "batch"
           - "-source"
           - "sim/simulation.tcl"
+          - "-log"
+          - "build/vivado/vivado.log"
+          - "-journal"
+          - "build/vivado/vivado.jou"
           - "-tclargs"
           - mpysource
           - mpysourcestem
