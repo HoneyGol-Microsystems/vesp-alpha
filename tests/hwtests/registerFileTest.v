@@ -20,9 +20,6 @@ module registerFileTest();
 	);
 
 	initial begin
-		// $dumpfile("test");
-		// $dumpvars;
-
 		a1 = 0;
 		a2 = 10;
 		a3 = 1;

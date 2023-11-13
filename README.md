@@ -69,6 +69,9 @@ We effectively disable the `write_tohost` routine altogether, because it is only
 
 Using special opcodes instead of the `tohost` mechanism is fine for all other tests but not for the test where the `ecall` instruction itself is tested (rv32mi-p-scall). To detect a success in this test we abuse the `write_tohost` routine to signalize the result using the aforementioned 0x1 opcode. This can be done, because as it was mentioned, `write_tohost` is not used anywhere else in our modification of the test result handling.
 
+## Creating testbenches
+Testbenches must not contain Verilog's `$dumpfile` and `$dumpvars`, otherwise no VCD will be created by Vivado!
+
 ## Importing to Vivado Design Suite
 1. Create a new project
 2. Add directory src (do not forget to tick "include subdirectories")

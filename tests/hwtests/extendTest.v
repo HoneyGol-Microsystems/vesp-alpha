@@ -21,9 +21,6 @@ module extendTest();
     );
 
 	initial begin
-		// $dumpfile("test");
-		// $dumpvars;
-
         #2;
         data8 = 8'b00001111;
         data16 = data8;
