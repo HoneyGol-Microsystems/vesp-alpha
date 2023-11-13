@@ -17,8 +17,8 @@ module aluTest();
     );
     
     initial begin
-		$dumpfile("test");
-		$dumpvars;
+		// $dumpfile("test");
+		// $dumpvars;
 
         $display("ALU test begin");
 

@@ -17,8 +17,8 @@ module synchronizerTest();
     );
    
     initial begin
-		$dumpfile("test");
-		$dumpvars;
+		// $dumpfile("test");
+		// $dumpvars;
 
         $display("Synchronizer test begin");
         clk = 0; 

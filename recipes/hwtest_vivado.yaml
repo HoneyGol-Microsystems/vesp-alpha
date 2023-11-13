@@ -6,9 +6,8 @@ recipe:
   name: "Hardware Test"
   comment: "This test recipe compiles and runs Verilog test files using Vivado XSIM."
   sources:
-    # - path: "tests/hwtests"
-    #   type: "verilog"
-    - path: "tests/hwtests/fifoTest.v"
+    - path: "tests/hwtests"
+      type: "verilog"
   # halt_on_step_error: true
   # halt_on_source_error
   steps:

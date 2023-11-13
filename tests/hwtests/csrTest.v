@@ -31,8 +31,8 @@ module csrTest();
     );
    
     initial begin
-		$dumpfile("test");
-		$dumpvars;
+		// $dumpfile("test");
+		// $dumpvars;
 
         $display("CRS test begin");
         clk = 0;
