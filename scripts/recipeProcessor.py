@@ -94,6 +94,11 @@ class RecipeProcessor:
             assertOutputCont    = []
         _LOGGER.debug(f"Assert output cont: {assertOutputCont}")
 
+        try:
+            killOn = stepData["kill_on"]
+        except KeyError:
+            killOn = None
+        _LOGGER.debug(f"Kill on: {killOn}")
 
         _LOGGER.debug(f"Elaborated params: {params}")
         
@@ -117,6 +122,9 @@ class RecipeProcessor:
             for line in pipes.stdout:
                 _LOGGER.info(f"{execName}: %s", line.strip('"\n"'))
                 output += line
+                if killOn is not None and killOn in line:
+                    pipes.kill()
+                    break
         
         # Required to get return code.
         pipes.wait()
