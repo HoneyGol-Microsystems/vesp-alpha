@@ -6,13 +6,14 @@
 
 # Defining default value for parameters.
 set output_directory ./build/vivado
+set test_file [lindex $argv 0]
 
 # Preparing environment.
 file mkdir $output_directory
 
 # Setting up sources.
 source ./sim/common/design_filelist.tcl
-read_verilog "./tests/hwtests/fifoTest.v"
+read_verilog $test_file
 read_verilog "./tests/testConstants.vh"
 
 save_project_as -force sim_proj build/vivado
