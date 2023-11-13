@@ -6,9 +6,9 @@ recipe:
   name: "Hardware Test"
   comment: "This test recipe compiles and runs Verilog test files using Vivado XSIM."
   sources:
-    - path: "tests/hwtests"
-      type: "verilog"
-      
+    # - path: "tests/hwtests"
+    #   type: "verilog"
+    - path: "tests/hwtests/fifoTest.v"
   # halt_on_step_error: true
   # halt_on_source_error
   steps:
@@ -22,7 +22,8 @@ recipe:
           - "-source"
           - "sim/simulation.tcl"
           - "-tclargs"
-          - "test_top=./tests/hwtests/fifoTest.v"          
+          - mpysource
+          - mpysourcestem
         assert:
           return_code: 0
           output:
