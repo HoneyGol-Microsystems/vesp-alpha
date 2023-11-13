@@ -18,7 +18,7 @@ file mkdir $output_directory
 # Setting up design sources.
 source ./sim/common/design_filelist.tcl
 
-# Setting up design-specific sources.
+# Setting up test-specific sources.
 read_verilog $test_file
 read_verilog "./tests/testConstants.vh"
 set_property is_global_include true [ get_files testConstants.vh ]
