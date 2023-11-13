@@ -59,6 +59,10 @@ class RecipeProcessor:
 
         _LOGGER.info("Starting run step...")
 
+        if stepData == None:
+            _LOGGER.error("Run step empty.")
+            return False
+
         try:
             execName             = stepData["executable"]
         except KeyError:
@@ -94,18 +98,28 @@ class RecipeProcessor:
         execWithParams = [execName, *params]
         _LOGGER.debug(f"Running: '{execWithParams}'")
 
+        # stderr is set to stdout to merge and pipe these two.
         pipes = subprocess.Popen(
             execWithParams,
             stdout = subprocess.PIPE,
-            stderr = subprocess.PIPE
+            stderr = subprocess.STDOUT,
+            bufsize = 1,
+            text = True
         )
 
-        stdout, stderr = pipes.communicate()
-        stdout = stdout.decode('utf-8')
-        stderr = stderr.decode('utf-8')
+        _LOGGER.info("Program's output follows:")
 
-        if stdout: _LOGGER.info(f"STDOUT: {stdout}")
-        if stderr: _LOGGER.info(f"STDERR: {stderr}")
+        output : str = ""
+
+        if pipes.stdout is not None:
+            for line in pipes.stdout:
+                _LOGGER.info(f"{execName}: %s", line.strip('"\n"'))
+                output += line
+        
+        # Required to get return code.
+        pipes.wait()
+
+        _LOGGER.info("Program's execution finished.")
 
         # There needs to be != None, because if the return code is 0, simple 'if assertReturnCode' will obviously evaluate to false.
         if assertReturnCode != None:
@@ -115,13 +129,13 @@ class RecipeProcessor:
             
         if type(assertOutputCont) == list:
             for outCont in assertOutputCont:
-                if not outCont in (stdout + stderr):
+                if not outCont in (output):
                     _LOGGER.info(f"Assertion failed for program output condition: '{outCont}' not found in output.")
                     return False
         
         if type(assertOutputNotCont) == list:
             for outCont in assertOutputNotCont:
-                if outCont in (stdout + stderr):
+                if outCont in (output):
                     _LOGGER.info(f"Assertion failed for program output condition: '{outCont}' was found in output.")
                     return False
         
