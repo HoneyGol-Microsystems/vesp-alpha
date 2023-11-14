@@ -1,4 +1,4 @@
-# RISC-V Student CPU
+# VESP-α
 This repository contains summer student project: RISC-V compatible processor.
 
 ## The main script (`make.py`)
