@@ -1,7 +1,5 @@
-#ifndef __GPIO_H
-#define __GPIO_H
-
-#include <stdint.h>
+#ifndef __VESP_GPIO_H
+#define __VESP_GPIO_H
 
 /* GPIO addresses */
 volatile uint8_t * const GPIOWR_A_PTR  = (volatile uint8_t *) 0xF0000000;
@@ -19,4 +17,4 @@ volatile uint8_t * const GPIORD_B_PTR  = (volatile uint8_t *) 0xF0000005;
 #define GPIODIR_B *GPIODIR_B_PTR
 #define GPIORD_B  *GPIORD_B_PTR
 
-#endif // __GPIO_H
+#endif // __VESP_GPIO_H
