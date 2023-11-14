@@ -26,10 +26,10 @@ LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static -T $(COMMON_PATH)/mem.l
 SRC_OBJ = $(BUILD_PATH)/$(addsuffix .o, $(notdir $(basename $(SRC))))
 
 # for compiling standalone programs
-standalone: $(SRC_OBJ) standalone.elf
+standalone: standalone.elf
 
 # for compiling firmware in C with startup, headers etc.
-firmware: $(BUILD_PATH)/startup.o $(SRC_OBJ) firmware.elf
+firmware: firmware.elf
 
 $(BUILD_PATH)/startup.o: $(COMMON_PATH)/startup.S
 	$(CC) $(CFLAGS) $^ -o $@
