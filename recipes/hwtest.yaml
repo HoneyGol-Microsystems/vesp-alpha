@@ -19,7 +19,7 @@ recipe:
           - "-mode"
           - "batch"
           - "-source"
-          - "sim/simulation.tcl"
+          - "vivado/simulation.tcl"
           - "-log"
           - "build/vivado/vivado.log"
           - "-journal"
