@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="33.744892mm"
+   height="11.139203mm"
+   viewBox="0 0 33.744892 11.139203"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6">
+      <rect
+         style="fill:#fdb515;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
+         id="rect6"
+         width="6.2298965"
+         height="6.2298965"
+         x="4.2209806"
+         y="5.5753064" />
+    </clipPath>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-2.7375252,-3.4239097)">
+    <g
+       id="g2">
+      <g
+         id="text1"
+         style="font-weight:100;font-size:5.64444px;font-family:'Exo 2';-inkscape-font-specification:'Exo 2 Thin';fill:#003262;stroke:#ffffff;stroke-width:0.1;stroke-opacity:1;paint-order:stroke fill markers"
+         aria-label="VESP-α">
+        <path
+           style="font-weight:600;font-family:'IBM Plex Sans';-inkscape-font-specification:'IBM Plex Sans Semi-Bold';stroke:#ffffff;stroke-opacity:1"
+           d="M 15.407618,10.963421 14.120686,7.0236016 h 0.761999 l 0.603955,1.9191097 0.349955,1.3095097 h 0.01693 L 16.19784,8.9427113 16.801795,7.0236016 h 0.739421 l -1.286932,3.9398194 z m 2.686756,0 V 7.0236016 h 2.596443 V 7.6840011 H 18.83944 v 0.9539104 h 1.636888 V 9.298311 H 18.83944 v 1.00471 h 1.851377 v 0.6604 z m 4.61151,0.06773 q -0.508,0 -0.8636,-0.180622 -0.349955,-0.180622 -0.603955,-0.474133 l 0.502355,-0.4854218 q 0.2032,0.2370668 0.451556,0.3612438 0.253999,0.124178 0.558799,0.124178 0.344311,0 0.519289,-0.146755 0.174977,-0.1524 0.174977,-0.4064 0,-0.1975555 -0.112888,-0.3217331 Q 23.219528,9.3773332 22.909084,9.3208888 L 22.536551,9.2644444 Q 21.356863,9.0781778 21.356863,8.118623 q 0,-0.2652887 0.09596,-0.4797774 0.1016,-0.2144887 0.287866,-0.3668886 0.186267,-0.1523999 0.445911,-0.2314221 0.265289,-0.084667 0.598311,-0.084667 0.445911,0 0.778933,0.1467555 0.333022,0.1467554 0.570088,0.4346219 l -0.508,0.4797774 Q 23.479172,7.836401 23.270328,7.7235122 23.061483,7.6106234 22.745395,7.6106234 q -0.321733,0 -0.485422,0.1241777 -0.158044,0.1185332 -0.158044,0.3386664 0,0.2257776 0.129822,0.333022 0.129822,0.1072443 0.417688,0.1580443 l 0.366889,0.067733 q 0.598311,0.1072443 0.880533,0.3838219 0.287866,0.2709331 0.287866,0.7619994 0,0.2822219 -0.1016,0.5136439 -0.09596,0.225778 -0.287866,0.395111 -0.186267,0.163689 -0.462844,0.254 -0.270934,0.09031 -0.626533,0.09031 z m 2.22391,-0.06773 V 7.0236016 h 1.772354 q 0.270933,0 0.485422,0.090311 0.220133,0.084667 0.372533,0.2483553 0.1524,0.1580444 0.231422,0.383822 0.07902,0.2257776 0.07902,0.4967107 0,0.2765776 -0.07902,0.5023552 -0.07902,0.2201331 -0.231422,0.3838219 -0.1524,0.1580443 -0.372533,0.2483554 -0.214489,0.084667 -0.485422,0.084667 H 25.67486 V 10.963421 Z M 25.67486,8.8185336 h 0.959554 q 0.214489,0 0.338667,-0.1128888 0.124178,-0.1185332 0.124178,-0.333022 V 8.1129786 q 0,-0.2144887 -0.124178,-0.3273776 Q 26.848903,7.6727122 26.634414,7.6727122 H 25.67486 Z"
+           id="path1" />
+        <path
+           style="font-weight:600;font-family:'IBM Plex Sans';-inkscape-font-specification:'IBM Plex Sans Semi-Bold';fill:#fdb515;stroke:#ffffff;stroke-opacity:1"
+           d="M 28.412418,9.6031108 V 8.8862669 h 1.61431 v 0.7168439 z m 5.475108,1.3603102 h -0.310444 q -0.299155,0 -0.451555,-0.118533 -0.1524,-0.124178 -0.214489,-0.434622 l -0.06209,-0.344311 h -0.01693 q -0.129822,0.479777 -0.378177,0.722488 -0.242711,0.242711 -0.671689,0.242711 -0.541866,0 -0.857955,-0.400755 -0.316088,-0.400755 -0.316088,-1.140177 0,-0.7394217 0.316088,-1.1401769 0.316089,-0.4007553 0.857955,-0.4007553 0.423333,0 0.682978,0.2314221 0.265288,0.231422 0.39511,0.7281327 h 0.02258 l 0.118533,-0.4684885 0.135467,-0.423333 h 0.733777 l -0.643466,1.4562656 0.344311,0.9143993 H 33.88753 Z M 31.83295,10.432843 q 0.169333,0 0.299156,-0.118533 0.129822,-0.124177 0.237066,-0.4289772 L 32.510283,9.4845775 32.369172,9.0951112 Q 32.261928,8.7903114 32.132106,8.6661337 32.002283,8.541956 31.83295,8.541956 q -0.214488,0 -0.344311,0.1806221 -0.124177,0.1749777 -0.124177,0.5475107 v 0.4346219 q 0,0.3781773 0.124177,0.5531553 0.129823,0.174977 0.344311,0.174977 z"
+           id="path2" />
+      </g>
+      <g
+         id="g6"
+         clip-path="url(#clipPath6)"
+         transform="translate(0.9736135,0.30325666)">
+        <rect
+           style="fill:#fdb515;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
+           id="rect3-7"
+           width="6.2298965"
+           height="6.2298965"
+           x="4.2232194"
+           y="5.5889359" />
+        <rect
+           style="fill:#fdb515;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
+           id="rect3-8"
+           width="6.2298965"
+           height="6.2298965"
+           x="4.2209806"
+           y="5.5753059" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';fill:#003262;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
+           x="8.1738739"
+           y="11.275716"
+           id="text4"><tspan
+             id="tspan4"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222px;font-family:'IBM Plex Sans';-inkscape-font-specification:'IBM Plex Sans Bold';fill:#003262;fill-opacity:1;stroke-width:0.1"
+             x="8.1738739"
+             y="11.275716">α</tspan></text>
+        <path
+           style="fill:#003262;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
+           d="M 8.8369726,4.9884316 6.0380337,12.719372 H 4.0855481 V 5.2931549 Z"
+           id="path6" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87778px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
+           x="3.1036625"
+           y="12.234072"
+           id="text6"><tspan
+             id="tspan6"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87778px;font-family:'IBM Plex Sans';-inkscape-font-specification:'IBM Plex Sans';fill:#ffffff;stroke-width:0.1"
+             x="3.1036625"
+             y="12.234072">V</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
