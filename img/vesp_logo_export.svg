@@ -7,8 +7,31 @@
    viewBox="0 0 33.744892 11.139203"
    version="1.1"
    id="svg1"
+   sodipodi:docname="vesp_logo_export.svg"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="13.705531"
+     inkscape:cx="63.769875"
+     inkscape:cy="21.049896"
+     inkscape:window-width="2560"
+     inkscape:window-height="1360"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6" />
   <defs
      id="defs1">
     <clipPath
@@ -73,16 +96,11 @@
            style="fill:#003262;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
            d="M 8.8369726,4.9884316 6.0380337,12.719372 H 4.0855481 V 5.2931549 Z"
            id="path6" />
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87778px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
-           x="3.1036625"
-           y="12.234072"
-           id="text6"><tspan
-             id="tspan6"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87778px;font-family:'IBM Plex Sans';-inkscape-font-specification:'IBM Plex Sans';fill:#ffffff;stroke-width:0.1"
-             x="3.1036625"
-             y="12.234072">V</tspan></text>
+        <path
+           style="font-size:9.87778px;font-family:'IBM Plex Sans';-inkscape-font-specification:'IBM Plex Sans';fill:#ffffff;stroke-width:0.1;paint-order:stroke fill markers"
+           d="M 5.592863,12.234072 3.3012181,5.3393813 H 4.1902183 L 5.326163,8.8163599 6.086752,11.404338 h 0.049389 L 6.9164856,8.8163599 8.062308,5.3393813 H 8.9216749 L 6.6003966,12.234072 Z"
+           id="text6"
+           aria-label="V" />
       </g>
     </g>
   </g>
