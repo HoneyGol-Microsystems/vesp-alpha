@@ -83,7 +83,7 @@ def vivado(args):
         print("Specified path is invalid!")
         return False
 
-    if not no_overwrite:
+    if path.exists() and not no_overwrite:
         shutil.rmtree(str(path.resolve()))
 
     if not path.exists():
