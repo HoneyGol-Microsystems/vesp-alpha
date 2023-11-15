@@ -56,6 +56,12 @@ By default, a project will be created and Vivado will stay in Tcl mode. To launc
 ./make.py vivado --gui
 ```
 
+### Cleaning
+You can remove all generated content using:
+```sh
+./make.py clean
+```
+
 ## Official test suite - handling success/failure
 *This section is mainly meant as a documentation of the official tests' inner workings for our future reference, because there is none in the official repository.*
 

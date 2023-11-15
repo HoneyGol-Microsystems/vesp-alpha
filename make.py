@@ -11,6 +11,7 @@ from scripts.recipeProcessor import RecipeProcessor
 
 DEFAULT_RECIPE_PATH = "recipes"
 DEFAULT_VIVADO_PATH = "build/vivado"
+TO_CLEAN : list[Path] = [Path("build")]
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -102,6 +103,14 @@ def vivado(args):
 
     return proc.returncode == 0
 
+def clean(args):
+    for item in TO_CLEAN:
+        if (item.exists()):
+            if (item.is_dir()):
+                shutil.rmtree(str(item.resolve()))
+            else:
+                item.unlink()
+    
 if __name__ == "__main__":
 
     # Setting proper working directory (to script location).
@@ -161,6 +170,13 @@ if __name__ == "__main__":
         type = Path,
         default = Path("build/vivado")
     )
+
+    # ============= Clean subcommand =============
+    cleanParser = subparsers.add_parser(
+        "clean",
+        help = "Remove all generated content."
+    )
+    cleanParser.set_defaults(func = clean)
 
     # ============= Convert subcommand =============
     # convertParser = subparsers.add_parser(
