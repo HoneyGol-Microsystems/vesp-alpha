@@ -94,7 +94,7 @@ def vivado(args):
     if gui:
         vivadoMode = "gui"
     else:
-        vivadoMode = "batch"
+        vivadoMode = "tcl"
 
     proc = subprocess.run(
         ["vivado", "-mode", vivadoMode, "-source", "vivado/create_project.tcl", "-log", "build/vivado.log", "-journal", "build/vivado.jou", "-tclargs", str(path.resolve()), "vesp"]
