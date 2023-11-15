@@ -10,35 +10,32 @@ recipe:
       type: "hex"
   steps:
     - make_directory:
-        name: "build/vivado"
+        name: "build"
     - find_and_replace:
         source_file: "tests/riscvTopTest.v"
         dest_file: "build/tmp.v"
         find: "\"PATH_TO_HEX\""
-        replace: "\"tmp.hex\""
+        replace: "\"build/tmp.hex\""
+    - run:
+        executable: "iverilog"
+        params:
+          - "build/tmp.v"
+          - "-obuild/tmp.out"
+          - "-Irtl/components"
+        assert:
+          return_code: 0
+          output:
+            not_contains:
+              - "ERROR"
     - copy:
         source: mpysource
         dest: "build/tmp.hex"
         recursive: false
     - run:
-        executable: "vivado"
-        params:
-          - "-mode"
-          - "batch"
-          - "-source"
-          - "vivado/simulation.tcl"
-          - "-log"
-          - "build/vivado/vivado.log"
-          - "-journal"
-          - "build/vivado/vivado.jou"
-          - "-tclargs"
-          - "build/tmp.v"
-          - "topTest"
-          - "build/tmp.hex"
+        executable: "build/tmp.out"
         assert:
           output:
-            not_contains:
-              - "ERROR"
             contains:
               - "ASSERT_SUCCESS"
-        kill_on: "# quit"
+            not_contains:
+              - "ASSERT_FAIL"
