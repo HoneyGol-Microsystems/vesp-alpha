@@ -111,6 +111,8 @@ def clean(args):
             else:
                 item.unlink()
     
+    return True
+    
 if __name__ == "__main__":
 
     # Setting proper working directory (to script location).
