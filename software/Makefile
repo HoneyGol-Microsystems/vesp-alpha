@@ -38,7 +38,7 @@ RISCV_OPTIONS     = -mabi=ilp32 -mno-fdiv -mno-div -misa-spec=20191213 -march=rv
 OVERALL_OPTIONS   = -c
 C_OPTIONS 	      = -ffreestanding -std=c11
 WARNING_OPTIONS   = -Wall -pedantic
-OPTIMIZE_OPTIONS  = -fno-function-sections -fno-data-sections -fno-zero-initialized-in-bss -O2
+OPTIMIZE_OPTIONS  = -O2 -fno-function-sections -fno-data-sections -fno-zero-initialized-in-bss
 DIRECTORY_OPTIONS = -I $(LIB_INCLUDE_PATH)
 CODE_GEN_OPTIONS  = -fvisibility=hidden
 
