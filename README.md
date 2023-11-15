@@ -119,7 +119,7 @@ Executable can be created with these steps:
    ```sh
    make <chosen-target-name> SRC=<path-to-the-user-program>
    ```
-   The final executable can be found in the current directory and is called either `standalone.elf` or `firmware.elf`, depending on the chosen target. A memory map file called `memory.map` is also created in the current directory for debugging purposes.
+The final executable can be found in the current directory and is called either `standalone.elf` or `firmware.elf`, depending on the chosen target. A memory map file called `memory.map` is also created in the current directory for debugging purposes.
 
 To remove all of the files created along the way, simply run:
    ```sh
