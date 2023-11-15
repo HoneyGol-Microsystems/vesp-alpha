@@ -6,14 +6,9 @@
 `define OPCODE_FAIL         32'b0
 `define PC_STOP             'ha4
 
-`define MAX_QUEUE_SIZE      10
-
 module topTest();
     
     reg clk, reset;
-    integer i;
-    integer pcValuesLog [`MAX_QUEUE_SIZE - 1:0];
-    integer pcValuesLogPtr = 0;
 
     top dut (
         .clk(clk),
@@ -22,8 +17,6 @@ module topTest();
 
     initial begin
 
-        $dumpfile("riscvTopTest");
-		$dumpvars;
         $readmemh(`__MKPY_CURRENT_TEST, dut.ramInst.RAM, 0, `RAM_WORD_CNT-1);
 
         reset <= 1;
@@ -70,13 +63,6 @@ module topTest();
         // end
         // $display("------------------------------------------");
 
-        if (pcValuesLogPtr >= `MAX_QUEUE_SIZE - 1) begin
-            pcValuesLogPtr = 0;
-        end
-
-        pcValuesLog[pcValuesLogPtr] = dut.cpuInst.PC;
-        pcValuesLogPtr++;
-
         if (dut.iRead === `OPCODE_PASS) begin
             $display(`ASSERT_SUCCESS);
             $finish;
@@ -84,13 +70,6 @@ module topTest();
 
         if (dut.iRead === `OPCODE_FAIL) begin
             $display(`ASSERT_FAIL);
-            
-            $display("Last PC values dump:");
-            for(integer currentPc = pcValuesLogPtr; currentPc < `MAX_QUEUE_SIZE; currentPc++)
-                $display("%x", pcValuesLog[currentPc]);
-            for(integer currentPc = 0; currentPc < pcValuesLogPtr; currentPc++)
-                $display("%x", pcValuesLog[currentPc]);
-
             $finish;
         end
 
