@@ -2,14 +2,15 @@
 This repository contains summer student project: RISC-V compatible processor.
 
 ## The main script (`make.py`)
-This script is (for now) used mainly for launching tests.
+This script is used mainly for launching tests and interfacing with Vivado design suite.
 
 ### Setup
-To use the script, install all required dependencies.
+To use the script, install all required dependencies and add them to path.
 
 1. RISC-V toolchain
 2. iverilog
-3. Python version >=3.10 (older versions not officially supported)
+3. Python version >=3.10 (older versions not officially supported
+4. Vivado Design Suite
 
 ### Usage
 
@@ -40,6 +41,20 @@ To run specific recipe, use the `--recipe` switch. You can also pass custom sour
 Of course, only files compatible with the selected recipe will work. Trying to run hex files using Hardware Test (hwtest.yaml) recipe will obviously not work. See list below for currently available recipes:
 - `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using iverilog.
 - `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
+
+### Creating a Vivado project
+To simply create a Vivado project in the default directory (`build/vivado`), use: 
+
+```sh
+./make.py vivado
+```
+
+To specify a custom directory path, use `--path`. Beware, everything in the specified directory will be deleted, unless `--no-overwrite` is specified.
+
+By default, a project will be created and Vivado will stay in Tcl mode. To launch the GUI, use the `--gui` switch:
+```sh
+./make.py vivado --gui
+```
 
 ### Cleaning
 You can remove all generated content using:
