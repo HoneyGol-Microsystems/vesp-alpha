@@ -132,14 +132,14 @@ Compiled executables can be transformed into `.hex` files using the [`elftohex.p
 - RISC-V toolchain,
 - `pax-utils` package.
 
-To create the `.hex` file(s), run the script and supply three arguments - **location of executable(s)**, **destination location for the `.hex` file(s)** and **memory architecture** - `von-neumann` or `harvard`:
+To create the `.hex` file(s), run the script and supply three arguments - **location of executable(s)**, **destination location for the** `.hex` **file(s)** and **memory architecture** - `von-neumann` or `harvard`:
    ```sh
    python3.12 ./scripts/elftohex.py -s <path-to-executables> -d <dest-path-for-hex> -m <memory-architecture>
    ```
 If `von-neumann` architecture is specified, corresponding `*.hex` file will be created with the same name as the executable has and if `harvard` architecture was specified, `*_text.hex` and `*_data.hex` will be created. For more information about the script, run `-h` or `--help`.
 
 ## Deploying on FPGA
-The created `.hex` files can be loaded straight to the FPGA. To do that, open [`top.v`](rtl/components/top.v) and supply the **path of the `*_text.hex` and `*_data.hex` files** to the parameters `MEM_FILE` inside the **instruction** and **data** memory module instances:
+The created `.hex` files can be loaded straight to the FPGA. To do that, open [`top.v`](rtl/components/top.v) and supply the **path of the** `*_text.hex` **and** `*_data.hex` **files** to the parameters `MEM_FILE` of the **instruction** and **data** memory module instances:
 ```verilog
 instructionMemory #(
    .WORD_CNT(`INSTR_MEM_WORD_CNT),
