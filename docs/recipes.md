@@ -66,7 +66,7 @@ Example:
 ```
 
 #### `run`
-This step will run an executable with (optionally) specified parameters and optionally checks the return code and whether the output contains or does not contain specified strings.
+This step will run an executable with (optionally) specified parameters and optionally checks the return code and whether the output contains or does not contain specified strings. The step can also kill the executable if a specific string defined using `kill_on` key is found.
 Example:
 ```yaml
 - run:
@@ -82,6 +82,7 @@ Example:
                 - "ERROR"
             contains:
                 - "SUCCESS"
+    kill_on: "please kill me"
 ```
 
 #### `copy`
