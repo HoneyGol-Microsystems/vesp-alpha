@@ -4,10 +4,13 @@ import argparse
 import sys
 import os
 import logging
+import shutil
+import subprocess
 from pathlib import Path
 from scripts.recipeProcessor import RecipeProcessor
 
 DEFAULT_RECIPE_PATH = "recipes"
+DEFAULT_VIVADO_PATH = "build/vivado"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -69,6 +72,36 @@ def test(args):
 
     return len(failedRecipes) > 0
 
+def vivado(args):
+
+    path : Path         = args.path
+    no_overwrite : bool = args.no_overwrite
+    gui : bool          = args.gui
+
+    if path.exists() and not path.is_dir():
+        print("Specified path is invalid!")
+        return False
+
+    if not no_overwrite:
+        shutil.rmtree(str(path.resolve()))
+
+    if not path.exists():
+        path.mkdir(parents = True, exist_ok = True)
+
+    # Creating build dir to store logs.
+    Path("build").mkdir(exist_ok = True)
+
+    if gui:
+        vivadoMode = "gui"
+    else:
+        vivadoMode = "batch"
+
+    proc = subprocess.run(
+        ["vivado", "-mode", vivadoMode, "-source", "vivado/create_project.tcl", "-log", "build/vivado.log", "-journal", "build/vivado.jou", "-tclargs", str(path.resolve()), "vesp"]
+    )
+
+    return proc.returncode == 0
+
 if __name__ == "__main__":
 
     # Setting proper working directory (to script location).
@@ -104,7 +137,30 @@ if __name__ == "__main__":
         type = Path
     )
 
-    # add custom source files definition
+    # ============= Vivado subcommand =============
+    vivadoParser = subparsers.add_parser(
+        "vivado",
+        help = "Create a Vivado project."
+    )
+    vivadoParser.set_defaults(func = vivado)
+    vivadoParser.add_argument(
+        "--gui",
+        help = "Open a GUI.",
+        action = "store_true"
+    )
+    # We will actually "overwrite" the project either way but won't delete any existing files (logs, VCDs, etc.)
+    vivadoParser.add_argument(
+        "--no-overwrite",
+        help = "Do not overwrite an existing project.",
+        action = "store_true"
+    )
+    vivadoParser.add_argument(
+        "--path",
+        help = "Set a custom path for the project.",
+        action = "store",
+        type = Path,
+        default = Path("build/vivado")
+    )
 
     # ============= Convert subcommand =============
     # convertParser = subparsers.add_parser(
@@ -150,6 +206,9 @@ if __name__ == "__main__":
     elif args.v > 1:
         logging.basicConfig(level = logging.DEBUG)
 
-    subcommandReturnCode = args.func(args)
-    sys.exit(subcommandReturnCode) # Pass return code to system. Handy e.g. when evaluating the result in GitHub actions.
+    # Pass return code to system. Handy e.g. when evaluating the result in GitHub actions.
+    if(args.func(args)):
+        sys.exit(0)
+    else:
+        sys.exit(1)
     
