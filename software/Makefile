@@ -47,7 +47,7 @@ CFLAGS = $(OVERALL_OPTIONS) $(C_OPTIONS) $(WARNING_OPTIONS) $(OPTIMIZE_OPTIONS) 
 			  $(CODE_GEN_OPTIONS) $(DIRECTORY_OPTIONS) $(RISCV_OPTIONS)
 
 # Linker script options
-LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static -T $(LINKER_SCRIPT_SRC) -Wl,-Map=memory.map
+LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static -T $(LINKER_SCRIPT_SRC) -Wl,-Map=memory.map,--gc-sections
 
 # -----------------------------------------------------------------------------
 # User targets
