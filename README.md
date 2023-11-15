@@ -41,6 +41,12 @@ Of course, only files compatible with the selected recipe will work. Trying to r
 - `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using iverilog.
 - `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
 
+### Cleaning
+You can remove all generated content using:
+```sh
+./make.py clean
+```
+
 ## Official test suite - handling success/failure
 *This section is mainly meant as a documentation of the official tests' inner workings for our future reference, because there is none in the official repository.*
 
