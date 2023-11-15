@@ -23,23 +23,23 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="8.2884961"
-     inkscape:cx="49.707449"
-     inkscape:cy="12.728485"
+     inkscape:zoom="23.443407"
+     inkscape:cx="28.024937"
+     inkscape:cy="17.467597"
      inkscape:window-width="2560"
      inkscape:window-height="1360"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="g6" />
   <defs
      id="defs1">
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath6">
+       id="clipPath31">
       <rect
-         style="fill:#fdb515;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
-         id="rect6"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
+         id="rect31"
          width="6.2298965"
          height="6.2298965"
          x="4.2209806"
@@ -66,7 +66,7 @@
    id="tspan3">-α</tspan></tspan></text>
     <g
        id="g6"
-       clip-path="url(#clipPath6)"
+       clip-path="url(#clipPath31)"
        transform="translate(0.9736135,0.30325666)">
       <rect
          style="fill:#fdb515;fill-opacity:1;stroke:none;stroke-width:0.1;paint-order:stroke fill markers"
