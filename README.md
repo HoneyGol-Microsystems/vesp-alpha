@@ -1,4 +1,7 @@
-# VESP-α
+# <img src="img/vesp_logo_export.svg" alt="VESP logo"  height="150"/>
+
+*VESP: "VEřejný Studentský Procesor" (public students' processor)*
+
 This repository contains summer student project: RISC-V compatible processor.
 
 ## The main script (`make.py`)
