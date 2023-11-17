@@ -1,15 +1,19 @@
-# VESP-α
+# <img src="img/vesp_logo_export.svg" alt="VESP logo"  height="150"/>
+
+*VESP: "VEřejný Studentský Procesor" (public students' processor)*
+
 This repository contains summer student project: RISC-V compatible processor.
 
 ## The main script (`make.py`)
-This script is (for now) used mainly for launching tests.
+This script is used mainly for launching tests and interfacing with Vivado design suite.
 
 ### Setup
-To use the script, install all required dependencies.
+To use the script, install all required dependencies and add them to path.
 
 1. RISC-V toolchain
 2. iverilog
-3. Python version >=3.10 (older versions not officially supported)
+3. Python version >=3.10 (older versions not officially supported
+4. Vivado Design Suite
 
 ### Usage
 
@@ -41,6 +45,26 @@ Of course, only files compatible with the selected recipe will work. Trying to r
 - `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using iverilog.
 - `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
 
+### Creating a Vivado project
+To simply create a Vivado project in the default directory (`build/vivado`), use: 
+
+```sh
+./make.py vivado
+```
+
+To specify a custom directory path, use `--path`. Beware, everything in the specified directory will be deleted, unless `--no-overwrite` is specified.
+
+By default, a project will be created and Vivado will stay in Tcl mode. To launch the GUI, use the `--gui` switch:
+```sh
+./make.py vivado --gui
+```
+
+### Cleaning
+You can remove all generated content using:
+```sh
+./make.py clean
+```
+
 ## Official test suite - handling success/failure
 *This section is mainly meant as a documentation of the official tests' inner workings for our future reference, because there is none in the official repository.*
 
@@ -68,6 +92,9 @@ Because for now there are no memory-mapped peripherals in our implementation, we
 We effectively disable the `write_tohost` routine altogether, because it is only called in the `trap_vector` when the exception is caused by the `ecall`. 
 
 Using special opcodes instead of the `tohost` mechanism is fine for all other tests but not for the test where the `ecall` instruction itself is tested (rv32mi-p-scall). To detect a success in this test we abuse the `write_tohost` routine to signalize the result using the aforementioned 0x1 opcode. This can be done, because as it was mentioned, `write_tohost` is not used anywhere else in our modification of the test result handling.
+
+## Creating testbenches
+Testbenches must not contain Verilog's `$dumpfile` and `$dumpvars`, otherwise no VCD will be created by Vivado!
 
 ## Compilation of user programs
 User programs can be written in C or using assembly (with `.S` suffix, not `.s`). Executables of these programs can be generated in two ways:
