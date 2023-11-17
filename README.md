@@ -70,8 +70,8 @@ We effectively disable the `write_tohost` routine altogether, because it is only
 Using special opcodes instead of the `tohost` mechanism is fine for all other tests but not for the test where the `ecall` instruction itself is tested (rv32mi-p-scall). To detect a success in this test we abuse the `write_tohost` routine to signalize the result using the aforementioned 0x1 opcode. This can be done, because as it was mentioned, `write_tohost` is not used anywhere else in our modification of the test result handling.
 
 ## Compilation of user programs
-User programs can be written in C or using assembly (with `.S` suffix). Executables of these programs can be generated in two ways:
-1. compiling program as **standalone** - the final executable should not contain any platform specific code (startup or firmware libraries),
+User programs can be written in C or using assembly (with `.S` suffix, not `.s`). Executables of these programs can be generated in two ways:
+1. compiling program as **standalone** - the final executable will not contain any platform specific code (startup or firmware libraries),
 2. compiling program as **firmware** - startup code and VESP firmware library will be linked together with the user program.
 
 The user programs have to fulfill a certain structure - for more information on this, see [Writing programs for available targets](#writing-programs-for-available-targets). These programs can be compiled using the [main `Makefile`](software/Makefile), where `standalone` and `firmware` targets are implemented - see [Using the `Makefile`](#using-the-makefile) on how to use it.
@@ -80,7 +80,7 @@ The user programs have to fulfill a certain structure - for more information on 
 #### Standalone
 Using assembly for writing standalone programs is recommended over C. Prerequisite for running C program is an initialized stack pointer, which is usually done by the startup code. Thus, for writing C programs, the `firmware` target is recommended.
 
-The assembly program with suffix `.S` should define symbol `_start` as shown below:
+The assembly program should define symbol `_start` as shown below:
 ```asm
 .global _start
 _start:
@@ -90,7 +90,7 @@ _start:
 #### Firmware
 Using C for writing firmware programs is recommended, but assembly can also be used.
 
-The assembly program with suffix `.S` shouldn't define symbol `_start`, because it is already defined in the startup code. However, `main` symbol has to be defined and used as shown below:
+The assembly program shouldn't define symbol `_start`, because it is already defined in the startup code. However, `main` symbol has to be defined and used as shown below:
 ```asm
 .global main
 main:
@@ -136,10 +136,10 @@ To create the `.hex` file(s), run the script and supply three arguments - **loca
    ```sh
    python3.12 ./scripts/elftohex.py -s <path-to-executables> -d <dest-path-for-hex> -m <memory-architecture>
    ```
-If `von-neumann` architecture is specified, corresponding `*.hex` file will be created with the same name as the executable has and if `harvard` architecture was specified, `*_text.hex` and `*_data.hex` will be created. For more information about the script, run `-h` or `--help`.
+If `von-neumann` architecture is specified, corresponding `*.hex` file will be created with the same name as the executable has and if `harvard` architecture is specified, `*_text.hex` and `*_data.hex` will be created. For more information about the script, run it with `-h` or `--help`.
 
 ## Deploying on FPGA
-The created `.hex` files can be loaded straight to the FPGA. To do that, open [`top.v`](rtl/components/top.v) and supply the **path of the** `*_text.hex` **and** `*_data.hex` **files** to the parameters `MEM_FILE` of the **instruction** and **data** memory module instances:
+The created `.hex` files can be loaded straight to the FPGA. To do that, open [`top.v`](rtl/components/top.v) and supply a **path of the** `*_text.hex` **and** `*_data.hex` **files** to the parameters `MEM_FILE` of the **instruction** and the **data** memory module instances:
 ```verilog
 instructionMemory #(
    .WORD_CNT(`INSTR_MEM_WORD_CNT),
