@@ -2,6 +2,7 @@ import logging
 import yaml
 import subprocess
 import shutil
+import re
 from pathlib import Path
 
 _LOGGER = logging.getLogger(__name__)
@@ -18,7 +19,8 @@ class RecipeProcessor:
     """
 
     recipe : dict
-    PLACEHOLDER_CURRENT_SOURCE = "mpysource"
+    PLACEHOLDER_CURRENT_SOURCE = r"\bmpysource\b"
+    PLACEHOLDER_CURRENT_SOURCE_STEM = r"\bmpysourcestem\b"
 
     def __init__(self, recipePath, customSourcePath : Path):
         _LOGGER.debug(f"Loading recipe: {recipePath}")
@@ -59,6 +61,10 @@ class RecipeProcessor:
 
         _LOGGER.info("Starting run step...")
 
+        if stepData == None:
+            _LOGGER.error("Run step empty.")
+            return False
+
         try:
             execName             = stepData["executable"]
         except KeyError:
@@ -88,24 +94,42 @@ class RecipeProcessor:
             assertOutputCont    = []
         _LOGGER.debug(f"Assert output cont: {assertOutputCont}")
 
+        try:
+            killOn = stepData["kill_on"]
+        except KeyError:
+            killOn = None
+        _LOGGER.debug(f"Kill on: {killOn}")
 
         _LOGGER.debug(f"Elaborated params: {params}")
         
         execWithParams = [execName, *params]
         _LOGGER.debug(f"Running: '{execWithParams}'")
 
+        # stderr is set to stdout to merge and pipe these two.
         pipes = subprocess.Popen(
             execWithParams,
             stdout = subprocess.PIPE,
-            stderr = subprocess.PIPE
+            stderr = subprocess.STDOUT,
+            bufsize = 1,
+            text = True
         )
 
-        stdout, stderr = pipes.communicate()
-        stdout = stdout.decode('utf-8')
-        stderr = stderr.decode('utf-8')
+        _LOGGER.info("Program's output follows:")
 
-        if stdout: _LOGGER.info(f"STDOUT: {stdout}")
-        if stderr: _LOGGER.info(f"STDERR: {stderr}")
+        output : str = ""
+
+        if pipes.stdout is not None:
+            for line in pipes.stdout:
+                _LOGGER.info(f"{execName}: %s", line.strip('"\n"'))
+                output += line
+                if killOn is not None and killOn in line:
+                    pipes.kill()
+                    break
+        
+        # Required to get return code.
+        pipes.wait()
+
+        _LOGGER.info("Program's execution finished.")
 
         # There needs to be != None, because if the return code is 0, simple 'if assertReturnCode' will obviously evaluate to false.
         if assertReturnCode != None:
@@ -115,13 +139,13 @@ class RecipeProcessor:
             
         if type(assertOutputCont) == list:
             for outCont in assertOutputCont:
-                if not outCont in (stdout + stderr):
+                if not outCont in (output):
                     _LOGGER.info(f"Assertion failed for program output condition: '{outCont}' not found in output.")
                     return False
         
         if type(assertOutputNotCont) == list:
             for outCont in assertOutputNotCont:
-                if outCont in (stdout + stderr):
+                if outCont in (output):
                     _LOGGER.info(f"Assertion failed for program output condition: '{outCont}' was found in output.")
                     return False
         
@@ -314,8 +338,12 @@ class RecipeProcessor:
 
 
             if source != None:
+                
                 # Replacing source file placeholders with real paths.
-                replacedStepsString : str = yaml.safe_dump(self.steps).replace(self.PLACEHOLDER_CURRENT_SOURCE, str(source.resolve()))
+                replacedStepsString : str = yaml.safe_dump(self.steps)
+                replacedStepsString       = re.sub(self.PLACEHOLDER_CURRENT_SOURCE, rf"{str(source.resolve())}",  replacedStepsString)
+                replacedStepsString       = re.sub(self.PLACEHOLDER_CURRENT_SOURCE_STEM, rf"{str(source.stem)}", replacedStepsString)
+                
                 replacedSteps : dict      = yaml.safe_load(replacedStepsString)
                 print(f"📜📄 Running steps for source file '{source}'")
             else:
