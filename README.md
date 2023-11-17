@@ -74,7 +74,7 @@ User programs can be written in C or using assembly (with `.S` suffix, not `.s`)
 1. compiling program as **standalone** - the final executable will not contain any platform specific code (startup or firmware libraries),
 2. compiling program as **firmware** - startup code and VESP firmware library will be linked together with the user program.
 
-The user programs have to fulfill a certain structure - for more information on this, see [Writing programs for available targets](#writing-programs-for-available-targets). These programs can be compiled using the [main `Makefile`](software/Makefile), where `standalone` and `firmware` targets are implemented - see [Using the `Makefile`](#using-the-makefile) on how to use it.
+The user programs have to fulfill a certain structure - for more information on this, see [Writing programs for available targets](#writing-programs-for-available-targets). These programs can be compiled using the [main Makefile](software/Makefile), where `standalone` and `firmware` targets are implemented - see [Using the Makefile](#using-the-makefile) on how to use it.
 
 ### Writing programs for available targets
 #### Standalone
@@ -110,8 +110,8 @@ If any functionalities are needed from the VESP firmware library, just include i
 ```
 The `vesp.h` header includes all of the headers from the VESP library, so that other headers don't have to be manually included.
 
-### Using the `Makefile`
-Input programs are compiled using the RISC-V GCC and linked according to the [`mem.ld`](software/common/mem.ld) linker script, which creates `.text` and `.data` sections, both starting at address 0 and thus prepared for the Harvard memory architecture.
+### Using the Makefile
+Input programs are compiled using the RISC-V GCC and linked according to the [mem.ld](software/common/mem.ld) linker script, which creates `.text` and `.data` sections, both starting at address 0 and thus prepared for the Harvard memory architecture.
 
 Executable can be created with these steps:
 1. switch to `software/` directory, where the `Makefile` is located,
@@ -127,7 +127,7 @@ To remove all of the files created along the way, simply run:
    ```
 
 ## Creating `.hex` files from the executable
-Compiled executables can be transformed into `.hex` files using the [`elftohex.py`](scripts/elftohex.py) script. The dependencies are listed below:
+Compiled executables can be transformed into `.hex` files using the [elftohex.py](scripts/elftohex.py) script. The dependencies are listed below:
 - Python version >=3.10,
 - RISC-V toolchain,
 - `pax-utils` package.
@@ -139,7 +139,7 @@ To create the `.hex` file(s), run the script and supply three arguments - **loca
 If `von-neumann` architecture is specified, corresponding `*.hex` file will be created with the same name as the executable has and if `harvard` architecture is specified, `*_text.hex` and `*_data.hex` will be created. For more information about the script, run it with `-h` or `--help`.
 
 ## Deploying on FPGA
-The created `.hex` files can be loaded straight to the FPGA. To do that, open [`top.v`](rtl/components/top.v) and supply a **path of the** `*_text.hex` **and** `*_data.hex` **files** to the parameters `MEM_FILE` of the **instruction** and the **data** memory module instances:
+The created `.hex` files can be loaded straight to the FPGA. To do that, open [top.v](rtl/components/top.v) and supply a **path of the** `*_text.hex` **and** `*_data.hex` **files** to the parameters `MEM_FILE` of the **instruction** and the **data** memory module instances:
 ```verilog
 instructionMemory #(
    .WORD_CNT(`INSTR_MEM_WORD_CNT),
@@ -161,9 +161,9 @@ dataMemory #(
    .do(dRead)
 );
 ```
-If needed, the `INSTR_MEM_WORD_CNT` and `DATA_MEM_WORD_CNT` values can be changed in the [`constants.vh`](rtl/constants.vh) file.
+If needed, the `INSTR_MEM_WORD_CNT` and `DATA_MEM_WORD_CNT` values can be changed in the [constants.vh](rtl/constants.vh) file.
 
-Now, the module `top.v`, including the CPU and instruction/data memories, is ready for deploying on the FPGA with the specified `.hex` files.
+Now, the module top.v, including the CPU and instruction/data memories, is ready for deploying on the FPGA with the specified `.hex` files.
 
 ### Importing to Vivado Design Suite
 1. Create a new project
