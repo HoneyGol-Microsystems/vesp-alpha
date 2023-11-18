@@ -12,7 +12,7 @@ To use the script, install all required dependencies and add them to path.
 
 1. RISC-V toolchain
 2. iverilog
-3. Python version >=3.10 (older versions not officially supported
+3. Python version >=3.10 (older versions not officially supported)
 4. Vivado Design Suite
 
 ### Usage
