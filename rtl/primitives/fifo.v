@@ -6,10 +6,10 @@ module fifo #(
     input                 reset,
     input                 we,
     input                 re,
-    input  [XLEN-1:0]     di,
+    input  [XLEN-1:0]     din,
     output reg            empty,
     output reg            full,
-    output [XLEN-1:0]     do
+    output [XLEN-1:0]     dout
 );
 
 reg  [$clog2(LENGTH) - 1:0] frontPointer, backPointer;
@@ -29,7 +29,7 @@ always @( posedge clk ) begin : fifo_operations
     end else begin        
 
         if ( we && !full ) begin
-            memory[backPointer] <= di;
+            memory[backPointer] <= din;
             backPointer         <= backPointerInc;
 
             if ( !re ) begin
@@ -49,7 +49,7 @@ always @( posedge clk ) begin : fifo_operations
     end
 end
 
-assign do = memory[frontPointer];
+assign dout = memory[frontPointer];
 
 // Incrementation needs to be separated to keep correct width when comparing.
 assign frontPointerInc = frontPointer + 1;
