@@ -50,12 +50,12 @@ module gpioTest();
         portsReg = 16'b1111111100000000;
         regSel = 3'b010;
         #1;
-        `ASSERT(dataOut[7:0] === dut.ports[7:0], "dataOut does not match what was written to A ports.");
+        `ASSERT(dataOut[23:16] === dut.ports[7:0], "dataOut does not match what was written to A ports.");
         
         /* check if dataOut matches what is put on the B ports */
         regSel = 3'b101; // can be anything > 3'b100
         #1;
-        `ASSERT(dataOut[7:0] === dut.ports[15:8], "dataOut does not match what was written to B ports.");
+        `ASSERT(dataOut[15:8] === dut.ports[15:8], "dataOut does not match what was written to B ports.");
 
         /* test writing to A ports */
         portsReg = {16{1'bZ}}; // third state has to be simulated
@@ -98,24 +98,5 @@ module gpioTest();
         clk <= 1; #1;
         clk <= 0; #1;
     end
-
-    /* debug info */
-    // always @(*) begin
-    //     $display (
-    //         "GPIOWR_A: %b\n", dut.GPIOWR_A,
-    //         "GPIODIR_A: %b\n", dut.GPIODIR_A,
-    //         "GPIOWR_B: %b\n", dut.GPIOWR_B,
-    //         "GPIODIR_B: %b\n", dut.GPIODIR_B,
-    //         "\n",
-    //         "reset: %b\n", reset,
-    //         "regSel: %b\n", regSel,
-    //         "we: %b\n", we,
-    //         "dataIn: %b\n", dataIn,
-    //         "dataOut: %b\n", dataOut,
-    //         "A ports %b\n", ports[7:0],
-    //         "B ports %b\n", ports[15:8],
-    //         "-------------------------------------\n"
-    //     );
-    // end
 
 endmodule
