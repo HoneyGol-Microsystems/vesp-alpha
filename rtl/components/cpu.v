@@ -96,7 +96,9 @@ module cpu (
         .rd2(rs2)
     );
 
-    interruptController #(1) interruptControllerInst(
+    interruptController #(
+        .EXT_IRQ_COUNT(1)
+    ) interruptControllerInst (
         .clk(clk),
         .irqBus(irqBus),
         .interrupt(interrupt),

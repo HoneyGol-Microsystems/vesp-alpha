@@ -1,7 +1,7 @@
 `ifndef __FILE_INTERRUPTCONTROLLER_V
 `define __FILE_INTERRUPTCONTROLLER_V
 
-module interruptController # (
+module interruptController #(
     parameter EXT_IRQ_COUNT = 4
 ) (
     input               clk,
