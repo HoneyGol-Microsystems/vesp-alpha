@@ -1,0 +1,44 @@
+metadata:
+  type: "makepy recipe"
+  version: 0.1
+
+recipe:
+  name: "Official RISCV-V Test"
+  comment: "This test recipe runs pre-compiled official RISC-V tests."
+  sources:
+    - path: "tests/riscv-tests-hex"
+      type: "hex"
+  steps:
+    - make_directory:
+        name: "build/vivado"
+    - find_and_replace:
+        source_file: "tests/riscvTopTest.v"
+        dest_file: "build/tmp.v"
+        find: "\"PATH_TO_HEX\""
+        replace: "\"tmp.hex\""
+    - copy:
+        source: mpysource
+        dest: "build/tmp.hex"
+        recursive: false
+    - run:
+        executable: "vivado"
+        params:
+          - "-mode"
+          - "batch"
+          - "-source"
+          - "vivado/simulation.tcl"
+          - "-log"
+          - "build/vivado/vivado.log"
+          - "-journal"
+          - "build/vivado/vivado.jou"
+          - "-tclargs"
+          - "build/tmp.v"
+          - "topTest"
+          - "build/tmp.hex"
+        assert:
+          output:
+            not_contains:
+              - "ERROR"
+            contains:
+              - "ASSERT_SUCCESS"
+        kill_on: "# quit"

@@ -12,37 +12,47 @@ module fifo #(
     output [XLEN-1:0]     do
 );
 
-reg [$clog2(LENGTH) - 1:0] frontPointer, backPointer;
-reg [XLEN-1:0] memory [LENGTH-1:0];
+reg  [$clog2(LENGTH) - 1:0] frontPointer, backPointer;
+reg  [XLEN-1:0]             memory [LENGTH-1:0];
 
-always @( posedge clk ) begin
+wire [$clog2(LENGTH) - 1:0] frontPointerInc, backPointerInc;
+
+always @( posedge clk ) begin : fifo_operations
     
     if ( reset ) begin
-        frontPointer = 0;
-        backPointer  = 0;
-        empty        = 1;
-        full         = 0;
-    end else begin
-        
+
+        frontPointer <= 0;
+        backPointer  <= 0;
+        empty        <= 1;
+        full         <= 0;
+
+    end else begin        
+
         if ( we && !full ) begin
-            memory[backPointer] = di;
-            backPointer += 1;
-            empty = 0;
-            if ( frontPointer == backPointer ) begin
-                full = 1;
+            memory[backPointer] <= di;
+            backPointer         <= backPointerInc;
+
+            if ( !re ) begin
+                empty <= 0;
+                full  <= ( frontPointer == backPointerInc ) ? 1'b1 : 1'b0;
             end
         end
 
         if ( re && !empty ) begin
-            frontPointer += 1;
-            full = 0;
-            if ( frontPointer == backPointer ) begin
-                empty = 1;
+            frontPointer <= frontPointerInc;
+
+            if ( !we ) begin
+                empty <= ( frontPointerInc == backPointer ) ? 1'b1 : 1'b0;
+                full  <= 0;
             end
         end
     end
 end
 
 assign do = memory[frontPointer];
+
+// Incrementation needs to be separated to keep correct width when comparing.
+assign frontPointerInc = frontPointer + 1;
+assign backPointerInc  = backPointer  + 1;
 
 endmodule

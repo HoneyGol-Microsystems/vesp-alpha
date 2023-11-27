@@ -2,249 +2,117 @@
 
 import argparse
 import sys
-import subprocess
 import os
 import logging
 import shutil
-from itertools import zip_longest
+import subprocess
+from pathlib import Path
+from scripts.recipeProcessor import RecipeProcessor
 
-RVTESTS_SOURCE = os.path.join("tests", "riscv-tests", "isa")
-HWTESTS_DIR = os.path.join("tests", "hwtests")
-RVTESTS_HEX_DIR = os.path.join("tests", "riscv-tests-hex")
-RVTESTS_TOP_TEMPLATE = os.path.join("tests", "riscvTopTest.v")
-BUILD_DIR = "build"
-IVERILOG_OUTPUT = os.path.join(BUILD_DIR, "tmp.out")
+DEFAULT_RECIPE_PATH = "recipes"
+DEFAULT_VIVADO_PATH = "build/vivado"
+TO_CLEAN : list[Path] = [Path("build")]
 
-ASSERT_FAIL_MSG = "ASSERT_FAIL"
-ASSERT_SUCC_MSG = "ASSERT_SUCCESS"
-
-def printSeparator():
-    print("======================================")
-
-def prepareTesting():    
-    logging.debug("Creating temp directory...")
-    os.makedirs(BUILD_DIR, exist_ok = True)
-
-def rvtest():
-
-    prepareTesting()
-
-    PREPROCESSED_TOP_PATH = os.path.join(BUILD_DIR, "tmp.v")
-
-    testfiles = [file for file in os.listdir(RVTESTS_HEX_DIR) if file.endswith(".hex")]
-    testfiles.sort()
-
-    logging.debug(f"Found test files: {testfiles}")
-
-    if not testfiles:
-        print("No test files found. Terminating.")
-        return
-
-    successfulCount = 0
-
-    print("Preprocessing top entity...")
-    logging.debug(f"Opening top template at: {RVTESTS_TOP_TEMPLATE}")
-    try:
-        with open(RVTESTS_TOP_TEMPLATE) as template:
-            templateText = template.read()
-            logging.debug("Replacing test names...")
-            templateText = templateText.replace("\"PATH_TO_HEX\"", "\"build/tmp.hex\"")
-    except IOError:
-        print("Couldn't open top entity template. Terminating.")
-        return
-    
-    logging.debug("Writing preprocessed top...")
-
-    try:
-        with open(PREPROCESSED_TOP_PATH, 'w') as target:
-            target.write(templateText)
-    except IOError:
-        print("Couldn't write preprocessed top. Terminating.")
-        return
-
-    print("Compiling top entity...")
-    ret = subprocess.run(
-        ["iverilog", PREPROCESSED_TOP_PATH, "-o" + IVERILOG_OUTPUT, "-Irtl/components"],
-        stdout = sys.stdout,
-        stderr = subprocess.STDOUT
-    )
-
-    if ret.returncode != 0:
-        print("❌ Compilation error! Terminating.")
-        printSeparator()
-        return
-    
-    logging.debug("Preparations successful, running tests...")
-    unsuccessfulTestNames = []
-    
-    for testId, testName in enumerate(testfiles):
-        
-        print(f"Begin test [{testId + 1}/{len(testfiles)}]: {testName}")
-        logging.debug("Copying binary...")
-        shutil.copy2(os.path.join(RVTESTS_HEX_DIR, testName), os.path.join(BUILD_DIR, "tmp.hex"))
-        
-        print("Running test...")
-        output = subprocess.check_output(
-            [IVERILOG_OUTPUT],
-            stderr = subprocess.STDOUT
-        )
-
-        outputString = output.decode()
-
-        print(outputString)
-
-        if ASSERT_FAIL_MSG in outputString:
-            print("❌ Test error!")
-            printSeparator()
-            unsuccessfulTestNames.append(testName)
-            continue
-        elif not ASSERT_SUCC_MSG in outputString:
-            print("⚠️ Unknown error!")
-            printSeparator()
-            unsuccessfulTestNames.append(testName)
-            continue
-        else:
-            print("✅ Success!")
-            successfulCount += 1
-            printSeparator()
-        
-    print("RISC-V official tests summary")
-    print(f"Successful tests: {successfulCount}/{len(testfiles)}")        
-    if successfulCount < len(testfiles):
-        print("❌ There were some errors.")
-        print("Unsuccessful tests: ", unsuccessfulTestNames)
-    else:
-        print("✅ All tests passed.")
-    
-def hwtest():
-
-    prepareTesting()
-
-    testfiles = [file for file in os.listdir(HWTESTS_DIR) if file.endswith(".v")]
-    testfiles.sort()
-
-    logging.debug(f"Found test files: {testfiles}")
-
-    if not testfiles:
-        print("No test files found. Terminating.")
-        return
-
-    successfulCount = 0
-    unsuccessfulTestNames = []
-    for testId, testName in enumerate(testfiles):
-
-        print(f"Begin test [{testId + 1}/{len(testfiles)}]: {testName}")
-        print("Compiling test...")
-
-        ret = subprocess.run(
-            ["iverilog", os.path.join(HWTESTS_DIR, testName), "-o" + IVERILOG_OUTPUT],
-            stdout = sys.stdout,
-            stderr = subprocess.STDOUT
-        )
-
-        if ret.returncode != 0:
-            print("❌ Compilation error!")
-            printSeparator()
-            continue
-
-        print("Running test...")
-        output = subprocess.check_output(
-            [IVERILOG_OUTPUT],
-            stderr = subprocess.STDOUT
-        )
-
-        outputString = output.decode()
-
-        print(outputString)
-
-        if ASSERT_FAIL_MSG in outputString:
-            print("❌ Test error!")
-            printSeparator()
-            unsuccessfulTestNames.append(testName)
-            continue
-        elif not ASSERT_SUCC_MSG in outputString:
-            print("⚠️ Unknown error!")
-            printSeparator()
-            unsuccessfulTestNames.append(testName)
-            continue
-        else:
-            print("✅ Success!")
-            successfulCount += 1
-            printSeparator()
-
-    print("Hardware testing summary")
-    print(f"Successful tests: {successfulCount}/{len(testfiles)}")
-    if successfulCount < len(testfiles):
-        print("There were some errors.")
-        print("Unsuccessful tests: ", unsuccessfulTestNames)
-    else:
-        print("All tests passed.")
-
-def getRVExecsFromPath(sourcePath):
-
-    execs = []
-    return execs
-    
-# Copied from https://docs.python.org/3/library/itertools.html
-def grouper(iterable, n, fillvalue=None):
-    """Collect data into fixed-length chunks or blocks"""
-    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
-    args = [iter(iterable)] * n
-    return zip_longest(*args, fillvalue=fillvalue)
-
-# Inspired by https://github.com/sifive/elf2hex/blob/master/freedom-bin2hex.py
-def bin2hex(bit_width, inPath, outPath):
-    byte_width = bit_width // 8
-
-    infile = open(inPath, "rb")
-    outfile = open(outPath, "w")
-
-    for row in grouper(infile.read(), byte_width, fillvalue=0):
-        # Reverse because in Verilog most-significant bit of vectors is first.
-        hex_row = ''.join('{:02x}'.format(b) for b in reversed(row))
-        outfile.write(hex_row + '\n')
-
-    infile.close()
-    outfile.close()
-
-def convert(args):
-    sourcePath = os.path.normpath(args.sourceDir)
-    outputPath = os.path.normpath(args.outputDir)
-                        
-    if args.iformat == "binary" and args.oformat == "hex":
-        sourceFiles = getRVExecsFromPath(sourcePath)
-        
-        for fileName in sourceFiles:
-
-            tempObjFilePath = os.path.join(BUILD_DIR, "temp.obj")
-
-            ret = subprocess.run(
-                ["riscv64-unknown-elf-objcopy", os.path.join(sourcePath, fileName), "-Obinary", tempObjFilePath],
-                stdout = sys.stdout,
-                stderr = subprocess.STDOUT
-            )
-
-            if ret.returncode != 0:
-                print(f"Warning: '{fileName}' can't be converted (possibly malformed?).")
-                continue
-                
-            bin2hex(32, tempObjFilePath, os.path.join(outputPath, fileName + ".hex"))
-            print(f"Converted '{fileName}' to hex.")
-
-TEST_SUITES = {
-    "official": rvtest,
-    "hardware": hwtest
-}
+_LOGGER = logging.getLogger(__name__)
 
 def test(args):
+    
+    recipes = []
+    failedRecipes = []
+    customSourcePath = None
 
-    if "suite" in args and args.suite:
-        for testName in args.suite:
-            TEST_SUITES[testName]()
+    if "recipe" in args and args.recipe:
+        if not args.recipe.exists():
+            print("Specified recipe (or folder) does not exist.")
+            return True
+        if args.recipe.is_file():
+            if args.recipe.suffix == ".yaml" or args.recipe.suffix == ".yml":
+                recipes.append(args.recipe)
+            else:
+                print("Specified file is not YAML!")
+                return True
+        elif args.recipe.is_dir():
+            recipes = [recipe for recipe in args.recipe.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]    
+        else:
+            print("Specified path is neither file nor directory.")
+            return True
+        
+        if "sources" in args and args.sources:
+            if not args.sources.exists():
+                _LOGGER.error("Specified source path does not exist.")
+                return True
+            else:
+                customSourcePath = args.sources
     else:
-        for name,func in TEST_SUITES.items():
-            func()
+        if "sources" in args and args.sources:
+            _LOGGER.warning("You specified custom sources but not recipe path, ignoring")
 
+        print("No recipe path specified, using default...")
+        path = Path(DEFAULT_RECIPE_PATH)
+        if not path.exists() or not path.is_dir():
+            print("No default recipe folder found. Exiting.")
+            return True
+        recipes = [recipe for recipe in path.iterdir() if recipe.is_file() and (recipe.suffix == ".yaml" or recipe.suffix == ".yml")]
+    
+    _LOGGER.debug(f"Running recipes: {recipes}")
+
+    for recipe in recipes:
+        processor = RecipeProcessor(recipe, customSourcePath)
+        if not processor.process():
+            failedRecipes.append(recipe)
+
+    if len(failedRecipes) > 0:
+        print("Finished with errors! Rerun with -v or -vv to get more information.")
+    else:
+        print("Finished successfully!")
+
+    print("Details:")
+    print(f"- count of test suites: {len(recipes)}")
+    print(f"- # failed: {len(failedRecipes)}")
+    print(f"- failed suites: {[str(recName) for recName in failedRecipes]}")
+
+    return len(failedRecipes) > 0
+
+def vivado(args):
+
+    path : Path         = args.path
+    no_overwrite : bool = args.no_overwrite
+    gui : bool          = args.gui
+
+    if path.exists() and not path.is_dir():
+        print("Specified path is invalid!")
+        return False
+
+    if path.exists() and not no_overwrite:
+        shutil.rmtree(str(path.resolve()))
+
+    if not path.exists():
+        path.mkdir(parents = True, exist_ok = True)
+
+    # Creating build dir to store logs.
+    Path("build").mkdir(exist_ok = True)
+
+    if gui:
+        vivadoMode = "gui"
+    else:
+        vivadoMode = "tcl"
+
+    proc = subprocess.run(
+        ["vivado", "-mode", vivadoMode, "-source", "vivado/create_project.tcl", "-log", "build/vivado.log", "-journal", "build/vivado.jou", "-tclargs", str(path.resolve()), "vesp"]
+    )
+
+    return proc.returncode == 0
+
+def clean(args):
+    for item in TO_CLEAN:
+        if (item.exists()):
+            if (item.is_dir()):
+                shutil.rmtree(str(item.resolve()))
+            else:
+                item.unlink()
+    
+    return True
+    
 if __name__ == "__main__":
 
     # Setting proper working directory (to script location).
@@ -268,52 +136,97 @@ if __name__ == "__main__":
     )
     testParser.set_defaults(func = test)
     testParser.add_argument(
-        "--suite",
-        help = "Manually specify test suites to run.",
-        choices = list(TEST_SUITES.keys()),
-        action = "append"
+        "--recipe",
+        help = "Manually specify a recipe (or directory with recipes) to run.",
+        action = "store",
+        type = Path,
+    )
+    testParser.add_argument(
+        "--sources",
+        help = "Manually specify a sources to be used with manually specified recipe.",
+        action = "store",
+        type = Path
     )
 
+    # ============= Vivado subcommand =============
+    vivadoParser = subparsers.add_parser(
+        "vivado",
+        help = "Create a Vivado project."
+    )
+    vivadoParser.set_defaults(func = vivado)
+    vivadoParser.add_argument(
+        "--gui",
+        help = "Open a GUI.",
+        action = "store_true"
+    )
+    # We will actually "overwrite" the project either way but won't delete any existing files (logs, VCDs, etc.)
+    vivadoParser.add_argument(
+        "--no-overwrite",
+        help = "Do not overwrite an existing project.",
+        action = "store_true"
+    )
+    vivadoParser.add_argument(
+        "--path",
+        help = "Set a custom path for the project.",
+        action = "store",
+        type = Path,
+        default = Path("build/vivado")
+    )
+
+    # ============= Clean subcommand =============
+    cleanParser = subparsers.add_parser(
+        "clean",
+        help = "Remove all generated content."
+    )
+    cleanParser.set_defaults(func = clean)
+
     # ============= Convert subcommand =============
-    convertParser = subparsers.add_parser(
-        "convert",
-        help = "Convert different executable formats."
-    )
-    convertParser.set_defaults(func = convert)
+    # convertParser = subparsers.add_parser(
+    #     "convert",
+    #     help = "Convert different executable formats."
+    # )
+    # convertParser.set_defaults(func = convert)
     
-    convertParser.add_argument(
-        "sourceDir",
-        help = "Source directory."
-    )
-    convertParser.add_argument(
-        "outputDir",
-        help = "Output directory."
-    )    
+    # convertParser.add_argument(
+    #     "sourceDir",
+    #     help = "Source directory."
+    # )
+    # convertParser.add_argument(
+    #     "outputDir",
+    #     help = "Output directory."
+    # )    
     
-    convertParser.add_argument(
-        "--iformat",
-        help = "Input file format.",
-        choices = ["binary"],
-        required = True
-    )
-    convertParser.add_argument(
-        "--oformat",
-        help = "Output file format.",
-        choices = ["hex"],
-        required = True
-    )
+    # convertParser.add_argument(
+    #     "--iformat",
+    #     help = "Input file format.",
+    #     choices = ["binary"],
+    #     required = True
+    # )
+    # convertParser.add_argument(
+    #     "--oformat",
+    #     help = "Output file format.",
+    #     choices = ["hex"],
+    #     required = True
+    # )
     
     # ============= Other arguments =============
     parser.add_argument(
         "-v",
         help = "Print debug data.",
-        action = "store_true"
+        action = "count",
+        default = 0
     )
 
     args = parser.parse_args()
 
-    if args.v:
+    if args.v == 1:
+        logging.basicConfig(level = logging.INFO)
+    elif args.v > 1:
         logging.basicConfig(level = logging.DEBUG)
 
-    args.func(args)
+    # Pass return code to system. Handy e.g. when evaluating the result in GitHub actions.
+    if(args.func(args)):
+        sys.exit(0)
+    else:
+        sys.exit(1)
     
