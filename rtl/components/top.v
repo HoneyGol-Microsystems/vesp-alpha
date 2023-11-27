@@ -1,7 +1,7 @@
 `ifndef __FILE_TOP_V
 `define __FILE_TOP_V
 
-// `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
+`define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
 `include "rtl/components/cpu.v"
 `ifdef SPLIT_MEMORY
