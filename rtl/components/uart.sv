@@ -4,6 +4,7 @@ module uart #(
     parameter TX_QUEUE_SIZE = 16
 ) (
     input  logic                   we,
+    input  logic                   sel,
     input  logic [2:0]             regsel,
     input  logic [DATA_WIDTH-1:0]  din,
     input  logic                   clk,
@@ -82,13 +83,13 @@ module uart #(
     //////////////////////////////////////////////////
 
     // nelze !!! provedlo by se u kazdeho shodneho regselu
-    assign rx_re = !we && ( regsel == 3'h1 );
+    assign rx_re = sel && !we && ( regsel == 3'h1 );
     
     assign status_a.tx_queue_full = tx_full;
     assign status_a.rx_queue_empty = rx_empty;
     assign status_a.reserved = 0;
 
-    assign tx_we = we && ( regsel == 3'h0 );
+    assign tx_we = sel && we && ( regsel == 3'h0 );
 
     fifo #(
         .XLEN(8),
