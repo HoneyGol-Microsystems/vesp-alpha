@@ -1,13 +1,13 @@
-`ifndef __FILE_LEDDEBUGTOP_V
-`define __FILE_LEDDEBUGTOP_V
+`ifndef __FILE_VESPTOP_V
+`define __FILE_VESPTOP_V
 
 `include "rtl/components/top.v"
 `include "rtl/primitives/synchronizer.v"
 
-module ledDebugTop(
+module VESPTop (
     input clk,
     input reset,
-    output [31:16] PCdebug
+    inout [15:0] gpioPorts
 );
 
     wire syncReset;
@@ -24,11 +24,10 @@ module ledDebugTop(
 
     top topInst(
         .clk(clk),
-        .reset(syncReset)
+        .reset(syncReset),
+        .gpioPorts(gpioPorts)
     );
-    
-    assign PCdebug = topInst.cpuInst.registerFile32Inst.rf[1][31:16];
 
 endmodule
 
-`endif // __FILE_LEDDEBUGTOP_V
+`endif // __FILE_VESPTOP_V
