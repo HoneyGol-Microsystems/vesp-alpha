@@ -5,12 +5,12 @@
 `define OPCODE_FAIL         32'b0
 `define PC_STOP             'ha4
 
-module topTest();
+module gpioTopTest();
     
     reg clk, reset;
     wire [15:0] ports;
-    reg [15:0] portsReg;
-    assign ports = portsReg;
+    // reg [15:0] portsReg;
+    // assign ports = portsReg;
 
     top dut(
         .clk(clk),
@@ -19,19 +19,15 @@ module topTest();
     );
 
     initial begin
-
-        $dumpfile("gpioTopTest");
-		$dumpvars;
-        $readmemh("firmware/program_text.hex", dut.instrMemInst.ram, 0, `INSTR_MEM_WORD_CNT-1);
-        $readmemh("firmware/program_data.hex", dut.dataMemInst.ram, 0, `DATA_MEM_WORD_CNT-1);
-
-        portsReg = 16'hBBAA;
+        $readmemh("firmware_text.hex", dut.instrMemInst.ram, 0, `INSTR_MEM_WORD_CNT-1);
+        $readmemh("firmware_data.hex", dut.dataMemInst.ram, 0, `DATA_MEM_WORD_CNT-1);
 
         reset <= 0;
         #5;
         reset <= 1;
         #5;
         reset <= 0;
+
         #99999;
 
         $display(`ASSERT_TIMEOUT);
