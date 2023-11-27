@@ -8,7 +8,7 @@
     exception = 1;                           \
     excCode = `EXCEPTIONCODE_ILLEGAL_INSTR;
 
-module controller (
+(* dont_touch = "yes" *) module controller (
     input      [31:0] instruction,
     input      [31:0] memAddr,
     input             ALUZero,

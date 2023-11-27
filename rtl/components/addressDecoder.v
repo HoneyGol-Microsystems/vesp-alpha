@@ -1,7 +1,7 @@
 `ifndef __FILE_ADDRESSDECODER_V
 `define __FILE_ADDRESSDECODER_V
 
-module addressDecoder (
+(* dont_touch = "yes" *) module addressDecoder (
     input             we,
     input      [31:0] a,
     output reg [2:0]  outsel,

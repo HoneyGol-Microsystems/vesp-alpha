@@ -1,7 +1,7 @@
 `ifndef __FILE_ALU_V
 `define __FILE_ALU_V
 
-module alu #(
+(* dont_touch = "yes" *) module alu #(
     parameter XLEN = 32 // width of operands
 ) (
     input      [XLEN-1:0] op1, op2, // operands (unsigned)

@@ -1,7 +1,7 @@
 `ifndef __FILE_DATA_MEMORY_V
 `define __FILE_DATA_MEMORY_V
 
-module dataMemory #(
+(* dont_touch = "yes" *) module dataMemory #(
     parameter WORD_CNT = 16, // number of words (32b) in memory
     parameter MEM_FILE = ""
 ) (
