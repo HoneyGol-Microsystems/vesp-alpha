@@ -52,7 +52,7 @@ class RecipeProcessor:
             raise MissingRequiredKey
 
         _LOGGER.debug(f"Creating directory '{dirName}'")
-        Path(dirName).mkdir(exist_ok = True)
+        Path(dirName).mkdir(exist_ok = True, parents = True)
         
         _LOGGER.info("Step passed.")
         return True
