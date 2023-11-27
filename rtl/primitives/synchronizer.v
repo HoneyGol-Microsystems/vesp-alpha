@@ -1,11 +1,11 @@
 `ifndef __FILE_SYNCHRONIZER_V
 `define __FILE_SYNCHRONIZER_V
 
-module synchronizer #(
+(* dont_touch = "yes" *) module synchronizer #(
     parameter LEN    = 32,
     parameter STAGES = 2
 ) (
-    input           clk,
+    input            clk,
     input  [LEN-1:0] dataIn,
     output [LEN-1:0] dataOut
 );

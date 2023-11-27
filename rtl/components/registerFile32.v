@@ -2,7 +2,7 @@
 `define __FILE_REGISTERFILE32_V
 
 /* register file with 32 GPR's with parametrized width */
-module registerFile32 #(
+(* dont_touch = "yes" *) module registerFile32 #(
     parameter XLEN = 32 // width of registers
 ) (
     input  [4:0]      a1, a2, a3, // address to src (a1, a2) and dest (a3) register

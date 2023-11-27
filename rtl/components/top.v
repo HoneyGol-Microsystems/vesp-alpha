@@ -14,7 +14,7 @@
 `include "rtl/components/addressDecoder.v"
 `include "rtl/components/gpio.v"
 
-module top (
+(* dont_touch = "yes" *) module top (
     input clk,
     input reset,
     inout [15:0] gpioPorts

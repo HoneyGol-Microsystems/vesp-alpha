@@ -10,7 +10,7 @@
 `include "rtl/components/csr.v"
 `include "rtl/components/interruptController.v"
 
-module cpu (
+(* dont_touch = "yes" *) module cpu (
     input             clk,
     input             reset,
     input      [31:0] instruction,

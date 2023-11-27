@@ -1,7 +1,7 @@
 `ifndef __FILE_IMMDECODER_V
 `define __FILE_IMMDECODER_V
 
-module immDecoder (
+(* dont_touch = "yes" *) module immDecoder (
     input      [31:0] instruction, // instruction to get the immediate from
     output reg [31:0] imm          // result immediate
 );

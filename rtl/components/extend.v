@@ -1,7 +1,7 @@
 `ifndef __FILE_EXTEND_V
 `define __FILE_EXTEND_V
 
-module extend #(
+(* dont_touch = "yes" *) module extend #(
     parameter DATA_LEN = 8, // width of data
     parameter RES_LEN  = 32 // width of result (extended) data
 ) (
