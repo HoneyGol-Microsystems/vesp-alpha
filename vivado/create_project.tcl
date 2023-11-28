@@ -10,19 +10,24 @@
 set project_path [lindex $argv 0]
 set project_name [lindex $argv 1]
 
+# Creating a project.
+create_project -force $project_name $project_path -part xc7a35tcpg236-1
+
 # Setting up design sources.
 # List of all files of the design. This is universally usable for both simulation and synthesis.
-read_verilog [ glob "./rtl/components/*.v" ]
-read_verilog [ glob "./rtl/primitives/*.v" ]
-read_verilog "./rtl/constants.vh"
+add_files -fileset sources_1 [ glob "./rtl/components/*.v" ]
+add_files -fileset sources_1 [ glob "./rtl/primitives/*.v" ]
+add_files -fileset sources_1 [ glob "./rtl/top/*.v" ]
+add_files -fileset sources_1 "./rtl/constants.vh"
 set_property is_global_include true [ get_files constants.vh ]
 
 # Settings up testbench/simulation sources.
-read_verilog "./tests/testConstants.vh"
+add_files -fileset sim_1 "./tests/testConstants.vh"
 set_property is_global_include true [ get_files testConstants.vh ]
 
-# Create a project.
-save_project_as -force $project_name $project_path
+# Update to set top and file compile order
+update_compile_order -fileset sources_1
+update_compile_order -fileset sim_1
 
 # Configure include directories.
-set_property include_dirs "./" [get_fileset sim_1]
+set_property include_dirs "./" [get_fileset sources_1]
