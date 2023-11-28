@@ -1,7 +1,7 @@
 `ifndef __FILE_CONTROLLER_V
 `define __FILE_CONTROLLER_V
 
-module controller (
+(* dont_touch = "yes" *) module controller (
     input      [31:0] instruction,
     input      [31:0] memAddr,
     input             ALUZero,

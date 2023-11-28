@@ -1,7 +1,7 @@
 `ifndef __FILE_GPIO_V
 `define __FILE_GPIO_V
 
-module gpio (
+(* dont_touch = "yes" *) module gpio (
     input      [2:0]  regSel,   // select register
     input             we,
     input             reset,

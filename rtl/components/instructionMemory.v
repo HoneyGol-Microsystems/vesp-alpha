@@ -1,7 +1,7 @@
 `ifndef __FILE_INSTRUCTION_MEMORY_V
 `define __FILE_INSTRUCTION_MEMORY_V
 
-module instructionMemory #(
+(* dont_touch = "yes" *) module instructionMemory #(
     parameter WORD_CNT = 16, // number of words (32b) in memory
     parameter MEM_FILE = ""
 ) (

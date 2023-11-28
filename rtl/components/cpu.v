@@ -8,7 +8,7 @@
 `include "rtl/components/registerFile32.v"
 `include "rtl/components/extend.v"
 
-module cpu (
+(* dont_touch = "yes" *) module cpu (
     input             clk,
     input             reset,
     input      [31:0] instruction,

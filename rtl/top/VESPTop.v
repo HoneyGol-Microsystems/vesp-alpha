@@ -4,7 +4,7 @@
 `include "rtl/components/top.v"
 `include "rtl/primitives/synchronizer.v"
 
-module VESPTop (
+(* dont_touch = "yes" *) module VESPTop (
     input clk,
     input reset,
     inout [15:0] gpioPorts
