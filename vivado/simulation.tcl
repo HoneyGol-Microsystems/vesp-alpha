@@ -20,7 +20,7 @@ set argv [list ./build/vivado sim_temp]
 source ./vivado/create_project.tcl
 
 # Setting up test-specific sources.
-read_verilog $test_file
+add_files $test_file
 
 # Add another file if specified.
 if { $another_file ne "" } {
@@ -37,6 +37,7 @@ log_vcd -level 0 [ get_scopes /* ]
 run -all
 flush_vcd
 close_vcd
+close_project
 quit
 
 # This command can be used to check whether is the constants.vh correctly set as global include.
