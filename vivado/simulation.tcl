@@ -11,7 +11,8 @@
 # Defining default value for parameters.
 set test_file [lindex $argv 0]
 set test_top_name [lindex $argv 1]
-set another_file [lindex $argv 2]
+set is_gui [lindex $argv 2]
+set another_file [lindex $argv 3]
 
 # Creating a temp project.
 # Command line args have to be passed in this goofy way sadly.
@@ -20,7 +21,7 @@ set argv [list ./build/vivado sim_temp]
 source ./vivado/create_project.tcl
 
 # Setting up test-specific sources.
-read_verilog $test_file
+add_files $test_file
 
 # Add another file if specified.
 if { $another_file ne "" } {
@@ -36,8 +37,14 @@ open_vcd sim.vcd
 log_vcd -level 0 [ get_scopes /* ]
 run -all
 flush_vcd
-close_vcd
-quit
+
+if { $is_gui == "gui" } {
+    start_gui
+} else {
+    close_vcd
+    close_project
+    quit
+}
 
 # This command can be used to check whether is the constants.vh correctly set as global include.
 # report_property [ get_files constants.vh ]
