@@ -21,7 +21,10 @@ add_files -fileset sources_1 [ glob "./rtl/top/*.v" ]
 add_files -fileset sources_1 "./rtl/constants.vh"
 set_property is_global_include true [ get_files constants.vh ]
 
-# Settings up testbench/simulation sources.
+# Setting up constraints.
+add_files -fileset constrs_1 "./synth/basys3/constraints.xdc"
+
+# Setting up testbench/simulation sources.
 add_files -fileset sim_1 "./tests/testConstants.vh"
 set_property is_global_include true [ get_files testConstants.vh ]
 
