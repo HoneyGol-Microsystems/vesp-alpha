@@ -23,9 +23,6 @@ module gpioTest();
     );
 
     initial begin
-        $dumpfile("test");
-		$dumpvars;
-
         reset <= 1;
         we <= 0;
         #2;
