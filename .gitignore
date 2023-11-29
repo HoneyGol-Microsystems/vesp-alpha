@@ -6,3 +6,6 @@ __pycache__
 *.o
 *.elf
 *.map
+/xsim.dir
+/.Xil
+/xvlog.pb
