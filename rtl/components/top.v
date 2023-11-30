@@ -3,17 +3,6 @@
 
 // `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
-`include "rtl/components/cpu.v"
-`ifdef SPLIT_MEMORY
-    `include "rtl/components/instructionMemory.v"
-    `include "rtl/components/dataMemory.v"
-`else
-    `include "rtl/components/ram.v"
-`endif // SPLIT_MEMORY
-`include "rtl/constants.vh"
-`include "rtl/components/addressDecoder.v"
-`include "rtl/components/gpio.v"
-
 (* dont_touch = "yes" *) module top (
     input clk,
     input reset,

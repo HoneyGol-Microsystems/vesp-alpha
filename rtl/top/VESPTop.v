@@ -1,9 +1,6 @@
 `ifndef __FILE_VESPTOP_V
 `define __FILE_VESPTOP_V
 
-`include "rtl/components/top.v"
-`include "rtl/primitives/synchronizer.v"
-
 (* dont_touch = "yes" *) module VESPTop (
     input clk,
     input reset,

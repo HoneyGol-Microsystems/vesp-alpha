@@ -1,15 +1,6 @@
 `ifndef __FILE_CPU_V
 `define __FILE_CPU_V
 
-`include "rtl/constants.vh"
-`include "rtl/components/controller.v"
-`include "rtl/components/alu.v"
-`include "rtl/components/immDecoder.v"
-`include "rtl/components/registerFile32.v"
-`include "rtl/components/extend.v"
-`include "rtl/components/csr.v"
-`include "rtl/components/interruptController.v"
-
 (* dont_touch = "yes" *) module cpu (
     input             clk,
     input             reset,
