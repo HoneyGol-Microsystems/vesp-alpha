@@ -1,16 +1,7 @@
 `ifndef __FILE_CPU_V
 `define __FILE_CPU_V
 
-`include "rtl/constants.vh"
-`include "rtl/components/controller.v"
-`include "rtl/components/alu.v"
-`include "rtl/components/immDecoder.v"
-`include "rtl/components/registerFile32.v"
-`include "rtl/components/extend.v"
-`include "rtl/components/csr.v"
-`include "rtl/components/interruptController.v"
-
-module cpu (
+(* dont_touch = "yes" *) module cpu (
     input             clk,
     input             reset,
     input      [31:0] instruction,
@@ -96,7 +87,9 @@ module cpu (
         .rd2(rs2)
     );
 
-    interruptController #(1) interruptControllerInst(
+    interruptController #(
+        .EXT_IRQ_COUNT(1)
+    ) interruptControllerInst (
         .clk(clk),
         .irqBus(irqBus),
         .interrupt(interrupt),

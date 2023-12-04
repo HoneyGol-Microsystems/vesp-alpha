@@ -1,7 +1,7 @@
 `ifndef __FILE_CSR_V
 `define __FILE_CSR_V
 
-module csr (
+(* dont_touch = "yes" *) module csr (
     input             reset,
     input             clk,
     input             we,

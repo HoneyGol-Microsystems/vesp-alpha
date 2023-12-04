@@ -2,7 +2,7 @@
 `define __FILE_RAM_V
 
 // Dual port RAM.
-module ram #(
+(* dont_touch = "yes" *) module ram #(
     parameter WORD_CNT = 16, // number of words (32b) in RAM
     parameter MEM_FILE = ""
 ) (

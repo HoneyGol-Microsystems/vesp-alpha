@@ -11,7 +11,7 @@ from scripts.recipeProcessor import RecipeProcessor
 
 DEFAULT_RECIPE_PATH = "recipes"
 DEFAULT_VIVADO_PATH = "build/vivado"
-TO_CLEAN : list[Path] = [Path("build")]
+TO_CLEAN : list[Path] = [Path("build"), Path("xsim.dir"), Path(".Xil"), Path("xvlog.pb")]
 
 _LOGGER = logging.getLogger(__name__)
 

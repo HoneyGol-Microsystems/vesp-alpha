@@ -34,12 +34,5 @@ recipe:
           - "-tclargs"
           - "build/tmp.v"
           - "topTest"
-          - "nogui"
+          - "gui"
           - "build/tmp.hex"
-        assert:
-          output:
-            not_contains:
-              - "ERROR"
-            contains:
-              - "ASSERT_SUCCESS"
-        kill_on: "# quit"

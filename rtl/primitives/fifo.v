@@ -1,4 +1,4 @@
-module fifo #(
+(* dont_touch = "yes" *) module fifo #(
     parameter XLEN    = 32,
     parameter LENGTH  = 16
 ) (
