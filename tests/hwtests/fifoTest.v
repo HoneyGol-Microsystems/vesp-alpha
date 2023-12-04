@@ -17,10 +17,10 @@ module fifoTest();
         .reset(reset),
         .we(we),
         .re(re),
-        .di(di),
+        .din(di),
         .empty(empty),
         .full(full),
-        .do(do)        
+        .dout(do)        
     );
     
     initial begin
