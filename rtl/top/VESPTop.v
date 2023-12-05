@@ -53,7 +53,6 @@
       // Feedback Clocks: 1-bit (each) input: Clock feedback ports
       .CLKFBIN(pllFeedback)   // 1-bit input: Feedback clock
     );
-    
     // End of PLLE2_BASE_inst instantiation
 
 endmodule
