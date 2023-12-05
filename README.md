@@ -190,11 +190,4 @@ dataMemory #(
 ```
 If needed, the `INSTR_MEM_WORD_CNT` and `DATA_MEM_WORD_CNT` values can be changed in the [constants.vh](rtl/constants.vh) file.
 
-Now, the module top.v, including the CPU and instruction/data memories, is ready for deploying on the FPGA with the specified `.mem` files.
-
-### Importing to Vivado Design Suite
-1. Create a new project
-2. Add directory src (do not forget to tick "include subdirectories")
-3. Add root directory as Verilog include path:
-  - In Vivado GUI: `Tools > Settings > General > Verilog options > Verilog Include Files Search Paths`
-  - See [help article](https://support.xilinx.com/s/article/54006?language=en_US)
+Now, the global top module [VESPTop.v](rtl/top/VESPTop.v), which connects `top.v`, synchronises `reset` signal and divides clock frequency using this [PLL template](https://docs.xilinx.com/r/en-US/ug953-vivado-7series-libraries/PLLE2_BASE) is ready for bitstream generation. To create a Vivado project with this top module, see [Creating a Vivado project](#creating-a-vivado-project).
