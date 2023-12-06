@@ -52,7 +52,7 @@ To simply create a Vivado project in the default directory (`build/vivado`), use
 ./make.py vivado
 ```
 
-To specify a custom directory path, use `--path`. Beware, everything in the specified directory will be deleted, unless `--no-overwrite` is specified.
+To specify a custom directory path, use `--path`. If any project already exists in the default (or specified) path, it will be opened. Otherwise, a new one will be created. You can force script to overwrite an existing project using `--clean`.
 
 By default, a project will be created and Vivado will stay in Tcl mode. To launch the GUI, use the `--gui` switch:
 ```sh
