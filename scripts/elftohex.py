@@ -110,7 +110,7 @@ def convertElfToHex(elfPath: pathlib.Path, destPath: pathlib.Path):
     destPath.mkdir(parents=True, exist_ok=True)
 
     # Convert temporary .bin to .hex format
-    bin2hex(32, tmpBinPath, destPath.joinpath(elfPath.name).with_suffix(".hex"))
+    bin2hex(32, tmpBinPath, destPath.joinpath(elfPath.name).with_suffix(".mem"))
 
     # Delete temporary .bin file
     tmpBinPath.unlink()

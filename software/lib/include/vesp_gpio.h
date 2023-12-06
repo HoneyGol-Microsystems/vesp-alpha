@@ -1,6 +1,8 @@
 #ifndef __VESP_GPIO_H
 #define __VESP_GPIO_H
 
+#include "vesp.h"
+
 /* GPIO addresses */
 extern volatile uint8_t * const GPIOWR_A_PTR;
 extern volatile uint8_t * const GPIODIR_A_PTR;

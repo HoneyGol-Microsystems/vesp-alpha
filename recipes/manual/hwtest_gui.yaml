@@ -27,11 +27,4 @@ recipe:
           - "-tclargs"
           - mpysource
           - mpysourcestem
-          - "nogui"
-        assert:
-          output:
-            not_contains:
-              - "ERROR"
-            contains:
-              - "ASSERT_SUCCESS"
-        kill_on: "# quit"
+          - "gui"
