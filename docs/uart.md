@@ -8,7 +8,7 @@ Main frequency: UART will use reference clock 100/27, which is roughly equal to 
 | 0 | tx data | R+W | enqueue data to send |
 | 1 | rx data | R | get data from receive queue |
 | 2 | config register A | R+W | - |
-| 3 | reserved | R+W | - |
+| 3 | config register B | R+W | - |
 | 4 | reserved | R+W | - |
 | 5 | status register A | R | - |
 | 6 | reserved | R+W | - |
