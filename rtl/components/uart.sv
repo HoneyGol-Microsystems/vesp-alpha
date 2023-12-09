@@ -13,7 +13,7 @@ module uart #(
     output logic                  irq,
     output logic [DATA_WIDTH-1:0] dout,
     output logic                  tx,
-    output logic                  rx
+    input  logic                  rx
 );
 
     logic [4:0] ref_clk_timer_val;
