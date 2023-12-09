@@ -134,6 +134,10 @@ module uart #(
                 3'h2: begin
                     config_a <= din[23:16];
                 end
+                // Config register B.
+                3'h3: begin
+                    config_b <= din[31:24];
+                end
                 default: begin end
             endcase
         end
@@ -144,6 +148,7 @@ module uart #(
             3'h0:    dout = { { 24{ 1'b0 } }, tx_data                  };
             3'h1:    dout = { { 16{ 1'b0 } }, rx_data,  {  8{ 1'b0 } } };
             3'h2:    dout = { {  8{ 1'b0 } }, config_a, { 16{ 1'b0 } } };
+            3'h3:    dout = {                 config_b, { 24{ 1'b0 } } };
             default: dout = { { 16{ 1'b0 } }, status_a, {  8{ 1'b0 } } };
         endcase
     end
