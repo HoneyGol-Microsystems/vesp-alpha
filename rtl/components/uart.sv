@@ -141,10 +141,10 @@ module uart #(
 
     always_comb begin : proc_register_read
         case ( regsel )
-            3'h0:    dout = { { 24{ 1'b0 } }, tx_data                   };
-            3'h1:    dout = { { 16{ 1'b0 } }, rx_data,  {  8{ 1'b0  } } };
-            3'h2:    dout = { {  8{ 1'b0 } }, config_a, { 16{ 1'b0  } } };
-            default: dout = { { 16{ 1'b0 } }, status_a, {  8{ 1'b0  } } };
+            3'h0:    dout = { { 24{ 1'b0 } }, tx_data                  };
+            3'h1:    dout = { { 16{ 1'b0 } }, rx_data,  {  8{ 1'b0 } } };
+            3'h2:    dout = { {  8{ 1'b0 } }, config_a, { 16{ 1'b0 } } };
+            default: dout = { { 16{ 1'b0 } }, status_a, {  8{ 1'b0 } } };
         endcase
     end
 
@@ -158,7 +158,7 @@ module uart #(
         else
             ref_clk_timer_val <= ref_clk_timer_val + 1;
     end
-    assign ref_clk = ref_clk_timer_val == 26;
+    assign ref_clk = (ref_clk_timer_val == 26);
 
     // Main clock - used for RX sampling. Configurable.
     always_ff @( posedge clk ) begin : proc_main_clk_timer
@@ -167,7 +167,7 @@ module uart #(
         else if ( ref_clk )
             main_clk_timer_val <= main_clk_timer_val + 1;
     end
-    assign main_clk = main_clk_timer_val == config_a.clock_divisor;
+    assign main_clk = (main_clk_timer_val == config_a.clock_divisor);
 
     always_ff @( posedge clk ) begin : proc_bit_clk_timer
         if ( reset )
@@ -175,7 +175,7 @@ module uart #(
         else if ( main_clk )
             bit_clk_timer_val <= bit_clk_timer_val + 1;
     end
-    assign bit_clk = bit_clk_timer_val == 15;
+    assign bit_clk = (bit_clk_timer_val == 15);
 
     //////////////////////////////////////////////////
     // TX logic controller
