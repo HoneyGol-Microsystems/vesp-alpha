@@ -3,17 +3,17 @@ module uart #(
     parameter RX_QUEUE_SIZE = 16,
     parameter TX_QUEUE_SIZE = 16
 ) (
-    input  logic                   we,
-    input  logic                   sel,
-    input  logic [2:0]             regsel,
-    input  logic [DATA_WIDTH-1:0]  din,
-    input  logic                   clk,
-    input  logic                   reset,
+    input  logic                  we,
+    input  logic                  sel,
+    input  logic [2:0]            regsel,
+    input  logic [DATA_WIDTH-1:0] din,
+    input  logic                  clk,
+    input  logic                  reset,
 
-    output logic                   irq,
-    output logic [DATA_WIDTH-1:0]  dout,
-    output logic                   tx,
-    output logic                   rx
+    output logic                  irq,
+    output logic [DATA_WIDTH-1:0] dout,
+    output logic                  tx,
+    output logic                  rx
 );
 
     logic [4:0] ref_clk_timer_val;
