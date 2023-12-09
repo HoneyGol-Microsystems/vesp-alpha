@@ -26,10 +26,10 @@
 
     always @(posedge clk) begin
         if (reset) begin
-            GPIOWR_A  <= 8'h00;
-            GPIODIR_A <= 8'h00;
-            GPIOWR_B  <= 8'h00;
-            GPIODIR_B <= 8'h00;
+            GPIOWR_A  <= 0;
+            GPIODIR_A <= 0;
+            GPIOWR_B  <= 0;
+            GPIODIR_B <= 0;
         end else if (we) begin
             case (regSel)
                 3'b000:  GPIOWR_A  <= di[7:0];
