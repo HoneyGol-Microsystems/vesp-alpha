@@ -65,15 +65,6 @@ module uart #(
     logic tx_empty;
     logic tx_full;
 
-    enum {
-        TX_IDLE,
-        TX_START_BIT,
-        TX_DATA_BIT,
-        TX_PAR_BIT,
-        TX_END_BIT_1,
-        TX_END_BIT_2
-    } tx_logic_state, tx_logic_next_state;
-
     logic [7:0] tx_out_buffer;
     logic [3:0] tx_bits_sent_count;
 
@@ -181,58 +172,6 @@ module uart #(
             bit_clk_timer_val <= bit_clk_timer_val + 1;
     end
     assign bit_clk = (bit_clk_timer_val == 15);
-
-    //////////////////////////////////////////////////
-    // TX logic controller
-    //////////////////////////////////////////////////
-    always_ff @( posedge clk ) begin : proc_tx_logic_ff
-        if ( reset ) begin
-            tx_logic_state <= TX_IDLE;
-        end else begin
-            tx_logic_state <= tx_logic_next_state;
-        end
-    end
-
-    always_comb begin : proc_tx_logic_lookup
-
-        case ( tx_logic_state )
-            TX_IDLE: begin
-                if ( !tx_empty ) begin
-                   tx_logic_next_state = TX_START_BIT;
-                end else begin
-                   tx_logic_next_state = TX_IDLE;
-                end
-            end
-
-            TX_START_BIT: begin
-                tx_logic_next_state = TX_DATA_BIT;
-            end
-
-            TX_DATA_BIT: begin
-                
-            end
-
-            TX_PAR_BIT: begin
-                tx_logic_next_state = TX_END_BIT_1;
-            end
-
-            TX_END_BIT_1: begin
-                if ( config_b.double_stop_bits ) begin
-                    tx_logic_next_state = TX_END_BIT_2;
-                end else begin
-                    tx_logic_next_state = TX_IDLE;
-                end
-            end
-
-            TX_END_BIT_2: begin
-                tx_logic_next_state = TX_IDLE;
-            end
-        endcase
-    end
-
-    always_comb begin : proc_tx_logic_output
-
-    end
     
 
 endmodule
