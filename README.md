@@ -42,7 +42,7 @@ To run specific recipe, use the `--recipe` switch. You can also pass custom sour
 ```
 
 Of course, only files compatible with the selected recipe will work. Trying to run hex files using Hardware Test (hwtest.yaml) recipe will obviously not work. See list below for currently available recipes:
-- `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using iverilog.
+- `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using Vivado.
 - `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
 
 ### Creating a Vivado project
