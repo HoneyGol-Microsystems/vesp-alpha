@@ -101,7 +101,7 @@ module uart_datapath #(
     //////////////////////////////////////////////////
     always_ff @(posedge clk) begin : tx_parity_proc
         if (tx_parity_reset) begin
-            tx_parity_out <= ~config_b.parity_type[1];
+            tx_parity_out <= config_b.parity_type[1];
         end else if (tx_parity_we) begin
             tx_parity_out <= tx_shift_reg_lsb ? ~tx_parity_out : tx_parity_out;
         end
