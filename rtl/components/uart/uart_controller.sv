@@ -24,7 +24,7 @@ module uart_controller (
     // states enum
     enum {
         TX_IDLE,
-        TX_DATA_BIT,
+        TX_SEND_DATA,
         TX_PARITY_BIT,
         TX_STOP_BIT_2
     } tx_state, tx_next_state;
@@ -45,13 +45,13 @@ module uart_controller (
         case (tx_state)
             TX_IDLE: begin
                 if (!tx_queue_empty) begin
-                   tx_next_state = TX_DATA_BIT;
+                   tx_next_state = TX_SEND_DATA;
                 end else begin
                    tx_next_state = TX_IDLE;
                 end
             end
 
-            TX_DATA_BIT: begin
+            TX_SEND_DATA: begin
                 if (tx_bits_cnt_top) begin
                     if (parity_en) begin
                         tx_next_state = TX_PARITY_BIT;
@@ -63,7 +63,7 @@ module uart_controller (
                         end
                     end
                 end else begin
-                    tx_next_state = TX_DATA_BIT;
+                    tx_next_state = TX_SEND_DATA;
                 end
             end
 
@@ -104,7 +104,7 @@ module uart_controller (
                 end
             end
 
-            TX_DATA_BIT: begin
+            TX_SEND_DATA: begin
                 if (tx_bits_cnt_top) begin
                     if (parity_en) begin
                         tx_out_sel = 2'b11;
