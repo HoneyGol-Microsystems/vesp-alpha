@@ -3,26 +3,26 @@ module uart_datapath #(
     parameter RX_QUEUE_SIZE = 16,
     parameter TX_QUEUE_SIZE = 16
 ) (
-    input  logic                  clk,
-    input  logic                  reset,
-    input  logic                  we,
-    input  logic                  re,
-    input  logic [2:0]            regsel,
-    input  logic [31:0]           din,
-    input  logic                  tx_queue_re,
-    input  logic                  tx_shift_reg_we,
-    input  logic                  tx_shift_reg_se,
-    input  logic                  tx_bits_cnt_en,
-    input  logic                  tx_bits_cnt_reset,
-    input  logic                  tx_parity_we,
-    input  logic                  tx_parity_reset,
-    input  logic                  tx_out_sel,
+    input  logic        clk,
+    input  logic        reset,
+    input  logic        we,
+    input  logic        re,
+    input  logic [2:0]  regsel,
+    input  logic [31:0] din,
+    input  logic        tx_queue_re,
+    input  logic        tx_shift_reg_we,
+    input  logic        tx_shift_reg_se,
+    input  logic        tx_bits_cnt_en,
+    input  logic        tx_bits_cnt_reset,
+    input  logic        tx_parity_we,
+    input  logic        tx_parity_reset,
+    input  logic        tx_out_sel,
 
-    output logic [31:0]           dout,
-    output logic                  tx,
-    output logic                  bit_clk_cnt_top,
-    output logic                  tx_queue_empty,
-    output logic                  tx_bits_cnt_top
+    output logic [31:0] dout,
+    output logic        tx,
+    output logic        bit_clk_cnt_top,
+    output logic        tx_queue_empty,
+    output logic        tx_bits_cnt_top
 );
 
     /////////////////////////////////////////////////////////////////////////
