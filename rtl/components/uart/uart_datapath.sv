@@ -65,6 +65,14 @@ module uart_datapath #(
         logic [5:0] reserved;
     } status_a;
 
+    // interrupt flag register
+    struct packed {
+        logic tx_queue_empty;
+        logic rx_queue_full;
+        logic parity_error;
+        logic stop_bit_error;
+    } if_reg;
+
     /////////////////////////////////////////////////////////////////////////
     // REGISTER INTERFACE
     /////////////////////////////////////////////////////////////////////////
