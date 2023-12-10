@@ -30,7 +30,7 @@ Main frequency: UART will use reference clock 100/27, which is roughly equal to 
 | 7-3 | clock divisor | divides main frequency and thus determines baudrate |
 | 2 | enable irq on tx queue empty | |
 | 1 | enable irq on rx queue full | |
-| 0 | reserved | |
+| 0 | enable irq on parity error | |
 
 ### Config register B
 | bits | usage | comment |
@@ -38,7 +38,8 @@ Main frequency: UART will use reference clock 100/27, which is roughly equal to 
 | 7-6 | parity type | 0: no, 1: even, 2-3: odd |
 | 5-4 | data bits count | count = value + 5 |
 | 3 | double stop bits | 0: no, 1: yes |
-| 2-0 | reserved | |
+| 2 | enable irq on stop bit error | |
+| 1-0 | reserved | |
 
 ### Status register A
 | bits | meaning | comment |
