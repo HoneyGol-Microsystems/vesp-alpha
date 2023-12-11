@@ -42,7 +42,7 @@ To run specific recipe, use the `--recipe` switch. You can also pass custom sour
 ```
 
 Of course, only files compatible with the selected recipe will work. Trying to run hex files using Hardware Test (hwtest.yaml) recipe will obviously not work. See list below for currently available recipes:
-- `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using iverilog.
+- `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using Vivado.
 - `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
 
 ### Creating a Vivado project
@@ -52,7 +52,7 @@ To simply create a Vivado project in the default directory (`build/vivado`), use
 ./make.py vivado
 ```
 
-To specify a custom directory path, use `--path`. Beware, everything in the specified directory will be deleted, unless `--no-overwrite` is specified.
+To specify a custom directory path, use `--path`. If any project already exists in the default (or specified) path, it will be opened. Otherwise, a new one will be created. You can force script to overwrite an existing project using `--clean`.
 
 By default, a project will be created and Vivado will stay in Tcl mode. To launch the GUI, use the `--gui` switch:
 ```sh
