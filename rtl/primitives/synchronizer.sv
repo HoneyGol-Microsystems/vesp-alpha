@@ -3,7 +3,7 @@
 
 (* dont_touch = "yes" *) module synchronizer #(
     parameter LEN    = 32,
-    parameter STAGES = 2
+    parameter STAGES = 2    // At least 2 required.
 ) (
     input            clk,
     input            en,
@@ -20,22 +20,23 @@
         if (en) begin
             buffer[0] <= dataIn;
 
-            for (i = 1; i < STAGES; i = i + 1) begin
+            // There is additional one stage for rise/fall detection to work!
+            // See scheme for reference.
+            for (i = 1; i < STAGES + 1; i = i + 1) begin
                 buffer[i] <= buffer[i - 1];
             end
         end
     end
     generate
         if (STAGES >= 2) begin
-            assign rise = ~buffer[STAGES-2]  &  buffer[STAGES-1];
-            assign fall =  buffer[STAGES-2]  & ~buffer[STAGES-1];
+            assign rise =  buffer[STAGES - 2]  & ~buffer[STAGES - 1];
+            assign fall = ~buffer[STAGES - 2]  &  buffer[STAGES - 1];
         end else begin
-            assign rise = 0;
-            assign fall = 0;
+            $fatal("There must be at least two stages! (STAGES parameter error.)");
         end
     endgenerate
 
-    assign dataOut = buffer[STAGES - 1];
+    assign dataOut = buffer[STAGES - 2];
 
 endmodule
 
