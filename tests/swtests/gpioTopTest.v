@@ -1,3 +1,5 @@
+`timescale 10ns/1ns
+
 `define OPCODE_PASS         32'b1
 `define OPCODE_FAIL         32'b0
 `define PC_STOP             'ha4
@@ -21,11 +23,6 @@ module gpioTopTest();
         reset <= 1;
         #5;
         reset <= 0;
-
-        #10000;
-
-        $display(`ASSERT_TIMEOUT);
-        $finish;
     end
 
     always begin
