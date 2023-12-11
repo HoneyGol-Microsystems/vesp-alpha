@@ -20,10 +20,8 @@ if { [ catch { open_project "${project_path}/${project_name}.xpr" } error_str ] 
 
     # Setting up design sources.
     # List of all files of the design. This is universally usable for both simulation and synthesis.
-    add_files -fileset sources_1 [ glob "./rtl/components/*.v" ]
-    add_files -fileset sources_1 [ glob "./rtl/primitives/*.v" ]
-    add_files -fileset sources_1 [ glob "./rtl/top/*.v" ]
-    add_files -fileset sources_1 "./rtl/constants.vh"
+    # This command will recursively search through rtl folder and all its subdirectories.
+    add_files -fileset sources_1 "./rtl"
     set_property is_global_include true [ get_files constants.vh ]
 
     # Setting up constraints.
