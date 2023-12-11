@@ -21,6 +21,7 @@
 
     top topInst(
         .clk(divClk),
+        .en(1'b1),
         .reset(syncReset),
         .gpioPorts(gpioPorts)
     );
