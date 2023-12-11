@@ -15,13 +15,13 @@
         .STAGES(2)
     ) resetSync (
         .clk(divClk),
+        .en(1'b1),
         .dataIn(reset),
         .dataOut(syncReset)
     );
 
     top topInst(
         .clk(divClk),
-        .en(1'b1),
         .reset(syncReset),
         .gpioPorts(gpioPorts)
     );
