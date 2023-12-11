@@ -45,9 +45,9 @@ module uart_datapath #(
     // Config register A.
     struct packed {
         logic [4:0] clock_divisor;
-        logic       irq_en_tx_empty;
-        logic       irq_en_rx_full;
-        logic       reserved;
+        logic       tx_empty_irq_en;
+        logic       rx_full_irq_en;
+        logic       parity_error_irq_en;
     } config_a;
 
     // Config register B.
@@ -55,7 +55,8 @@ module uart_datapath #(
         logic [1:0] parity_type;
         logic [1:0] data_bits_count;
         logic       double_stop_bits;
-        logic [2:0] reserved;
+        logic       stop_bit_error_irq_en;
+        logic [1:0] reserved;
     } config_b;
     
     // Status register A.
