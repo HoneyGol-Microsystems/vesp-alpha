@@ -1,6 +1,3 @@
-`include "rtl/primitives/synchronizer.v"
-`include "tests/testConstants.vh"
-
 module synchronizerTest();
 
     reg clk;
@@ -26,13 +23,13 @@ module synchronizerTest();
         // Shifting init values.
         dataIn = 3;
         #4;
-        `ASSERT(dataOut === 3, "Wrong output value");
+        assert(dataOut === 3) else $fatal("Wrong output value.");
 
         dataIn = 0;
         #4;
-        `ASSERT(dataOut === 0, "Wrong output value");
+        assert(dataOut === 0) else $fatal("Wrong output value");
 
-        $display(`ASSERT_SUCCESS);
+        $display("ASSERT_SUCCESS");
 		#1; $finish;
 	end
 
