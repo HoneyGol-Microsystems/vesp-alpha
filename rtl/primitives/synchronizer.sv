@@ -18,7 +18,7 @@
     logic   [LEN-1:0] buffer [STAGES:0];
     integer           i;
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if (en) begin
             buffer[0] <= dataIn;
 
