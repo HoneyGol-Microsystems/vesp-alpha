@@ -22,7 +22,8 @@ module uart_rx_controller (
     output logic parity_error_if_en,
     output logic rx_queue_we,
     output logic stop_bit_error_if_en,
-    output logic rx_error_reg_set
+    output logic rx_error_reg_set,
+    output logic rx_error_reg_reset
 );
 
     /////////////////////////////////////////////////////////////////////////
@@ -142,6 +143,7 @@ module uart_rx_controller (
         rx_queue_we          = 0;
         stop_bit_error_if_en = 0;
         rx_error_reg_set     = 0;
+        rx_error_reg_reset   = 0;
 
         case (rx_state)
             RX_IDLE: begin
@@ -187,6 +189,7 @@ module uart_rx_controller (
                     end else begin
                         rx_queue_we          = !rx_error_reg_out && rx_sync_out;
                         stop_bit_error_if_en = 1;
+                        rx_error_reg_reset   = 1;
                     end
                 end
             end
@@ -195,6 +198,7 @@ module uart_rx_controller (
                 if (rx_get_sample) begin
                     rx_queue_we          = !rx_error_reg_out && rx_sync_out;
                     stop_bit_error_if_en = 1;
+                    rx_error_reg_reset   = 1;
                 end
             end
         endcase
