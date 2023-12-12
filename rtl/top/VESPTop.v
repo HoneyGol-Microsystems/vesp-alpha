@@ -8,6 +8,8 @@
 );
 
     wire syncReset, pllFeedback, divClk;
+    reg [6:0] resetCounter;
+    reg finalReset;
 
     // synchronize reset signal
     synchronizer #(
@@ -20,9 +22,22 @@
         .dataOut(syncReset)
     );
 
+    always @(posedge clk) begin
+        if (syncReset) begin
+            resetCounter <= 0;
+            finalReset <= 1;
+        end else begin
+            resetCounter <= resetCounter + 1;
+        end
+
+        if (resetCounter == 69) begin
+            finalReset <= 0;
+        end
+    end
+
     top topInst(
         .clk(divClk),
-        .reset(syncReset),
+        .reset(finalReset),
         .gpioPorts(gpioPorts)
     );
     
