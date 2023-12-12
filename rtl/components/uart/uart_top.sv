@@ -18,7 +18,7 @@ module uart_top (
     // SIGNAL DECLARATIONS
     /////////////////////////////////////////////////////////////////////////
     logic stop_bit_error_if_en, parity_error_if_en, tx_queue_empty,
-          rx_queue_full, rx_sync_out, rx_parity_out, if_reg_reset;
+          rx_queue_full, rx_sync, rx_parity_out, if_reg_reset;
     logic [7:0] tx_queue_din, tx_queue_dout, rx_queue_dout;
 
     /////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ module uart_top (
         if (if_reg_reset) begin
             if_reg.stop_bit_error <= if_reg.stop_bit_error & din[16+4];
         end else if (config_b.stop_bit_error_irq_en && stop_bit_error_if_en) begin
-            if_reg.stop_bit_error <= !rx_sync_out;
+            if_reg.stop_bit_error <= !rx_sync;
         end
     end
 

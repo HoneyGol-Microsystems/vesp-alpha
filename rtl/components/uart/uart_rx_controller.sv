@@ -10,7 +10,7 @@ module uart_rx_controller (
     input  logic rx_get_sample,
     input  logic rx_bits_cnt_top,
     input  logic rx_error_reg_out,
-    input  logic rx_sync_out,
+    input  logic rx_sync,
 
     output logic rx_sample_cnt_reset,
     output logic rx_sample_reg_reset,
@@ -184,10 +184,10 @@ module uart_rx_controller (
             RX_WAIT_STOP_BIT_1: begin
                 if (rx_get_sample) begin
                     if (double_stop_bit) begin
-                        rx_error_reg_set     = !rx_sync_out;
+                        rx_error_reg_set     = !rx_sync;
                         stop_bit_error_if_en = 1;
                     end else begin
-                        rx_queue_we          = !rx_error_reg_out && rx_sync_out;
+                        rx_queue_we          = !rx_error_reg_out && rx_sync;
                         stop_bit_error_if_en = 1;
                         rx_error_reg_reset   = 1;
                     end
@@ -196,7 +196,7 @@ module uart_rx_controller (
 
             RX_WAIT_STOP_BIT_2: begin
                 if (rx_get_sample) begin
-                    rx_queue_we          = !rx_error_reg_out && rx_sync_out;
+                    rx_queue_we          = !rx_error_reg_out && rx_sync;
                     stop_bit_error_if_en = 1;
                     rx_error_reg_reset   = 1;
                 end
