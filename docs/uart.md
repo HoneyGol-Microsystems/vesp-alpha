@@ -11,7 +11,7 @@ Main frequency: UART will use reference clock 100/27, which is roughly equal to 
 | 3 | config register B | R+W | - |
 | 4 | reserved | R+W | - |
 | 5 | status register A | R | - |
-| 6 | interrupt flag register | R+W | - |
+| 6 | interrupt flag register | R+W | writing in form of reset only |
 | 7 | reserved | R+W | - |
 
 ### TX data
