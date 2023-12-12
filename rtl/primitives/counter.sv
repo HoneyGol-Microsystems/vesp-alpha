@@ -2,14 +2,16 @@
 module counter #(
     parameter COUNTER_LENGTH = 4
 ) (
-    input  logic reset,
-    input  logic clk,
-    input  logic en,
-    input  logic max,
-    output logic top
+    input  logic                      reset,
+    input  logic                      clk,
+    input  logic                      en,
+    input  logic                      max,
+    output logic                      top,
+    output logic [COUNTER_LENGTH-1:0] val
 );
 
     logic [COUNTER_LENGTH-1:0] counter;
+    assign val = counter;
 
     always_ff @(posedge clk) begin : counter_proc
         if (reset)
