@@ -18,13 +18,22 @@ module uart_top (
     // SIGNAL DECLARATIONS
     /////////////////////////////////////////////////////////////////////////
     logic stop_bit_error_if_en, parity_error_if_en, tx_queue_empty,
-          rx_queue_full, rx_sync, rx_parity_out, if_reg_reset;
+          rx_queue_full, rx_sync, rx_parity_out, if_reg_reset, ref_clk_cnt_top,
+          sample_clk_cnt_top, bit_clk_cnt_top, rx_sync_fall, rx_get_sample,
+          rx_bits_cnt_top, rx_error_reg_out, rx_sample_cnt_reset, rx_parity_we,
+          rx_sample_reg_reset, rx_sample_reg_we, rx_parity_reset, rx_queue_we,
+          rx_bits_cnt_reset, rx_bits_cnt_en, rx_error_reg_set, tx_bits_cnt_top,
+          rx_error_reg_reset, tx_bits_cnt_reset, tx_bits_cnt_en, tx_queue_re,
+          tx_queue_we, tx_shift_reg_we, tx_shift_reg_se, tx_parity_reset,
+          tx_parity_we;
+    logic [1:0] tx_out_sel;
     logic [7:0] tx_queue_din, tx_queue_dout, rx_queue_dout;
 
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL ASSIGNMENTS
     /////////////////////////////////////////////////////////////////////////
     assign if_reg_reset = (we && regsel == 3'h6);
+    assign tx_queue_we  = (re && we && regsel == 3'h0);
 
     /////////////////////////////////////////////////////////////////////////
     // CONFIG, STATUS AND INTERRUPT FLAG REGISTERS
@@ -127,5 +136,158 @@ module uart_top (
             default: dout = { { 8{1'b0}}, if_reg       , {16{1'b0}} };
         endcase
     end
+
+    /////////////////////////////////////////////////////////////////////////
+    // CLOCK ENABLE SIGNALS
+    /////////////////////////////////////////////////////////////////////////
+    // Reference clock. Generates 3.5714 MHz from 50 MHz system clock.
+    counter #(
+        .COUNTER_LENGTH(5)
+    ) ref_clk_cnt (
+        .reset(reset),
+        .clk(clk),
+        .en(1'b1),
+        .max(13),
+        .top(ref_clk_cnt_top)
+    );
+
+    // Main clock - used for RX sampling. Configurable.
+    counter #(
+        .COUNTER_LENGTH(5)
+    ) sample_clk_cnt (
+        .reset(reset),
+        .clk(clk),
+        .en(ref_clk_cnt_top),
+        .max(config_a.clock_divisor),
+        .top(sample_clk_cnt_top)
+    );
+
+    // bit clk counter
+    counter #(
+        .COUNTER_LENGTH(4)
+    ) bit_clk_cnt (
+        .reset(reset),
+        .clk(clk),
+        .en(sample_clk_cnt_top),
+        .max(16),
+        .top(bit_clk_cnt_top)
+    );
+
+    /////////////////////////////////////////////////////////////////////////
+    // RX CONTROLLER
+    /////////////////////////////////////////////////////////////////////////
+    uart_rx_controller rx_ctrl (
+        .clk(clk),
+        .rx_clk_en(sample_clk_cnt_top),
+        .reset(reset),
+        .parity_en(config_b.parity_type == 2'b0),
+        .double_stop_bit(config_b.double_stop_bits),
+        .rx_queue_full(rx_queue_full),
+        .rx_sync_fall(rx_sync_fall),
+        .rx_get_sample(rx_get_sample),
+        .rx_bits_cnt_top(rx_bits_cnt_top),
+        .rx_error_reg_out(rx_error_reg_out),
+        .rx_sync(rx_sync),
+
+        .rx_sample_cnt_reset(rx_sample_cnt_reset),
+        .rx_sample_reg_reset(rx_sample_reg_reset),
+        .rx_sample_reg_we(rx_sample_reg_we),
+        .rx_parity_reset(rx_parity_reset),
+        .rx_parity_we(rx_parity_we),
+        .rx_bits_cnt_reset(rx_bits_cnt_reset),
+        .rx_bits_cnt_en(rx_bits_cnt_en),
+        .parity_error_if_en(parity_error_if_en),
+        .rx_queue_we(rx_queue_we),
+        .stop_bit_error_if_en(stop_bit_error_if_en),
+        .rx_error_reg_set(rx_error_reg_set),
+        .rx_error_reg_reset(rx_error_reg_reset)
+    );
+
+    /////////////////////////////////////////////////////////////////////////
+    // TX CONTROLLER
+    /////////////////////////////////////////////////////////////////////////
+    uart_tx_controller tx_ctrl (
+        .clk(clk),
+        .tx_clk_en(bit_clk_cnt_top),
+        .reset(reset),
+        .parity_en(config_b.parity_type == 2'b0),
+        .tx_queue_empty(tx_queue_empty),
+        .double_stop_bit(config_b.double_stop_bits),
+        .tx_bits_cnt_top(tx_bits_cnt_top),
+
+        .tx_bits_cnt_reset(tx_bits_cnt_reset),
+        .tx_bits_cnt_en(tx_bits_cnt_en),
+        .tx_queue_re(tx_queue_re),
+        .tx_shift_reg_we(tx_shift_reg_we),
+        .tx_shift_reg_se(tx_shift_reg_se),
+        .tx_parity_reset(tx_parity_reset),
+        .tx_parity_we(tx_parity_we),
+        .tx_out_sel(tx_out_sel)
+    );
+
+    /////////////////////////////////////////////////////////////////////////
+    // RX DATAPATH
+    /////////////////////////////////////////////////////////////////////////
+    uart_rx_datapath #(
+        .RX_QUEUE_SIZE(16)
+    ) rx_datapath (
+        .clk(clk),
+        .reset(reset),
+        .rx(rx),
+        .rx_sync_en(1'b1),
+        .rx_sample_reg_we(rx_sample_reg_we),
+        .rx_sample_reg_reset(rx_sample_reg_reset),
+        .rx_queue_we(rx_queue_we),
+        .rx_queue_re(re),
+        .parity_type(config_b.parity_type[1]),
+        .rx_parity_we(rx_parity_we),
+        .rx_parity_reset(rx_parity_reset),
+        .rx_bits_cnt_en(rx_bits_cnt_en),
+        .rx_bits_cnt_reset(rx_bits_cnt_reset),
+        .rx_error_reg_set(rx_error_reg_set),
+        .rx_error_reg_reset(rx_error_reg_reset),
+        .rx_sample_cnt_en(sample_clk_cnt_top),
+        .rx_sample_cnt_reset(rx_sample_cnt_reset),
+
+        .rx_sync_rise(),
+        .rx_sync_fall(rx_sync_fall),
+        .rx_sync(rx_sync),
+        .rx_queue_empty(status_a.rx_queue_empty),
+        .rx_queue_full(rx_queue_full),
+        .rx_queue_dout(rx_queue_dout),
+        .rx_parity_out(rx_parity_out),
+        .rx_bits_cnt_top(rx_bits_cnt_top),
+        .rx_error_reg_out(rx_error_reg_out),
+        .rx_sample_cnt_top(),
+        .rx_get_sample(rx_get_sample)
+    );
+
+    /////////////////////////////////////////////////////////////////////////
+    // TX DATAPATH
+    /////////////////////////////////////////////////////////////////////////
+    uart_tx_datapath #(
+        .TX_QUEUE_SIZE(16)
+    ) tx_datapath (
+        .clk(clk),
+        .reset(reset),
+        .tx_queue_we(tx_queue_we),
+        .tx_queue_re(tx_queue_re),
+        .tx_queue_din(tx_queue_din),
+        .tx_shift_reg_we(tx_shift_reg_we),
+        .tx_shift_reg_se(tx_shift_reg_se),
+        .tx_shift_reg_reset(1'b0),
+        .tx_out_sel(tx_out_sel),
+        .tx_bits_cnt_en(tx_bits_cnt_en),
+        .tx_bits_cnt_reset(tx_bits_cnt_reset),
+        .data_bits_count(config_a.data_bits_count),
+        .parity_type(config_b.parity_type[1]),
+        .tx_parity_we(tx_parity_we),
+        .tx_parity_reset(tx_parity_reset),
+
+        .tx(tx),
+        .tx_queue_empty(tx_queue_empty),
+        .tx_queue_full(status_a.tx_queue_full),
+        .tx_bits_cnt_top(tx_bits_cnt_top)
+    );
 
 endmodule
