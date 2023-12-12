@@ -181,7 +181,7 @@
 
                             if(funct7[4]) begin // MRET
                                 
-                                if (privilegeLevel === 2'b11) begin
+                                if (privilegeLevel == 2'b11) begin
                                     // TODO throw exception
                                 end else begin
                                     branch  = 1;

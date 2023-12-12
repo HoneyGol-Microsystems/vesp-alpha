@@ -14,11 +14,11 @@
 );
 
     always @(*) begin
+        outsel  = 0;
         wemem   = 0;
         wegpio  = 0;
         weuart0 = 0;
         reuart0 = 0;
-        // weuart0 = 0;
         // wepwm   = 0;
         // wetmr0  = 0;
 

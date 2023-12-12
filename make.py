@@ -75,15 +75,15 @@ def test(args):
 
 def vivado(args):
 
-    path : Path         = args.path
-    no_overwrite : bool = args.no_overwrite
-    gui : bool          = args.gui
+    path  : Path          = args.path
+    clean : bool          = args.clean
+    gui   : bool          = args.gui
 
     if path.exists() and not path.is_dir():
         print("Specified path is invalid!")
         return False
 
-    if path.exists() and not no_overwrite:
+    if path.exists() and clean:
         shutil.rmtree(str(path.resolve()))
 
     if not path.exists():
@@ -159,10 +159,9 @@ if __name__ == "__main__":
         help = "Open a GUI.",
         action = "store_true"
     )
-    # We will actually "overwrite" the project either way but won't delete any existing files (logs, VCDs, etc.)
     vivadoParser.add_argument(
-        "--no-overwrite",
-        help = "Do not overwrite an existing project.",
+        "--clean",
+        help = "Create a new project even if already exists.",
         action = "store_true"
     )
     vivadoParser.add_argument(

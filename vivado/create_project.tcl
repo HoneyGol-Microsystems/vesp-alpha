@@ -10,23 +10,30 @@
 set project_path [lindex $argv 0]
 set project_name [lindex $argv 1]
 
-# Creating a project.
-create_project -force $project_name $project_path -part xc7a35tcpg236-1
+# Try to open an existing project.
+if { [ catch { open_project "${project_path}/${project_name}.xpr" } error_str ]  } {
 
-# Setting up design sources.
-# List of all files of the design. This is universally usable for both simulation and synthesis.
-add_files -fileset sources_1 [ glob "./rtl/components/*.v" ]
-add_files -fileset sources_1 [ glob "./rtl/primitives/*.v" ]
-add_files -fileset sources_1 [ glob "./rtl/top/*.v" ]
-add_files -fileset sources_1 "./rtl/constants.vh"
-set_property is_global_include true [ get_files constants.vh ]
+    puts $error_str
+    # No project found - creating a project.
+    puts "No project found, creating a new one..."
+    create_project $project_name $project_path -part xc7a35tcpg236-1
 
-# Setting up constraints.
-add_files -fileset constrs_1 "./synth/basys3/constraints.xdc"
+    # Setting up design sources.
+    # List of all files of the design. This is universally usable for both simulation and synthesis.
+    # This command will recursively search through rtl folder and all its subdirectories.
+    add_files -fileset sources_1 "./rtl"
+    set_property is_global_include true [ get_files constants.vh ]
 
-# Setting up testbench/simulation sources.
-add_files -fileset sim_1 "./tests/testConstants.vh"
-set_property is_global_include true [ get_files testConstants.vh ]
+    # Setting up constraints.
+    add_files -fileset constrs_1 "./synth/basys3/constraints.xdc"
+
+    # Setting up testbench/simulation sources.
+    add_files -fileset sim_1 "./tests/testConstants.vh"
+    set_property is_global_include true [ get_files testConstants.vh ]
+} else {
+    # All good.
+    puts "An existing project found."
+}
 
 # Update to set top and file compile order
 update_compile_order -fileset sources_1

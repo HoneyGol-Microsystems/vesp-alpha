@@ -42,7 +42,7 @@ To run specific recipe, use the `--recipe` switch. You can also pass custom sour
 ```
 
 Of course, only files compatible with the selected recipe will work. Trying to run hex files using Hardware Test (hwtest.yaml) recipe will obviously not work. See list below for currently available recipes:
-- `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using iverilog.
+- `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using Vivado.
 - `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
 
 ### Creating a Vivado project
@@ -52,7 +52,7 @@ To simply create a Vivado project in the default directory (`build/vivado`), use
 ./make.py vivado
 ```
 
-To specify a custom directory path, use `--path`. Beware, everything in the specified directory will be deleted, unless `--no-overwrite` is specified.
+To specify a custom directory path, use `--path`. If any project already exists in the default (or specified) path, it will be opened. Otherwise, a new one will be created. You can force script to overwrite an existing project using `--clean`.
 
 By default, a project will be created and Vivado will stay in Tcl mode. To launch the GUI, use the `--gui` switch:
 ```sh
@@ -153,24 +153,24 @@ To remove all of the files created along the way, simply run:
    make clean
    ```
 
-## Creating `.hex` files from the executable
-Compiled executables can be transformed into `.hex` files using the [elftohex.py](scripts/elftohex.py) script. The dependencies are listed below:
+## Creating `.mem` files from the executable
+Compiled executables can be transformed into `.mem` files using the [elftohex.py](scripts/elftohex.py) script. The dependencies are listed below:
 - Python version >=3.10,
 - RISC-V toolchain,
 - `pax-utils` package.
 
-To create the `.hex` file(s), run the script and supply three arguments - **location of executable(s)**, **destination location for the** `.hex` **file(s)** and **memory architecture** - `von-neumann` or `harvard`:
+To create the `.mem` file(s), run the script and supply three arguments - **location of executable(s)**, **destination location for the** `.mem` **file(s)** and **memory architecture** - `von-neumann` or `harvard`:
    ```sh
-   python3.12 ./scripts/elftohex.py -s <path-to-executables> -d <dest-path-for-hex> -m <memory-architecture>
+   python3.12 ./scripts/elftohex.py -s <path-to-executables> -d <dest-path-for-mem-file(s)> -m <memory-architecture>
    ```
-If `von-neumann` architecture is specified, corresponding `*.hex` file will be created with the same name as the executable has and if `harvard` architecture is specified, `*_text.hex` and `*_data.hex` will be created. For more information about the script, run it with `-h` or `--help`.
+If `von-neumann` architecture is specified, corresponding `*.mem` file will be created with the same name as the executable has and if `harvard` architecture is specified, `*_text.mem` and `*_data.mem` will be created. For more information about the script, run it with `-h` or `--help`.
 
 ## Deploying on FPGA
-The created `.hex` files can be loaded straight to the FPGA. To do that, open [top.v](rtl/components/top.v) and supply a **path of the** `*_text.hex` **and** `*_data.hex` **files** to the parameters `MEM_FILE` of the **instruction** and the **data** memory module instances:
+The created `.mem` files can be loaded straight to the FPGA. To do that, open [top.v](rtl/components/top.v) and supply a **path to the** `*_text.mem` **and** `*_data.mem` **files** to the parameters `MEM_FILE` of the **instruction** and the **data** memory module instances:
 ```verilog
 instructionMemory #(
    .WORD_CNT(`INSTR_MEM_WORD_CNT),
-   .MEM_FILE("*_text.hex")
+   .MEM_FILE("*_text.mem")
 ) instrMemInst (
    .a(iAddr),
    .d(iRead)
@@ -178,7 +178,7 @@ instructionMemory #(
 
 dataMemory #(
    .WORD_CNT(`DATA_MEM_WORD_CNT),
-   .MEM_FILE("*_data.hex")
+   .MEM_FILE("*_data.mem")
 ) dataMemInst (
    .clk(clk),
    .we(dWE),
@@ -190,11 +190,4 @@ dataMemory #(
 ```
 If needed, the `INSTR_MEM_WORD_CNT` and `DATA_MEM_WORD_CNT` values can be changed in the [constants.vh](rtl/constants.vh) file.
 
-Now, the module top.v, including the CPU and instruction/data memories, is ready for deploying on the FPGA with the specified `.hex` files.
-
-### Importing to Vivado Design Suite
-1. Create a new project
-2. Add directory src (do not forget to tick "include subdirectories")
-3. Add root directory as Verilog include path:
-  - In Vivado GUI: `Tools > Settings > General > Verilog options > Verilog Include Files Search Paths`
-  - See [help article](https://support.xilinx.com/s/article/54006?language=en_US)
+Now, the global top module [VESPTop.v](rtl/top/VESPTop.v), which connects `top.v`, synchronises `reset` signal and divides clock frequency using this [PLL template](https://docs.xilinx.com/r/en-US/ug953-vivado-7series-libraries/PLLE2_BASE) is ready for bitstream generation. To create a Vivado project with this top module, see [Creating a Vivado project](#creating-a-vivado-project).
