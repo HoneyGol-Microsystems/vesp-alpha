@@ -17,7 +17,7 @@ module uart_rx_datapath #(
     input  logic       rx_bits_cnt_reset,
     input  logic       rx_error_reg_set,
     input  logic       rx_error_reg_reset,
-    input  logic       rx_sample_ctn_en,
+    input  logic       rx_sample_cnt_en,
     input  logic       rx_sample_cnt_reset,
 
     output logic       rx_sync_rise,
