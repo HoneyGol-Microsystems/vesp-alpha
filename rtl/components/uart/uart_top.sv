@@ -1,12 +1,12 @@
 
 module uart_top (
-    input logic        clk,
-    input logic        reset,
-    input logic        rx,
-    input logic        re,
-    input logic        we,
-    input logic [2:0]  regsel,
-    input logic [31:0] din,
+    input  logic        clk,
+    input  logic        reset,
+    input  logic        rx,
+    input  logic        re,
+    input  logic        we,
+    input  logic [2:0]  regsel,
+    input  logic [31:0] din,
 
     output logic        tx,
     output logic        par_irq,
@@ -17,16 +17,17 @@ module uart_top (
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL DECLARATIONS
     /////////////////////////////////////////////////////////////////////////
-    logic stop_bit_error_if_out, stop_bit_error_if_en, parity_error_if_out,
-          parity_error_if_en, tx_queue_empty_if_out, tx_queue_empty,
-          rx_sync_out, rx_parity_out;
+    logic stop_bit_error_if_en, parity_error_if_en, tx_queue_empty,
+          rx_queue_full, rx_sync_out, rx_parity_out, if_reg_reset;
+    logic [7:0] tx_queue_din, tx_queue_dout, rx_queue_dout;
 
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL ASSIGNMENTS
     /////////////////////////////////////////////////////////////////////////
+    assign if_reg_reset = (we && regsel == 3'h6);
 
     /////////////////////////////////////////////////////////////////////////
-    // CONFIG/STATUS REGISTERS
+    // CONFIG, STATUS AND INTERRUPT FLAG REGISTERS
     /////////////////////////////////////////////////////////////////////////
     // Config register A.
     struct packed {
@@ -52,29 +53,51 @@ module uart_top (
         logic [5:0] reserved;
     } status_a;
 
+    // interrupt flag registers
+    struct packed {
+        logic       tx_queue_empty;
+        logic       rx_queue_full;
+        logic       parity_error;
+        logic       stop_bit_error;
+        logic [3:0] reserved;
+    } if_reg;
+
     /////////////////////////////////////////////////////////////////////////
-    // INTERRUPT FLAG REGISTERS
+    // INTERRUPT FLAG REGISTERS RESET/WRITE
     /////////////////////////////////////////////////////////////////////////
     // TX queue empty IF register
     always_ff @(posedge clk) begin : tx_queue_empty_if_proc
-        if (config_a.tx_queue_empty_irq_en) begin
-            tx_queue_empty_if_out <= tx_queue_empty;
+        if (if_reg_reset) begin
+            if_reg.tx_queue_empty <= if_reg.tx_queue_empty & din[16+7];
+        end else if (config_a.tx_queue_empty_irq_en) begin
+            if_reg.tx_queue_empty <= tx_queue_empty;
         end
     end
 
     // RX queue full IF register
+    always_ff @(posedge clk) begin : rx_queue_full_if_proc
+        if (if_reg_reset) begin
+            if_reg.rx_queue_full <= if_reg.rx_queue_full & din[16+6];
+        end else if (config_a.rx_queue_full_irq_en) begin
+            if_reg.rx_queue_full <= rx_queue_full;
+        end
+    end
 
     // parity error IF register
     always_ff @(posedge clk) begin : parity_error_if_proc
-        if (config_b.parity_error_irq_en && parity_error_if_en) begin
-            parity_error_if_out <= rx_parity_out;
+        if (if_reg_reset) begin
+            if_reg.parity_error <= if_reg.parity_error & din[16+5];
+        end else if (config_b.parity_error_irq_en && parity_error_if_en) begin
+            if_reg.parity_error <= rx_parity_out;
         end
     end
 
     // stop bit error IF register
     always_ff @(posedge clk) begin : stop_bit_error_if_proc
-        if (config_b.stop_bit_error_irq_en && stop_bit_error_if_en) begin
-            stop_bit_error_if_out <= !rx_sync_out;
+        if (if_reg_reset) begin
+            if_reg.stop_bit_error <= if_reg.stop_bit_error & din[16+4];
+        end else if (config_b.stop_bit_error_irq_en && stop_bit_error_if_en) begin
+            if_reg.stop_bit_error <= !rx_sync_out;
         end
     end
 
@@ -100,7 +123,8 @@ module uart_top (
             3'h1:    dout = { {16{1'b0}}, rx_queue_dout, { 8{1'b0}} };
             3'h2:    dout = { { 8{1'b0}}, config_a     , {16{1'b0}} };
             3'h3:    dout = { config_b  , {24{1'b0}}                };
-            default: dout = { {16{1'b0}}, status_a     , { 8{1'b0}} };
+            3'h5:    dout = { {16{1'b0}}, status_a     , { 8{1'b0}} };
+            default: dout = { { 8{1'b0}}, if_reg       , {16{1'b0}} };
         endcase
     end
 
