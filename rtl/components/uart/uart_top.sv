@@ -96,7 +96,7 @@
     always_ff @(posedge clk) begin : parity_error_if_proc
         if (if_reg_reset) begin
             if_reg.parity_error <= if_reg.parity_error & din[16+5];
-        end else if (config_b.parity_error_irq_en && parity_error_if_en) begin
+        end else if (config_a.parity_error_irq_en && parity_error_if_en) begin
             if_reg.parity_error <= rx_parity_out;
         end
     end
