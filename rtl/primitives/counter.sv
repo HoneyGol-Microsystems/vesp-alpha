@@ -2,11 +2,11 @@
 (* dont_touch = "yes" *) module counter #(
     parameter COUNTER_WIDTH = 4
 ) (
-    input  logic                      reset,
-    input  logic                      clk,
-    input  logic                      en,
+    input  logic                     reset,
+    input  logic                     clk,
+    input  logic                     en,
     input  logic [COUNTER_WIDTH-1:0] max,
-    output logic                      top,
+    output logic                     top,
     output logic [COUNTER_WIDTH-1:0] val
 );
 
