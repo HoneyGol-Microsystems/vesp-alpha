@@ -142,7 +142,7 @@
     /////////////////////////////////////////////////////////////////////////
     // Reference clock. Generates 3.5714 MHz from 50 MHz system clock.
     counter #(
-        .COUNTER_LENGTH(5)
+        .COUNTER_WIDTH(5)
     ) ref_clk_cnt (
         .reset(reset),
         .clk(clk),
@@ -153,7 +153,7 @@
 
     // Main clock - used for RX sampling. Configurable.
     counter #(
-        .COUNTER_LENGTH(5)
+        .COUNTER_WIDTH(5)
     ) sample_clk_cnt (
         .reset(reset),
         .clk(clk),
@@ -164,7 +164,7 @@
 
     // bit clk counter
     counter #(
-        .COUNTER_LENGTH(4)
+        .COUNTER_WIDTH(4)
     ) bit_clk_cnt (
         .reset(reset),
         .clk(clk),

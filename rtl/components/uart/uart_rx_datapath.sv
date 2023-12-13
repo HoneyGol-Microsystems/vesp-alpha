@@ -106,7 +106,7 @@
     // RX BITS RECIEVED COUNTER
     /////////////////////////////////////////////////////////////////////////
     counter #(
-        .COUNTER_LENGTH(4)
+        .COUNTER_WIDTH(4)
     ) rx_bits_cnt (
         .reset(rx_bits_cnt_reset),
         .clk(clk),
@@ -130,7 +130,7 @@
     // RX SAMPLE COUNTER
     /////////////////////////////////////////////////////////////////////////
     counter #(
-        .COUNTER_LENGTH(5)
+        .COUNTER_WIDTH(5)
     ) rx_sample_cnt (
         .reset(rx_sample_cnt_reset),
         .clk(clk),

@@ -69,7 +69,7 @@
     // TX BITS SENT COUNTER
     /////////////////////////////////////////////////////////////////////////
     counter #(
-        .COUNTER_LENGTH(4)
+        .COUNTER_WIDTH(4)
     ) tx_bits_cnt (
         .reset(tx_bits_cnt_reset),
         .clk(clk),
