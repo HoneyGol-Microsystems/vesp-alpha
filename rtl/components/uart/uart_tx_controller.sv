@@ -133,6 +133,8 @@ module uart_tx_controller (
             TX_STOP_BIT_2: begin
                 tx_out_sel = 2'b01;
             end
+
+            default: begin end
         endcase
     end
 

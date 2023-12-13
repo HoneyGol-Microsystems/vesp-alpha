@@ -203,6 +203,8 @@ module uart_rx_controller (
                     rx_error_reg_reset   = 1;
                 end
             end
+
+            default: begin end
         endcase
     end
 
