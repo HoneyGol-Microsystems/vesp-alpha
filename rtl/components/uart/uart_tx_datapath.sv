@@ -13,7 +13,7 @@
     input  logic [1:0] tx_out_sel,
     input  logic       tx_bits_cnt_en,
     input  logic       tx_bits_cnt_reset,
-    input  logic       data_bits_count,
+    input  logic [1:0] data_bits_count,
     input  logic       parity_type,
     input  logic       tx_parity_we,
     input  logic       tx_parity_reset,
@@ -69,12 +69,12 @@
     // TX BITS SENT COUNTER
     /////////////////////////////////////////////////////////////////////////
     counter #(
-        .COUNTER_WIDTH(4)
+        .COUNTER_WIDTH(5)
     ) tx_bits_cnt (
         .reset(tx_bits_cnt_reset),
         .clk(clk),
         .en(tx_bits_cnt_en),
-        .max(data_bits_count + 5),
+        .max(data_bits_count + 3'h5),
         .top(tx_bits_cnt_top)
     );
 

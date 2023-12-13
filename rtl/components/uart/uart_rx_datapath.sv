@@ -44,7 +44,7 @@
     // SIGNAL ASSIGNMENTS
     /////////////////////////////////////////////////////////////////////////
     assign rx_sync       = rx_sync_out;
-    assign rx_get_sample = (rx_sample_cnt_val == 7);
+    assign rx_get_sample = (rx_sample_cnt_val == 3'h7);
     
     /////////////////////////////////////////////////////////////////////////
     // RX SIGNAL SYNCHRONIZER
