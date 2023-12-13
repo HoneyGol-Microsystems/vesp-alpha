@@ -5,7 +5,7 @@ module counter #(
     input  logic                      reset,
     input  logic                      clk,
     input  logic                      en,
-    input  logic                      max,
+    input  logic [COUNTER_LENGTH-1:0] max,
     output logic                      top,
     output logic [COUNTER_LENGTH-1:0] val
 );
