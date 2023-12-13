@@ -46,7 +46,7 @@
         .reset(reset),
         .we(tx_queue_we),
         .re(tx_queue_re),
-        .di(tx_queue_din),
+        .din(tx_queue_din),
         .empty(tx_queue_empty),
         .full(tx_queue_full),
         .dout(tx_queue_dout)

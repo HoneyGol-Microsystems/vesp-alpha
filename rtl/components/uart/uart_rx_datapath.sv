@@ -84,7 +84,7 @@
         .reset(reset),
         .we(rx_queue_we),
         .re(rx_queue_re),
-        .di(rx_sample_reg_dout),
+        .din(rx_sample_reg_dout),
         .empty(rx_queue_empty),
         .full(rx_queue_full),
         .dout(rx_queue_dout)
