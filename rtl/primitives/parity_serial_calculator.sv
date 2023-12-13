@@ -1,5 +1,5 @@
 
-module parity_serial_calculator (
+(* dont_touch = "yes" *) module parity_serial_calculator (
     input  logic clk,
     input  logic reset,
     input  logic din,

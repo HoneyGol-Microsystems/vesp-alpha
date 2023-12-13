@@ -1,5 +1,5 @@
 
-module counter #(
+(* dont_touch = "yes" *) module counter #(
     parameter COUNTER_LENGTH = 4
 ) (
     input  logic                      reset,
