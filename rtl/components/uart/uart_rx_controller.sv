@@ -125,6 +125,8 @@ module uart_rx_controller (
                     rx_next_state = RX_WAIT_STOP_BIT_2;
                 end
             end
+
+            default: rx_next_state = RX_IDLE;
         endcase
     end
 

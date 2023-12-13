@@ -81,6 +81,8 @@ module uart_tx_controller (
             TX_STOP_BIT_2: begin
                 tx_next_state = TX_IDLE;
             end
+
+            default: tx_next_state = TX_IDLE;
         endcase
     end
 
