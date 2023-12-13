@@ -1,5 +1,5 @@
 
-module uart_rx_controller (
+(* dont_touch = "yes" *) module uart_rx_controller (
     input  logic clk,
     input  logic rx_clk_en,
     input  logic reset,

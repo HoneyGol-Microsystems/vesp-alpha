@@ -1,5 +1,5 @@
 
-module uart_tx_datapath #(
+(* dont_touch = "yes" *) module uart_tx_datapath #(
     parameter TX_QUEUE_SIZE = 16
 ) (
     input  logic       clk,

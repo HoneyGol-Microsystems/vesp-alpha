@@ -1,5 +1,5 @@
 
-module uart_tx_controller (
+(* dont_touch = "yes" *) module uart_tx_controller (
     input  logic       clk,
     input  logic       tx_clk_en,
     input  logic       reset,

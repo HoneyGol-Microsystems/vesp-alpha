@@ -1,5 +1,5 @@
 
-module uart_top (
+(* dont_touch = "yes" *) module uart_top (
     input  logic        clk,
     input  logic        reset,
     input  logic        rx,

@@ -1,5 +1,5 @@
 
-module uart_rx_datapath #(
+(* dont_touch = "yes" *) module uart_rx_datapath #(
     parameter RX_QUEUE_SIZE = 16
 ) (
     input  logic       clk,
