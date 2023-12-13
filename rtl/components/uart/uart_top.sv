@@ -279,7 +279,7 @@
         .tx_out_sel(tx_out_sel),
         .tx_bits_cnt_en(tx_bits_cnt_en),
         .tx_bits_cnt_reset(tx_bits_cnt_reset),
-        .data_bits_count(config_a.data_bits_count),
+        .data_bits_count(config_b.data_bits_count),
         .parity_type(config_b.parity_type[1]),
         .tx_parity_we(tx_parity_we),
         .tx_parity_reset(tx_parity_reset),
