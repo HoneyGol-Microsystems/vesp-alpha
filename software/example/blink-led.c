@@ -2,8 +2,8 @@
 
 int main ( void )
 {
-    GPIODIR_A = 0xFF;
-    GPIODIR_B = 0xFF;
+    GPIODIR_A = 0x00;
+    GPIODIR_B = 0x00;
 
     while ( 1 )
     {

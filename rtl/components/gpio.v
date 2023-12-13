@@ -46,9 +46,9 @@
     // writing to ports
     genvar i;
     for (i = 0; i < 8; i = i + 1) begin
-        // 1 -> output, 0 -> input
-        assign ports[i]     = GPIODIR_A[i] ? GPIOWR_A[i] : 1'bZ;
-        assign ports[i + 8] = GPIODIR_B[i] ? GPIOWR_B[i] : 1'bZ;
+        // 0 -> output, 1 -> input
+        assign ports[i]     = GPIODIR_A[i] ? 1'bZ : GPIOWR_A[i];
+        assign ports[i + 8] = GPIODIR_B[i] ? 1'bZ : GPIOWR_B[i];
     end
 
 endmodule
