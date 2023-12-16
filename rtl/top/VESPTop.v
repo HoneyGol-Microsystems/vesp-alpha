@@ -2,9 +2,11 @@
 `define __FILE_VESPTOP_V
 
 (* dont_touch = "yes" *) module VESPTop (
-    input clk,
-    input reset,
-    inout [15:0] gpioPorts
+    input        clk,
+    input        reset,
+    inout [15:0] gpioPorts,
+    input        rx,
+    output       tx
 );
 
     wire syncReset, pllFeedback, divClk;
@@ -23,7 +25,9 @@
     top topInst(
         .clk(divClk),
         .reset(syncReset),
-        .gpioPorts(gpioPorts)
+        .gpioPorts(gpioPorts),
+        .rx(rx),
+        .tx(tx)
     );
     
     // PLLE2_BASE: Base Phase Locked Loop (PLL)

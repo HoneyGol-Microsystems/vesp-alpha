@@ -4,15 +4,17 @@
 // `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
 (* dont_touch = "yes" *) module top (
-    input clk,
-    input reset,
-    inout [15:0] gpioPorts
+    input         clk,
+    input         reset,
+    inout  [15:0] gpioPorts,
+    input         rx,
+    output        tx
 );
 
-    wire dWE, dataMemWE, gpioWE;
+    wire dWE, dataMemWE, gpioWE, uartRE, uartWE;
     wire [2:0] dReadSel;
     wire [3:0] dMask;
-    wire [31:0] iAddr, iRead, dAddr, dWrite, dataMemDO, gpioDO;
+    wire [31:0] iAddr, iRead, dAddr, dWrite, dataMemDO, gpioDO, uartDOUT;
     reg [31:0] dRead;
 
     addressDecoder addressDecoderInst (
@@ -20,7 +22,9 @@
         .a(dAddr),
         .outsel(dReadSel),
         .wemem(dataMemWE),
-        .wegpio(gpioWE)
+        .wegpio(gpioWE),
+        .reuart0(uartRE),
+        .weuart0(uartWE)
     );
 
     gpio gpioInst (
@@ -31,6 +35,24 @@
         .di(dWrite),
         .do(gpioDO),
         .ports(gpioPorts)
+    );
+
+    uart_top #(
+        .TX_QUEUE_SIZE(16),
+        .RX_QUEUE_SIZE(16)
+    ) uartInst (
+        .clk(clk),
+        .reset(reset),
+        .rx(rx),
+        .re(uartRE),
+        .we(uartWE),
+        .regsel(dAddr[2:0]),
+        .din(dWrite),
+
+        .tx(tx),
+        .par_irq(),
+        .stop_bit_irq(),
+        .dout(uartDOUT)
     );
 
     `ifdef SPLIT_MEMORY
@@ -89,7 +111,8 @@
     always @(*) begin
         case (dReadSel)
             3'b000:  dRead = dataMemDO;
-            default: dRead = gpioDO;
+            3'b001:  dRead = gpioDO;
+            default: dRead = uartDOUT;
         endcase
     end
 
