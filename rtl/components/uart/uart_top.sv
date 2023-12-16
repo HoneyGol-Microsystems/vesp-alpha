@@ -1,5 +1,8 @@
 
-(* dont_touch = "yes" *) module uart_top (
+(* dont_touch = "yes" *) module uart_top #(
+    parameter TX_QUEUE_SIZE = 16,
+    parameter RX_QUEUE_SIZE = 16
+) (
     input  logic        clk,
     input  logic        reset,
     input  logic        rx,
@@ -228,7 +231,7 @@
     // RX DATAPATH
     /////////////////////////////////////////////////////////////////////////
     uart_rx_datapath #(
-        .RX_QUEUE_SIZE(16)
+        .RX_QUEUE_SIZE(RX_QUEUE_SIZE)
     ) rx_datapath (
         .clk(clk),
         .reset(reset),
@@ -265,7 +268,7 @@
     // TX DATAPATH
     /////////////////////////////////////////////////////////////////////////
     uart_tx_datapath #(
-        .TX_QUEUE_SIZE(16)
+        .TX_QUEUE_SIZE(TX_QUEUE_SIZE)
     ) tx_datapath (
         .clk(clk),
         .reset(reset),
