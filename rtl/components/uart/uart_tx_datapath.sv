@@ -29,11 +29,13 @@
     /////////////////////////////////////////////////////////////////////////
     logic tx_shift_reg_lsb, tx_parity_out;
     logic [7:0] tx_shift_reg, tx_queue_dout;
+    logic [4:0] tx_bits_cnt_max;
 
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL ASSIGNMENTS
     /////////////////////////////////////////////////////////////////////////
     assign tx_shift_reg_lsb = tx_shift_reg[0];
+    assign tx_bits_cnt_max  = data_bits_count + 3'h5;
     
     /////////////////////////////////////////////////////////////////////////
     // TX QUEUE
@@ -74,7 +76,7 @@
         .reset(tx_bits_cnt_reset),
         .clk(clk),
         .en(tx_bits_cnt_en),
-        .max(data_bits_count + 3'h5),
+        .max(tx_bits_cnt_max),
         .top(tx_bits_cnt_top)
     );
 
