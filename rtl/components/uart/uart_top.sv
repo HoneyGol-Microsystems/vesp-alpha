@@ -27,7 +27,7 @@
           tx_queue_we, tx_shift_reg_we, tx_shift_reg_se, tx_parity_reset,
           tx_parity_we;
     logic [1:0] tx_out_sel;
-    logic [7:0] tx_queue_din, tx_queue_dout, rx_queue_dout;
+    logic [7:0] tx_queue_dout, rx_queue_dout;
 
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL ASSIGNMENTS
@@ -117,9 +117,8 @@
     always_ff @(posedge clk) begin : register_write_proc
         if (we) begin
             case (regsel)
-                3'h0:    tx_queue_din <= din[7:0];
-                3'h2:    config_a     <= din[23:16];
-                3'h3:    config_b     <= din[31:24];
+                3'h2:    config_a <= din[23:16];
+                3'h3:    config_b <= din[31:24];
                 default: begin end
             endcase
         end
@@ -272,7 +271,7 @@
         .reset(reset),
         .tx_queue_we(tx_queue_we),
         .tx_queue_re(tx_queue_re),
-        .tx_queue_din(tx_queue_din),
+        .tx_queue_din(din[7:0]),
         .tx_shift_reg_we(tx_shift_reg_we),
         .tx_shift_reg_se(tx_shift_reg_se),
         .tx_shift_reg_reset(1'b0),
