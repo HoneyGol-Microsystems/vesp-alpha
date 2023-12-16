@@ -12,6 +12,7 @@
 
     logic [COUNTER_WIDTH-1:0] counter;
     assign val = counter;
+    assign top = (counter == max);
 
     always_ff @(posedge clk) begin : counter_proc
         if (reset)
@@ -19,6 +20,5 @@
         else if (en)
             counter <= counter + 1;
     end
-    assign top = (counter == max);
 
 endmodule
