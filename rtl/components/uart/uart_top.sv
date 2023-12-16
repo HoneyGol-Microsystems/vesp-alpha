@@ -33,7 +33,7 @@
     // SIGNAL ASSIGNMENTS
     /////////////////////////////////////////////////////////////////////////
     assign if_reg_reset = (we && regsel == 3'h6);
-    assign tx_queue_we  = (re && we && regsel == 3'h0);
+    assign tx_queue_we  = (!re && we && regsel == 3'h0);
 
     /////////////////////////////////////////////////////////////////////////
     // CONFIG, STATUS AND INTERRUPT FLAG REGISTERS
