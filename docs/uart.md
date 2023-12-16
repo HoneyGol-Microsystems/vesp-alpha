@@ -9,10 +9,9 @@ Main frequency: UART will use reference clock 100/27, which is roughly equal to 
 | 1 | RX data | R | get data from receive queue |
 | 2 | config register A | R+W | - |
 | 3 | config register B | R+W | - |
-| 4 | reserved | R+W | - |
-| 5 | status register A | R | - |
-| 6 | interrupt flag register | R+W | - |
-| 7 | reserved | - | - |
+| 4 | status register A | R | - |
+| 5 | interrupt flag register | R+W | - |
+| 6 | reserved | - | - |
 
 ### TX data
 | bits | usage | comment |

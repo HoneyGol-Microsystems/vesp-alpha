@@ -132,8 +132,8 @@
             3'h1:    dout = { {16{1'b0}}, rx_queue_dout, { 8{1'b0}} };
             3'h2:    dout = { { 8{1'b0}}, config_a     , {16{1'b0}} };
             3'h3:    dout = { config_b  , {24{1'b0}}                };
-            3'h5:    dout = { {16{1'b0}}, status_a     , { 8{1'b0}} };
-            default: dout = { { 8{1'b0}}, if_reg       , {16{1'b0}} };
+            3'h4:    dout = { {24{1'b0}}, status_a                  };
+            default: dout = { {16{1'b0}}, if_reg       , {8{1'b0}}  };
         endcase
     end
 
