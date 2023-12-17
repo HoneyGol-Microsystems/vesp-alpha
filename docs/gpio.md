@@ -17,7 +17,7 @@ the tri-state buffer of the corresponding register is either in high-impedance s
 - In high-impedance state, the port works as an input and the value can be read from the `GPIORD` register.
 - In output state, the port works as an output and the value to be output can be written to the `GPIOWR` register.
 
-For better understanding, please consult a scheme in the picture below:
+For better understanding, please consult a scheme in the picture below. In the scheme `x` can be `A` or `B`, `y` corresponds to a specific bit.
 
 ![GPIO hardware scheme](../img/scheme-gpio.svg)
 
