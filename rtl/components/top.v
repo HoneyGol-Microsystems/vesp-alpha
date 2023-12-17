@@ -15,7 +15,7 @@
     wire [31:0] iAddr, iRead, dAddr, dWrite, dataMemDO, gpioDO;
     reg [31:0] dRead;
 
-    addressDecoder addressDecoderInst (
+    addressDecoder addressDecoder (
         .we(dWE),
         .a(dAddr),
         .outsel(dReadSel),
@@ -23,7 +23,7 @@
         .wegpio(gpioWE)
     );
 
-    gpio gpioInst (
+    gpio gpio (
         .regSel(dAddr[2:0]),
         .we(gpioWE),
         .reset(reset),
@@ -37,7 +37,7 @@
         instructionMemory #(
             .WORD_CNT(`INSTR_MEM_WORD_CNT),
             .MEM_FILE("")
-        ) instrMemInst (
+        ) instrMem (
             .a(iAddr),
             .d(iRead)
         );
@@ -45,7 +45,7 @@
         dataMemory #(
             .WORD_CNT(`DATA_MEM_WORD_CNT),
             .MEM_FILE("")
-        ) dataMemInst (
+        ) dataMem (
             .clk(clk),
             .we(dWE),
             .mask(dMask),
@@ -58,7 +58,7 @@
         ram #(
             .WORD_CNT(`RAM_WORD_CNT),
             .MEM_FILE("")
-        ) ramInst (
+        ) ram (
             .a1(iAddr),
             .do1(iRead),
 
@@ -71,7 +71,7 @@
         );
     `endif // SPLIT_MEMORY
 
-    cpu cpuInst (
+    cpu cpu (
         .clk(clk),
         .reset(reset),
 

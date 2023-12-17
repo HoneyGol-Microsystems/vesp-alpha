@@ -20,7 +20,7 @@
         .dataOut(syncReset)
     );
 
-    top topInst(
+    top top(
         .clk(divClk),
         .reset(syncReset),
         .gpioPorts(gpioPorts)

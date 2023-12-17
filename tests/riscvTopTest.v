@@ -17,7 +17,7 @@ module topTest();
 
     initial begin
 
-        $readmemh(`__MKPY_CURRENT_TEST, dut.ramInst.RAM, 0, `RAM_WORD_CNT-1);
+        $readmemh(`__MKPY_CURRENT_TEST, dut.ram.RAM, 0, `RAM_WORD_CNT-1);
 
         reset <= 1;
         #1;
@@ -45,7 +45,7 @@ module topTest();
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpuInst.PC === `PC_STOP) begin
+        // if (dut.cpu.PC === `PC_STOP) begin
         //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end

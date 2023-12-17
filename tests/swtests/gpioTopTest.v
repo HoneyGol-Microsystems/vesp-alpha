@@ -42,7 +42,7 @@ module gpioTopTest();
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpuInst.PC === `PC_STOP) begin
+        // if (dut.cpu.PC === `PC_STOP) begin
         //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end
