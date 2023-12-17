@@ -2,7 +2,7 @@
 `define __FILE_GPIO_V
 
 (* dont_touch = "yes" *) module gpio (
-    input  logic [2:0]  regSel,   // select register
+    input  logic [2:0]  reg_sel,   // select register
     input  logic        we,
     input  logic        clk,
     input  logic        reset,
@@ -14,7 +14,7 @@
     logic [7:0] GPIOWR_A, GPIODIR_A, GPIOWR_B, GPIODIR_B;
 
     always_comb begin
-        case (regSel)
+        case (reg_sel)
             3'b000:  dout = { {24{1'b0}}, GPIOWR_A                };
             3'b001:  dout = { {16{1'b0}}, GPIODIR_A,   {8{1'b0}}  };
             3'b010:  dout = { {8{1'b0}} , ports[7:0] , {16{1'b0}} };
@@ -26,12 +26,15 @@
 
     always_ff @(posedge clk) begin
         if (reset) begin
+            // Default direction of GPIOs should be "input".
+            // Reason: If there is a bad intitial write value,
+            // it could cause a short.
             GPIOWR_A  <= 0;
             GPIODIR_A <= 0;
             GPIOWR_B  <= 0;
             GPIODIR_B <= 0;
         end else if (we) begin
-            case (regSel)
+            case (reg_sel)
                 3'b000:  GPIOWR_A  <= di[7:0];
                 3'b001:  GPIODIR_A <= di[15:8];
                 // 010:  ignore writes to GPIORD
@@ -50,8 +53,8 @@
         genvar i;
         for (i = 0; i < 8; i = i + 1) begin
             // 0 -> output, 1 -> input
-            assign ports[i]     = GPIODIR_A[i] ? 1'bZ : GPIOWR_A[i];
-            assign ports[i + 8] = GPIODIR_B[i] ? 1'bZ : GPIOWR_B[i];
+            assign ports[i]     = GPIODIR_A[i] ? GPIOWR_A[i] : 1'bZ;
+            assign ports[i + 8] = GPIODIR_B[i] ? GPIOWR_B[i] : 1'bZ;
         end
     endgenerate
 
