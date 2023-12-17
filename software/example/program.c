@@ -2,8 +2,8 @@
 
 int main ( void )
 {
-    GPIODIR_A &= 0xFF;
-    GPIODIR_B &= 0xFF;
+    GPIODIR_A = 0x00;
+    GPIODIR_B = 0x00;
 
     uint8_t a = GPIORD_A;
     uint8_t b = GPIORD_B;
@@ -11,8 +11,8 @@ int main ( void )
     __asm ( "nop" );
     __asm ( "nop" );
 
-    GPIODIR_A |= 0x00;
-    GPIODIR_B |= 0x00;
+    GPIODIR_A = 0xFF;
+    GPIODIR_B = 0xFF;
 
     // write some data to pins
     GPIOWR_A |= a + 1;
