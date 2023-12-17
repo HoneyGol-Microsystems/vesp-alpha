@@ -11,20 +11,30 @@
     inout  logic [15:0] ports     // to/from external ports
 );
 
-    logic [7:0] GPIOWR_A, GPIODIR_A, GPIOWR_B, GPIODIR_B;
+    logic [7:0] GPIOWR_A;
+    logic [7:0] GPIODIR_A;
+    logic [7:0] GPIORD_A;
+    logic [7:0] GPIOWR_B;
+    logic [7:0] GPIODIR_B;
+    logic [7:0] GPIORD_B;
 
-    always_comb begin
+    always_comb begin : register_read_proc
         case (reg_sel)
             3'b000:  dout = { {24{1'b0}}, GPIOWR_A                };
             3'b001:  dout = { {16{1'b0}}, GPIODIR_A,   {8{1'b0}}  };
-            3'b010:  dout = { {8{1'b0}} , ports[7:0] , {16{1'b0}} };
+            3'b010:  dout = { {8{1'b0}} , GPIORD_A , {16{1'b0}} };
             3'b011:  dout = { GPIOWR_B  , {24{1'b0}}              };
             3'b100:  dout = { {24{1'b0}}, GPIODIR_B               };
-            default: dout = { {16{1'b0}}, ports[15:8], {8{1'b0}}  };
+            default: dout = { {16{1'b0}}, GPIORD_B, {8{1'b0}}  };
         endcase    
     end
 
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk) begin : input_ff_proc
+        GPIORD_A <= ports[7:0];
+        GPIORD_B <= ports[15:8];
+    end
+
+    always_ff @(posedge clk) begin : register_write_proc
         if (reset) begin
             // Default direction of GPIOs should be "input".
             // Reason: If there is a bad intitial write value,
@@ -52,7 +62,7 @@
     generate
         genvar i;
         for (i = 0; i < 8; i = i + 1) begin
-            // 0 -> output, 1 -> input
+            // 1 -> output, 0 -> input
             assign ports[i]     = GPIODIR_A[i] ? GPIOWR_A[i] : 1'bZ;
             assign ports[i + 8] = GPIODIR_B[i] ? GPIOWR_B[i] : 1'bZ;
         end
