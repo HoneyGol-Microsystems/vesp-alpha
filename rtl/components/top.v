@@ -24,7 +24,7 @@
     );
 
     gpio gpioInst (
-        .regSel(dAddr[2:0]),
+        .reg_sel(dAddr[2:0]),
         .we(gpioWE),
         .reset(reset),
         .clk(clk),
