@@ -5,6 +5,7 @@
     input  logic [2:0]  regSel,   // select register
     input  logic        we,
     input  logic        clk,
+    input  logic        reset,
     input  logic [31:0] di,       // data to write to selected register
     output logic [31:0] dout,       // data to read from selected register
     inout  logic [15:0] ports     // to/from external ports
@@ -12,7 +13,7 @@
 
     logic [7:0] GPIOWR_A, GPIODIR_A, GPIOWR_B, GPIODIR_B;
 
-    always_comb @(*) begin
+    always_comb begin
         case (regSel)
             3'b000:  dout = { {24{1'b0}}, GPIOWR_A                };
             3'b001:  dout = { {16{1'b0}}, GPIODIR_A,   {8{1'b0}}  };
