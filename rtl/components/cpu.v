@@ -32,7 +32,7 @@
     reg [31:0] regData, memData, src2;
 
     // module instantiations
-    controller controllerInst (
+    controller controller (
         .instruction(instruction),
         .memAddr(memAddr),
         .ALUZero(ALUZero),
@@ -61,7 +61,7 @@
 
     alu #(
         .XLEN(`XLEN)
-    ) aluInst (
+    ) alu (
         .op1(src1),
         .op2(src2),
         .ctrl(ALUCtrl),
@@ -69,14 +69,14 @@
         .res(ALURes)
     );
 
-    immDecoder immDecoderInst (
+    immDecoder immDecoder (
         .instruction(instruction),
         .imm(imm)
     );
 
     registerFile32 #(
         .XLEN(`XLEN)
-    ) registerFile32Inst (
+    ) registerFile32 (
         .a1(instruction[19:15]),
         .a2(instruction[24:20]),
         .a3(instruction[11:7]),
@@ -89,14 +89,14 @@
 
     interruptController #(
         .EXT_IRQ_COUNT(1)
-    ) interruptControllerInst (
+    ) interruptController (
         .clk(clk),
         .irqBus(irqBus),
         .interrupt(interrupt),
         .intCode(intCode)
     );
 
-    csr csrInst (
+    csr csr (
         .reset(reset),
         .clk(clk),
         .we(csrWE),
