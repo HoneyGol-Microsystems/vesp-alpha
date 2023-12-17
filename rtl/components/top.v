@@ -1,7 +1,7 @@
 `ifndef __FILE_TOP_V
 `define __FILE_TOP_V
 
-// `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
+`define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
 (* dont_touch = "yes" *) module top (
     input clk,
@@ -29,14 +29,14 @@
         .reset(reset),
         .clk(clk),
         .di(dWrite),
-        .do(gpioDO),
+        .dout(gpioDO),
         .ports(gpioPorts)
     );
 
     `ifdef SPLIT_MEMORY
         instructionMemory #(
             .WORD_CNT(`INSTR_MEM_WORD_CNT),
-            .MEM_FILE("")
+            .MEM_FILE("software/firmware_text.mem")
         ) instrMemInst (
             .a(iAddr),
             .d(iRead)
@@ -44,7 +44,7 @@
 
         dataMemory #(
             .WORD_CNT(`DATA_MEM_WORD_CNT),
-            .MEM_FILE("")
+            .MEM_FILE("software/firmware_data.mem")
         ) dataMemInst (
             .clk(clk),
             .we(dWE),
