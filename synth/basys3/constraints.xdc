@@ -1,7 +1,7 @@
 create_clock -period 10.000 -name CLK -waveform {0.000 5.000} [get_ports clk]
 
 set_property PACKAGE_PIN W5 [get_ports clk]
-set_property PACKAGE_PIN U18 [get_ports reset]
+set_property PACKAGE_PIN T18 [get_ports reset]
 set_property PACKAGE_PIN U16 [get_ports {gpioPorts[0]}]
 set_property PACKAGE_PIN E19 [get_ports {gpioPorts[1]}]
 set_property PACKAGE_PIN U19 [get_ports {gpioPorts[2]}]
