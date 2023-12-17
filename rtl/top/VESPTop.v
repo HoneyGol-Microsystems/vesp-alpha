@@ -8,7 +8,6 @@
 );
 
     wire syncReset, pllFeedback, divClk;
-    reg [6:0] resetCounter;
 
     // synchronize reset signal
     synchronizer #(
