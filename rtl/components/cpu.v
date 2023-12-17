@@ -34,7 +34,7 @@
     reg [31:0] regData, memData;
 
     // module instantiations
-    controller controllerInst (
+    controller controller (
         .instruction(instruction),
         .memAddr(memAddr),
         .ALUZero(ALUZero),
@@ -54,7 +54,7 @@
 
     alu #(
         .XLEN(`XLEN)
-    ) aluInst (
+    ) alu (
         .op1(src1),
         .op2(src2),
         .ctrl(ALUCtrl),
@@ -62,14 +62,14 @@
         .res(ALURes)
     );
 
-    immDecoder immDecoderInst (
+    immDecoder immDecoder (
         .instruction(instruction),
         .imm(imm)
     );
 
     registerFile32 #(
         .XLEN(`XLEN)
-    ) registerFile32Inst (
+    ) registerFile32 (
         .a1(instruction[19:15]),
         .a2(instruction[24:20]),
         .a3(instruction[11:7]),

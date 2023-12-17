@@ -1,5 +1,6 @@
 `include "rtl/components/top.v"
 `include "rtl/constants.vh"
+`timescale 10ns/1ns
 
 `define OPCODE_PASS         32'b1
 `define OPCODE_FAIL         32'b0
@@ -19,19 +20,11 @@ module gpioTopTest();
     );
 
     initial begin
-        $readmemh("firmware_text.hex", dut.instrMemInst.ram, 0, `INSTR_MEM_WORD_CNT-1);
-        $readmemh("firmware_data.hex", dut.dataMemInst.ram, 0, `DATA_MEM_WORD_CNT-1);
-
         reset <= 0;
         #5;
         reset <= 1;
         #5;
         reset <= 0;
-
-        #99999;
-
-        $display(`ASSERT_TIMEOUT);
-        $finish;
     end
 
     always begin
@@ -51,7 +44,7 @@ module gpioTopTest();
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpuInst.PC === `PC_STOP) begin
+        // if (dut.cpu.PC === `PC_STOP) begin
         //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end

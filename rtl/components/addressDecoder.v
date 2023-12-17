@@ -15,6 +15,7 @@
     always @(*) begin
         wemem   = 0;
         wegpio  = 0;
+        outsel  = 0;
         // weuart0 = 0;
         // wepwm   = 0;
         // wetmr0  = 0;
