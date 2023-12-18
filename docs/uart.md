@@ -1,6 +1,6 @@
 # UART Peripheral
 
-Main frequency: UART will use reference clock 100/14, which is roughly equal to 3.5714, close to the 1.8432 (8250 UART's clock) times two. This allows to support up to 231 481 bps.
+Main frequency: UART will use reference clock 100/14, which is roughly equal to 3.5714, close to the 1.8432 (8250 UART's clock) times two. This allows to support up to 223 214 bps.
 
 ##  Registers
 | addr | name | access | comment |
