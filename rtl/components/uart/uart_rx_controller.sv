@@ -1,7 +1,6 @@
 
 (* dont_touch = "yes" *) module uart_rx_controller (
     input  logic clk,
-    input  logic rx_clk_en,
     input  logic reset,
     input  logic parity_en,
     input  logic double_stop_bit,
@@ -47,9 +46,7 @@
         if (reset) begin
             rx_state <= RX_IDLE;
         end else begin
-            if (rx_clk_en) begin
-                rx_state <= rx_next_state;
-            end
+            rx_state <= rx_next_state;
         end
     end
 

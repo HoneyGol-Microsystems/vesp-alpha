@@ -180,7 +180,6 @@
     /////////////////////////////////////////////////////////////////////////
     uart_rx_controller rx_ctrl (
         .clk(clk),
-        .rx_clk_en(sample_clk_cnt_top),
         .reset(reset),
         .parity_en(config_b.parity_type != 2'b0),
         .double_stop_bit(config_b.double_stop_bits),
