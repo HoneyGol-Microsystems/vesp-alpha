@@ -1,7 +1,7 @@
 `ifndef __FILE_TOP_V
 `define __FILE_TOP_V
 
-// `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
+`define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
 (* dont_touch = "yes" *) module top (
     input clk,
@@ -24,12 +24,12 @@
     );
 
     gpio gpio (
-        .regSel(dAddr[2:0]),
+        .reg_sel(dAddr[2:0]),
         .we(gpioWE),
         .reset(reset),
         .clk(clk),
         .di(dWrite),
-        .do(gpioDO),
+        .dout(gpioDO),
         .ports(gpioPorts)
     );
 

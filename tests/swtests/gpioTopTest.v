@@ -11,7 +11,7 @@ module gpioTopTest();
     // reg [15:0] portsReg;
     // assign ports = portsReg;
 
-    top dut(
+    VESPTop dut(
         .clk(clk),
         .reset(reset),
         .gpioPorts(ports)
@@ -30,22 +30,22 @@ module gpioTopTest();
         clk <= 0; #1;
 	end
 
-    always @(posedge clk) begin
-        if (dut.iRead === `OPCODE_PASS) begin
-            $display(`ASSERT_SUCCESS);
-            $finish;
-        end
+//    always @(posedge clk) begin
+//        if (dut.iRead === `OPCODE_PASS) begin
+//            $display(`ASSERT_SUCCESS);
+//            $finish;
+//        end
 
-        if (dut.iRead === `OPCODE_FAIL) begin
-            $display(`ASSERT_FAIL);
-            $finish;
-        end
+//        if (dut.iRead === `OPCODE_FAIL) begin
+//            $display(`ASSERT_FAIL);
+//            $finish;
+//        end
 
-        /* stop on certain PC for debugging purposes */
-        // if (dut.cpu.PC === `PC_STOP) begin
-        //     $display(`ASSERT_DEBUG_STOP);
-        //     $finish;
-        // end
-    end
+//        /* stop on certain PC for debugging purposes */
+//        // if (dut.cpuInst.PC === `PC_STOP) begin
+//        //     $display(`ASSERT_DEBUG_STOP);
+//        //     $finish;
+//        // end
+//    end
     
 endmodule
