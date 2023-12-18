@@ -210,9 +210,9 @@
     /////////////////////////////////////////////////////////////////////////
     uart_tx_controller tx_ctrl (
         .clk(clk),
-        .tx_clk_en(bit_clk_cnt_top),
         .reset(reset),
         .parity_en(config_b.parity_type != 2'b0),
+        .tx_send_bit(TODO),
         .tx_queue_empty(tx_queue_empty),
         .double_stop_bit(config_b.double_stop_bits),
         .tx_bits_cnt_top(tx_bits_cnt_top),
