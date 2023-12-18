@@ -3,7 +3,7 @@
 int main ( void )
 {
     // configuration
-    UART_CONFIG_A = 0x14; // 0001 0100
+    UART_CONFIG_A = 0xB4; // 1011 0100
     UART_CONFIG_B = 0x60; // 1011 0000
 
     // tx data
