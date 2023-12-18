@@ -144,7 +144,7 @@
     /////////////////////////////////////////////////////////////////////////
     // Reference clock. Generates 3.5714 MHz from 50 MHz system clock.
     counter #(
-        .COUNTER_WIDTH(5)
+        .COUNTER_WIDTH(4)
     ) ref_clk_cnt (
         .reset(reset),
         .clk(clk),
@@ -171,7 +171,7 @@
         .reset(reset),
         .clk(clk),
         .en(sample_clk_cnt_top),
-        .max(16),
+        .max(15),
         .top(bit_clk_cnt_top)
     );
 
