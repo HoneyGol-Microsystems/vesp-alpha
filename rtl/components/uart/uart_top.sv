@@ -22,13 +22,13 @@
     /////////////////////////////////////////////////////////////////////////
     logic stop_bit_error_if_en, parity_error_if_en, tx_queue_empty,
           rx_queue_full, rx_sync, rx_parity_out, if_reg_reset, ref_clk_cnt_top,
-          sample_clk_cnt_top, bit_clk_cnt_top, rx_sync_fall, rx_get_sample,
-          rx_bits_cnt_top, rx_error_reg_out, rx_sample_cnt_reset, rx_parity_we,
-          rx_sample_reg_reset, rx_sample_reg_we, rx_parity_reset, rx_queue_we,
+          sample_clk_cnt_top, rx_sync_fall, rx_get_sample, rx_bits_cnt_top,
+          rx_error_reg_out, rx_sample_cnt_reset, rx_parity_we, rx_queue_we,
+          rx_sample_reg_reset, rx_sample_reg_we, rx_parity_reset, tx_queue_re,
           rx_bits_cnt_reset, rx_bits_cnt_en, rx_error_reg_set, tx_bits_cnt_top,
-          rx_error_reg_reset, tx_bits_cnt_reset, tx_bits_cnt_en, tx_queue_re,
-          tx_queue_we, tx_shift_reg_we, tx_shift_reg_se, tx_parity_reset,
-          tx_parity_we;
+          rx_error_reg_reset, tx_bits_cnt_reset, tx_bits_cnt_en, tx_queue_we,
+          tx_shift_reg_we, tx_shift_reg_se, tx_parity_reset, tx_parity_we, 
+          tx_send_bit;
     logic [1:0] tx_out_sel;
     logic [7:0] tx_queue_dout, rx_queue_dout;
 
@@ -172,7 +172,7 @@
         .clk(clk),
         .en(sample_clk_cnt_top),
         .max(15),
-        .top(bit_clk_cnt_top)
+        .top_pulse(tx_send_bit)
     );
 
     /////////////////////////////////////////////////////////////////////////
@@ -211,7 +211,7 @@
         .clk(clk),
         .reset(reset),
         .parity_en(config_b.parity_type != 2'b0),
-        .tx_send_bit(TODO),
+        .tx_send_bit(tx_send_bit),
         .tx_queue_empty(tx_queue_empty),
         .double_stop_bit(config_b.double_stop_bits),
         .tx_bits_cnt_top(tx_bits_cnt_top),
