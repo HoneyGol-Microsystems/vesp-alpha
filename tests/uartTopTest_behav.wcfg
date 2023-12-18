@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="uartTopTest_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="uartTopTest" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="317.508 ns"></ZoomEndTime>
+      <Cursor1Time time="700.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="199"></NameColumnWidth>
+      <ValueColumnWidth column_width="67"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="5" />
+   <wvobject type="group" fp_name="group2380">
+      <obj_property name="label">TOP</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="logic" fp_name="/uartTopTest/clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/rx">
+         <obj_property name="ElementShortName">rx</obj_property>
+         <obj_property name="ObjectShortName">rx</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/tx">
+         <obj_property name="ElementShortName">tx</obj_property>
+         <obj_property name="ObjectShortName">tx</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group2382">
+      <obj_property name="label">CPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/uartTopTest/dut/cpuInst/instruction">
+         <obj_property name="ElementShortName">instruction[31:0]</obj_property>
+         <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/cpuInst/PC">
+         <obj_property name="ElementShortName">PC[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group2381">
+      <obj_property name="label"> UART TOP</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/config_a">
+         <obj_property name="ElementShortName">config_a</obj_property>
+         <obj_property name="ObjectShortName">config_a</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/config_b">
+         <obj_property name="ElementShortName">config_b</obj_property>
+         <obj_property name="ObjectShortName">config_b</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/status_a">
+         <obj_property name="ElementShortName">status_a</obj_property>
+         <obj_property name="ObjectShortName">status_a</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/if_reg">
+         <obj_property name="ElementShortName">if_reg</obj_property>
+         <obj_property name="ObjectShortName">if_reg</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group2389">
+      <obj_property name="label">TX CTRL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_clk_en">
+         <obj_property name="ElementShortName">tx_clk_en</obj_property>
+         <obj_property name="ObjectShortName">tx_clk_en</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/parity_en">
+         <obj_property name="ElementShortName">parity_en</obj_property>
+         <obj_property name="ObjectShortName">parity_en</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_queue_empty">
+         <obj_property name="ElementShortName">tx_queue_empty</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_empty</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/double_stop_bit">
+         <obj_property name="ElementShortName">double_stop_bit</obj_property>
+         <obj_property name="ObjectShortName">double_stop_bit</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_bits_cnt_top">
+         <obj_property name="ElementShortName">tx_bits_cnt_top</obj_property>
+         <obj_property name="ObjectShortName">tx_bits_cnt_top</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_bits_cnt_reset">
+         <obj_property name="ElementShortName">tx_bits_cnt_reset</obj_property>
+         <obj_property name="ObjectShortName">tx_bits_cnt_reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_bits_cnt_en">
+         <obj_property name="ElementShortName">tx_bits_cnt_en</obj_property>
+         <obj_property name="ObjectShortName">tx_bits_cnt_en</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_queue_re">
+         <obj_property name="ElementShortName">tx_queue_re</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_re</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_shift_reg_we">
+         <obj_property name="ElementShortName">tx_shift_reg_we</obj_property>
+         <obj_property name="ObjectShortName">tx_shift_reg_we</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_shift_reg_se">
+         <obj_property name="ElementShortName">tx_shift_reg_se</obj_property>
+         <obj_property name="ObjectShortName">tx_shift_reg_se</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_parity_reset">
+         <obj_property name="ElementShortName">tx_parity_reset</obj_property>
+         <obj_property name="ObjectShortName">tx_parity_reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_parity_we">
+         <obj_property name="ElementShortName">tx_parity_we</obj_property>
+         <obj_property name="ObjectShortName">tx_parity_we</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_out_sel">
+         <obj_property name="ElementShortName">tx_out_sel[1:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_out_sel[1:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_state">
+         <obj_property name="ElementShortName">tx_state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_ctrl/tx_next_state">
+         <obj_property name="ElementShortName">tx_next_state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_next_state[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group2390">
+      <obj_property name="label">TX DATAPATH</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_queue_we">
+         <obj_property name="ElementShortName">tx_queue_we</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_we</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_queue_re">
+         <obj_property name="ElementShortName">tx_queue_re</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_re</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_queue_din">
+         <obj_property name="ElementShortName">tx_queue_din[7:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_din[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_shift_reg_we">
+         <obj_property name="ElementShortName">tx_shift_reg_we</obj_property>
+         <obj_property name="ObjectShortName">tx_shift_reg_we</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_shift_reg_se">
+         <obj_property name="ElementShortName">tx_shift_reg_se</obj_property>
+         <obj_property name="ObjectShortName">tx_shift_reg_se</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_shift_reg_reset">
+         <obj_property name="ElementShortName">tx_shift_reg_reset</obj_property>
+         <obj_property name="ObjectShortName">tx_shift_reg_reset</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_out_sel">
+         <obj_property name="ElementShortName">tx_out_sel[1:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_out_sel[1:0]</obj_property>
+      </wvobject>
+      <wvobject type="group" fp_name="group2497">
+         <obj_property name="label">TX BITS COUNTER</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt/en">
+            <obj_property name="ElementShortName">en</obj_property>
+            <obj_property name="ObjectShortName">en</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt/max">
+            <obj_property name="ElementShortName">max[4:0]</obj_property>
+            <obj_property name="ObjectShortName">max[4:0]</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt/top">
+            <obj_property name="ElementShortName">top</obj_property>
+            <obj_property name="ObjectShortName">top</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt/val">
+            <obj_property name="ElementShortName">val[4:0]</obj_property>
+            <obj_property name="ObjectShortName">val[4:0]</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt/counter">
+            <obj_property name="ElementShortName">counter[4:0]</obj_property>
+            <obj_property name="ObjectShortName">counter[4:0]</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt_en">
+         <obj_property name="ElementShortName">tx_bits_cnt_en</obj_property>
+         <obj_property name="ObjectShortName">tx_bits_cnt_en</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt_reset">
+         <obj_property name="ElementShortName">tx_bits_cnt_reset</obj_property>
+         <obj_property name="ObjectShortName">tx_bits_cnt_reset</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt_max">
+         <obj_property name="ElementShortName">tx_bits_cnt_max[4:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_bits_cnt_max[4:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/data_bits_count">
+         <obj_property name="ElementShortName">data_bits_count[1:0]</obj_property>
+         <obj_property name="ObjectShortName">data_bits_count[1:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/parity_type">
+         <obj_property name="ElementShortName">parity_type</obj_property>
+         <obj_property name="ObjectShortName">parity_type</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_parity_we">
+         <obj_property name="ElementShortName">tx_parity_we</obj_property>
+         <obj_property name="ObjectShortName">tx_parity_we</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_parity_reset">
+         <obj_property name="ElementShortName">tx_parity_reset</obj_property>
+         <obj_property name="ObjectShortName">tx_parity_reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx">
+         <obj_property name="ElementShortName">tx</obj_property>
+         <obj_property name="ObjectShortName">tx</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_queue_empty">
+         <obj_property name="ElementShortName">tx_queue_empty</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_empty</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_queue_full">
+         <obj_property name="ElementShortName">tx_queue_full</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_full</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_bits_cnt_top">
+         <obj_property name="ElementShortName">tx_bits_cnt_top</obj_property>
+         <obj_property name="ObjectShortName">tx_bits_cnt_top</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_shift_reg_lsb">
+         <obj_property name="ElementShortName">tx_shift_reg_lsb</obj_property>
+         <obj_property name="ObjectShortName">tx_shift_reg_lsb</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_parity_out">
+         <obj_property name="ElementShortName">tx_parity_out</obj_property>
+         <obj_property name="ObjectShortName">tx_parity_out</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_shift_reg">
+         <obj_property name="ElementShortName">tx_shift_reg[7:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_shift_reg[7:0]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/tx_queue_dout">
+         <obj_property name="ElementShortName">tx_queue_dout[7:0]</obj_property>
+         <obj_property name="ObjectShortName">tx_queue_dout[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/uartTopTest/dut/uartInst/tx_datapath/TX_QUEUE_SIZE">
+         <obj_property name="ElementShortName">TX_QUEUE_SIZE[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TX_QUEUE_SIZE[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>
