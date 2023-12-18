@@ -125,17 +125,21 @@
 
         case (tx_state)
             TX_IDLE: begin
-                if (!tx_send_bit || tx_queue_empty) begin
+                if (tx_send_bit && !tx_queue_empty) begin
+                    tx_queue_re       = 1;
+                    tx_shift_reg_we   = 1;
+                    tx_bits_cnt_reset = 1;
+                    tx_parity_reset   = 1;
+                end else begin
                     tx_out_sel = 2'b01;
                 end
             end
 
             TX_START_BIT: begin
                 if (tx_send_bit) begin
-                    tx_queue_re       = 1;
-                    tx_shift_reg_we   = 1;
-                    tx_bits_cnt_reset = 1;
-                    tx_parity_reset   = 1;
+                    tx_bits_cnt_en  = 1;
+                    tx_out_sel      = 2'b10;
+                    tx_parity_we    = 1;
                 end
             end
 
@@ -151,7 +155,6 @@
                         tx_bits_cnt_en  = 1;
                         tx_out_sel      = 2'b10;
                         tx_shift_reg_se = 1;
-                        tx_parity_we    = 1;
                     end
                 end else begin
                     tx_out_sel = 2'b10;
@@ -159,7 +162,8 @@
             end
 
             TX_SEND_DATA: begin
-                tx_out_sel = 2'b10;
+                tx_out_sel   = 2'b10;
+                tx_parity_we = 1;
             end
 
             TX_PARITY_BIT: begin
