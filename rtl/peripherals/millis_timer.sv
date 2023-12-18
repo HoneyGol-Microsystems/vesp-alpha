@@ -19,7 +19,7 @@
         .clk(clk),
         .en(1),
         .max(CLK_DIV_MAX - 1),
-        .top(millis_en)
+        .top_pulse(millis_en)
     );
 
     counter #(
