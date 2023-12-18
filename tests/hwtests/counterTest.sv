@@ -45,7 +45,7 @@ module counterTest();
         $display("Counter test begin.");
         en  = 0;
         clk = 0;
-        max = 1;
+        max = 7;
         reset = 1;
         #8;
         
