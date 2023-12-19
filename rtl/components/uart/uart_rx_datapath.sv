@@ -36,15 +36,15 @@
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL DECLARATIONS
     /////////////////////////////////////////////////////////////////////////
-    logic rx_sync_out;
+    logic rx_sync_out, rx_get_sample_synchr_in;
     logic [7:0] rx_sample_reg_dout;
     logic [4:0] rx_sample_cnt_val;
 
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL ASSIGNMENTS
     /////////////////////////////////////////////////////////////////////////
-    assign rx_sync       = rx_sync_out;
-    assign rx_get_sample = (rx_sample_cnt_val == 3'h7);
+    assign rx_sync                 = rx_sync_out;
+    assign rx_get_sample_synchr_in = (rx_sample_cnt_val == 3'h7);
     
     /////////////////////////////////////////////////////////////////////////
     // RX SIGNAL SYNCHRONIZER
@@ -59,6 +59,19 @@
         .dataOut(rx_sync_out),
         .rise(rx_sync_rise),
         .fall(rx_sync_fall)
+    );
+
+    /////////////////////////////////////////////////////////////////////////
+    // RX GET SAMPLE SYNCHRONIZER (used as rising edge detector)
+    /////////////////////////////////////////////////////////////////////////
+    synchronizer #(
+        .LEN(1),
+        .STAGES(2)
+    ) rx_get_sample_synchr (
+        .clk(clk),
+        .en(1'b1),
+        .dataIn(rx_get_sample_synchr_in),
+        .rise(rx_get_sample)
     );
 
     /////////////////////////////////////////////////////////////////////////
