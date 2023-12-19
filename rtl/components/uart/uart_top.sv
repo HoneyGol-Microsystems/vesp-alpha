@@ -241,6 +241,7 @@
         .rx_queue_we(rx_queue_we),
         .rx_queue_re(re),
         .parity_type(config_b.parity_type[1]),
+        .data_bits_count(config_b.data_bits_count),
         .rx_parity_we(rx_parity_we),
         .rx_parity_reset(rx_parity_reset),
         .rx_bits_cnt_en(rx_bits_cnt_en),
