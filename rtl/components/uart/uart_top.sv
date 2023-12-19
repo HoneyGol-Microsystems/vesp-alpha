@@ -150,7 +150,7 @@
         .clk(clk),
         .en(1'b1),
         .max(13),
-        .top(ref_clk_cnt_top)
+        .top_pulse(ref_clk_cnt_top)
     );
 
     // Main clock - used for RX sampling. Configurable.
@@ -161,7 +161,7 @@
         .clk(clk),
         .en(ref_clk_cnt_top),
         .max(config_a.clock_divisor),
-        .top(sample_clk_cnt_top)
+        .top_pulse(sample_clk_cnt_top)
     );
 
     // bit clk counter
