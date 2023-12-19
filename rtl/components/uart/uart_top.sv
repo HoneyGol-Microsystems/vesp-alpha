@@ -189,6 +189,7 @@
         .rx_bits_cnt_top(rx_bits_cnt_top),
         .rx_error_reg_out(rx_error_reg_out),
         .rx_sync(rx_sync),
+        .rx_parity_out(rx_parity_out),
 
         .rx_sample_cnt_reset(rx_sample_cnt_reset),
         .rx_sample_reg_reset(rx_sample_reg_reset),

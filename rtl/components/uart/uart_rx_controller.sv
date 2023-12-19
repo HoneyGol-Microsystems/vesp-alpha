@@ -10,6 +10,7 @@
     input  logic rx_bits_cnt_top,
     input  logic rx_error_reg_out,
     input  logic rx_sync,
+    input  logic rx_parity_out,
 
     output logic rx_sample_cnt_reset,
     output logic rx_sample_reg_reset,
@@ -181,6 +182,7 @@
             end
 
             RX_PARITY_BIT: begin
+                rx_error_reg_set = rx_parity_out;
                 parity_error_if_en = 1;
             end
 
