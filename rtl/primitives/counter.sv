@@ -20,8 +20,12 @@
     always_ff @(posedge clk) begin : counter_proc
         if (reset)
             counter <= 0;
-        else if (en)
-            counter <= counter + 1;
+        else if (en) begin
+            if (top)
+                counter <= 0;
+            else
+                counter <= counter + 1;
+        end
     end
 
     always_ff @(posedge clk) begin : top_proc
