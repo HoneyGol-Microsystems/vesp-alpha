@@ -9,7 +9,8 @@ The VESP is a result of student initiative to create a RISC-V compatible process
 ## Links
 This README contains basic information about project building. More information is covered in the documentation in the `docs` folder:
 
-### Software and testing
+### Development and testing
+- [Generic development guides](docs/development.md)
 - [Compiling and deploying software](docs/software.md)
 - [Notes about testing](docs/testing.md)
 - [Creating `make.py` recipes](docs/recipes.md)
