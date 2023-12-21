@@ -15,6 +15,8 @@
     wire [31:0] iAddr, iRead, dAddr, dWrite, dataMemDO, gpioDO;
     reg [31:0] dRead;
 
+    wire [31:0] millis_timer_dout;
+
     addressDecoder addressDecoder (
         .we(dWE),
         .a(dAddr),
@@ -33,10 +35,19 @@
         .ports(gpioPorts)
     );
 
+    millis_timer #(
+        .TIMER_WIDTH(32),
+        .CLK_FREQ_HZ(50000000)
+    ) millis_timer (
+        .clk(clk),
+        .reset(reset),
+        .dout(millis_timer_dout)
+    );
+
     `ifdef SPLIT_MEMORY
         instructionMemory #(
             .WORD_CNT(`INSTR_MEM_WORD_CNT),
-            .MEM_FILE("")
+            .MEM_FILE("software/firmware_text.mem")
         ) instrMem (
             .a(iAddr),
             .d(iRead)
@@ -44,7 +55,7 @@
 
         dataMemory #(
             .WORD_CNT(`DATA_MEM_WORD_CNT),
-            .MEM_FILE("")
+            .MEM_FILE("software/firmware_data.mem")
         ) dataMem (
             .clk(clk),
             .we(dWE),
@@ -89,7 +100,9 @@
     always @(*) begin
         case (dReadSel)
             3'b000:  dRead = dataMemDO;
-            default: dRead = gpioDO;
+            3'b001:  dRead = gpioDO;
+            3'b011:  dRead = millis_timer_dout;
+            default: dRead = 0;
         endcase
     end
 

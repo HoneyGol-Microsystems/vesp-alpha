@@ -40,6 +40,12 @@ module counterTest();
         en |-> (val == ($past(val) + 1))
     );
 
+    // Value after reaching max is 0 again on next enable.
+    max_reset_check: assert property (
+        @(posedge en)
+        top |=> (val == 0)
+    );
+
     initial begin
 
         $display("Counter test begin.");
