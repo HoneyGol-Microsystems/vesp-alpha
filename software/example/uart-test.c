@@ -3,14 +3,17 @@
 int main ( void )
 {
     // configuration
-    UART_CONFIG_A = 0xB4; // 1011 0100
-    UART_CONFIG_B = 0x30; // 0011 0000
+    UART_CONFIG_A = 0xB6; // 1011 0110
+    UART_CONFIG_B = 0x34; // 0011 0100
 
     while ( 1 )
     {
-        UART_TX_DATA = 0x41;
-        delay_ms ( 1000 );
+        if ( ! ( UART_STATUS_A & 0x40 ) )
+        {
+            UART_TX_DATA = UART_RX_DATA;
+        }
     }
+    delay_us ( 10 );
 
     return 0;
 }

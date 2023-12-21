@@ -32,8 +32,8 @@ always @( posedge clk ) begin : fifo_operations
             memory[backPointer] <= din;
             backPointer         <= backPointerInc;
 
+            empty <= 0;
             if ( !re ) begin
-                empty <= 0;
                 full  <= ( frontPointer == backPointerInc ) ? 1'b1 : 1'b0;
             end
         end

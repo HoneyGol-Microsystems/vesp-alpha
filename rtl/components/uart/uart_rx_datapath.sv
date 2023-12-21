@@ -11,6 +11,7 @@
     input  logic       rx_queue_we,
     input  logic       rx_queue_re,
     input  logic       parity_type,
+    input  logic [1:0] data_bits_count,
     input  logic       rx_parity_we,
     input  logic       rx_parity_reset,
     input  logic       rx_bits_cnt_en,
@@ -36,15 +37,16 @@
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL DECLARATIONS
     /////////////////////////////////////////////////////////////////////////
-    logic rx_sync_out;
+    logic rx_sync_out, rx_get_sample_synchr_in;
     logic [7:0] rx_sample_reg_dout;
-    logic [4:0] rx_sample_cnt_val;
+    logic [4:0] rx_sample_cnt_val, rx_bits_cnt_max;
 
     /////////////////////////////////////////////////////////////////////////
     // SIGNAL ASSIGNMENTS
     /////////////////////////////////////////////////////////////////////////
-    assign rx_sync       = rx_sync_out;
-    assign rx_get_sample = (rx_sample_cnt_val == 3'h7);
+    assign rx_sync                 = rx_sync_out;
+    assign rx_get_sample_synchr_in = (rx_sample_cnt_val == 3'h7);
+    assign rx_bits_cnt_max         = data_bits_count + 3'h5;
     
     /////////////////////////////////////////////////////////////////////////
     // RX SIGNAL SYNCHRONIZER
@@ -59,6 +61,19 @@
         .dataOut(rx_sync_out),
         .rise(rx_sync_rise),
         .fall(rx_sync_fall)
+    );
+
+    /////////////////////////////////////////////////////////////////////////
+    // RX GET SAMPLE SYNCHRONIZER (used as rising edge detector)
+    /////////////////////////////////////////////////////////////////////////
+    synchronizer #(
+        .LEN(1),
+        .STAGES(2)
+    ) rx_get_sample_synchr (
+        .clk(clk),
+        .en(1'b1),
+        .dataIn(rx_get_sample_synchr_in),
+        .rise(rx_get_sample)
     );
 
     /////////////////////////////////////////////////////////////////////////
@@ -111,7 +126,7 @@
         .reset(rx_bits_cnt_reset),
         .clk(clk),
         .en(rx_bits_cnt_en),
-        .max(8),
+        .max(rx_bits_cnt_max),
         .top(rx_bits_cnt_top)
     );
 
@@ -135,7 +150,7 @@
         .reset(rx_sample_cnt_reset),
         .clk(clk),
         .en(rx_sample_cnt_en),
-        .max(16),
+        .max(15),
         .top(rx_sample_cnt_top),
         .val(rx_sample_cnt_val)
     );

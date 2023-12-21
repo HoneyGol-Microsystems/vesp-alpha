@@ -10,6 +10,7 @@
     input  logic rx_bits_cnt_top,
     input  logic rx_error_reg_out,
     input  logic rx_sync,
+    input  logic rx_parity_out,
 
     output logic rx_sample_cnt_reset,
     output logic rx_sample_reg_reset,
@@ -160,9 +161,13 @@
             end
 
             RX_WAIT_DATA: begin
-                if (!rx_bits_cnt_top && rx_get_sample) begin
-                    rx_sample_reg_we = 1;
-                    rx_parity_we     = 1;
+                if (rx_bits_cnt_top) begin
+                    rx_error_reg_reset = 1;
+                end else begin
+                    if (rx_get_sample) begin
+                        rx_sample_reg_we = 1;
+                        rx_parity_we     = 1;
+                    end
                 end
             end
 
@@ -177,6 +182,7 @@
             end
 
             RX_PARITY_BIT: begin
+                rx_error_reg_set = rx_parity_out;
                 parity_error_if_en = 1;
             end
 
@@ -188,7 +194,6 @@
                     end else begin
                         rx_queue_we          = !rx_error_reg_out && rx_sync;
                         stop_bit_error_if_en = 1;
-                        rx_error_reg_reset   = 1;
                     end
                 end
             end
@@ -197,7 +202,6 @@
                 if (rx_get_sample) begin
                     rx_queue_we          = !rx_error_reg_out && rx_sync;
                     stop_bit_error_if_en = 1;
-                    rx_error_reg_reset   = 1;
                 end
             end
 
