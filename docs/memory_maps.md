@@ -9,7 +9,7 @@ Peripherals are memory mapped. Memory subsystem is controlled via address decode
 | 0xF000_0000-0xFFFF_FFFF | Platform reserved (MMIO etc.) |
 
 ## Main memory
-The memory subsystem is based on Hardvard architecture (legacy Von Neumann support is available). Instruction memory is implemented using LUTs, data memory using DRAMs.
+The memory subsystem is based on Harvard architecture (legacy Von Neumann support is available). Instruction memory is implemented using LUTs, data memory using DRAMs.
 
 Address space of instruction memory and data memory is separated. This means that addressing of both memories starts from 0. The addressing is handled automatically by our firmware support package (Makefile and linker script).
 
