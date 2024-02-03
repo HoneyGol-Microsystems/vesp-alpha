@@ -5,17 +5,17 @@ OUTPUT_ARCH(riscv)
 /* define entry point of the first piece of code to be executed */
 ENTRY(_start)
 
-/* define the memory sections */
+/* define the memory segments */
 MEMORY
 {
-    /* section 'CODE' can be read and executed, starts at address ORIGIN and is LENGTH bytes long */
+    /* segment 'CODE' can be read and executed, starts at address ORIGIN and is LENGTH bytes long */
     CODE(rx): ORIGIN = 0x00000000, LENGTH = 2K
 
-    /* section 'DATA' can be read, written and executed, starts at address ORIGIN and is LENGTH bytes long */
+    /* segment 'DATA' can be read, written and executed, starts at address ORIGIN and is LENGTH bytes long */
     DATA(rwx): ORIGIN = 0x00000000, LENGTH = 2K
 }
 
-/* define the placement of the sections */
+/* define the sections and it's placement */
 SECTIONS
 {
     .text :
