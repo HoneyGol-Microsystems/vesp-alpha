@@ -28,8 +28,8 @@ if { [ catch { open_project "${project_path}/${project_name}.xpr" } error_str ] 
     add_files -fileset constrs_1 "./synth/basys3/constraints.xdc"
 
     # Setting up testbench/simulation sources.
-    add_files -fileset sim_1 "./tests/testConstants.vh"
-    set_property is_global_include true [ get_files testConstants.vh ]
+    add_files -fileset sim_1 "./tests/test_constants.vh"
+    set_property is_global_include true [ get_files test_constants.vh ]
 } else {
     # All good.
     puts "An existing project found."

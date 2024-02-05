@@ -1,18 +1,19 @@
 `ifndef __FILE_ADDRESSDECODER_V
 `define __FILE_ADDRESSDECODER_V
 
-(* dont_touch = "yes" *) module addressDecoder (
-    input             we,
-    input      [31:0] a,
-    output reg [2:0]  outsel,
-    output reg        wemem,
-    output reg        wegpio
-    // output reg        weuart0,
-    // output reg        wepwm,
-    // output reg        wetmr0
+(* dont_touch = "yes" *) module module_address_decoder (
+    input  logic        we,
+    input  logic [31:0] a,
+
+    output logic [2:0]  outsel,
+    output logic        wemem,
+    output logic        wegpio
+    // output logic        weuart0,
+    // output logic        wepwm,
+    // output logic        wetmr0
 );
 
-    always @(*) begin
+    always_comb begin
         wemem   = 0;
         wegpio  = 0;
         outsel  = 0;

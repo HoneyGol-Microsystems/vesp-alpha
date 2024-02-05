@@ -1,17 +1,17 @@
-`include "rtl/components/alu.v"
+`include "rtl/components/alu.sv"
 `include "rtl/constants.vh"
 
-module aluTest();
-	reg [31:0] op1, op2;
-    reg [3:0] ctrl;
-    wire [31:0] res;
-    wire zero;
+module module_alu_test();
+    logic zero;
+    logic [3:0] ctrl;
+    logic [31:0] op1, op2, res;
 
-	alu #(32) ALU
+	module_alu #(32) ALU
     (
         .op1(op1),
         .op2(op2),
         .ctrl(ctrl),
+
         .zero(zero),
         .res(res)
     );

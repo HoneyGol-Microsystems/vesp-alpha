@@ -1,6 +1,6 @@
 `timescale 10ns/1ns
 
-module millis_timer_test();
+module module_millis_timer_test();
 
     localparam TIMER_WIDTH   = 32;
     localparam REF_FREQUENCY = 50000000;
@@ -12,7 +12,7 @@ module millis_timer_test();
     logic                   clk;
     logic [TIMER_WIDTH-1:0] dout;
 
-    millis_timer #(
+    module_millis_timer #(
         .TIMER_WIDTH(TIMER_WIDTH),
         .CLK_FREQ_HZ(REF_FREQUENCY)
     ) DUT (

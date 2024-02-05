@@ -1,4 +1,4 @@
-module counterTest();
+module module_counter_test();
 
     localparam COUNTER_WIDTH = 4;
     localparam TB_WAIT       = 200;
@@ -11,13 +11,14 @@ module counterTest();
     logic top_pulse;
     logic [COUNTER_WIDTH-1:0] val;
 
-    counter #(
+    module_counter #(
         .COUNTER_WIDTH(COUNTER_WIDTH)
     ) DUT (
         .reset(reset),
         .clk(clk),
         .en(en),
         .max(max),
+
         .top(top),
         .top_pulse(top_pulse),
         .val(val)

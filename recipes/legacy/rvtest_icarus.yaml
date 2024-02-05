@@ -12,7 +12,7 @@ recipe:
     - make_directory:
         name: "build"
     - find_and_replace:
-        source_file: "tests/riscvTopTest.v"
+        source_file: "tests/riscv_top_test.sv"
         dest_file: "build/tmp.v"
         find: "\"PATH_TO_HEX\""
         replace: "\"build/tmp.hex\""
