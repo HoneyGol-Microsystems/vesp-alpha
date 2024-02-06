@@ -1,6 +1,8 @@
 #ifndef __VESP_UART_H
 #define __VESP_UART_H
 
+#include <stdint.h>
+
 /* GPIO addresses */
 extern volatile uint8_t * const UART_TX_DATA_PTR;
 extern volatile uint8_t * const UART_RX_DATA_PTR;

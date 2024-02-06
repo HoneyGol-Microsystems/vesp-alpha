@@ -1,4 +1,4 @@
-#include "vesp.h"
+#include "vesp_uart.h"
 
 volatile uint8_t * const UART_TX_DATA_PTR  = (volatile uint8_t *) 0xF0000010;
 volatile uint8_t * const UART_RX_DATA_PTR  = (volatile uint8_t *) 0xF0000011;

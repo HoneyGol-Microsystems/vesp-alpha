@@ -1,6 +1,8 @@
 #ifndef __VESP_DELAY_H
 #define __VESP_DELAY_H
 
+#include <stdint.h>
+
 /* frequency is 50 MHz, period 20ns */
 #define CPU_TICK_MS 50000
 #define CPU_TICK_US 50
