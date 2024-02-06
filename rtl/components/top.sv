@@ -1,7 +1,7 @@
 `ifndef __FILE_TOP_V
 `define __FILE_TOP_V
 
-`define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
+// `define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
 
 (* dont_touch = "yes" *) module module_top (
     input clk,
@@ -83,7 +83,7 @@
             .we2(d_we),
 
             .do1(i_read),
-            .do2(data_mem_dout),
+            .do2(data_mem_dout)
         );
     `endif // SPLIT_MEMORY
 
