@@ -1,4 +1,4 @@
-#include "vesp.h"
+#include "vesp_gpio.h"
 
 volatile uint8_t * const GPIOWR_A_PTR  = (volatile uint8_t *) 0xF0000000;
 volatile uint8_t * const GPIODIR_A_PTR = (volatile uint8_t *) 0xF0000001;

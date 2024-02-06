@@ -1,7 +1,7 @@
 #ifndef __VESP_GPIO_H
 #define __VESP_GPIO_H
 
-#include "vesp.h"
+#include <stdint.h>
 
 /* GPIO addresses */
 extern volatile uint8_t * const GPIOWR_A_PTR;
