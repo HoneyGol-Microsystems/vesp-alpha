@@ -25,6 +25,7 @@
     module_top top(
         .clk(div_clk),
         .reset(sync_reset),
+
         .gpio_ports(gpio_ports)
     );
     

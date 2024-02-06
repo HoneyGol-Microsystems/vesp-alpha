@@ -12,7 +12,7 @@
 );
 
     logic [COUNTER_WIDTH-1:0] counter;
-    logic                     top_processed;
+    logic top_processed;
 
     assign val       = counter;
     assign top       = (counter == max);

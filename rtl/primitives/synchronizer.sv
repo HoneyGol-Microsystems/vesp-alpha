@@ -31,8 +31,8 @@
     
     generate
         if (STAGES >= 2) begin
-            assign rise =  buffer[STAGES - 1]  & ~buffer[STAGES];
-            assign fall = ~buffer[STAGES - 1]  &  buffer[STAGES];
+            assign rise =  buffer[STAGES - 1] & ~buffer[STAGES];
+            assign fall = ~buffer[STAGES - 1] &  buffer[STAGES];
         end else begin
             $fatal("There must be at least two stages! (STAGES parameter error.)");
         end
