@@ -1,5 +1,5 @@
 
-(* dont_touch = "yes" *) module uart_rx_controller (
+(* dont_touch = "yes" *) module module_uart_rx_controller (
     input  logic clk,
     input  logic reset,
     input  logic parity_en,

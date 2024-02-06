@@ -1,5 +1,5 @@
 
-(* dont_touch = "yes" *) module uart_top #(
+(* dont_touch = "yes" *) module module_uart_top #(
     parameter TX_QUEUE_SIZE = 16,
     parameter RX_QUEUE_SIZE = 16
 ) (
@@ -178,7 +178,7 @@
     /////////////////////////////////////////////////////////////////////////
     // RX CONTROLLER
     /////////////////////////////////////////////////////////////////////////
-    uart_rx_controller rx_ctrl (
+    module_uart_rx_controller rx_ctrl (
         .clk(clk),
         .reset(reset),
         .parity_en(config_b.parity_type != 2'b0),
@@ -208,7 +208,7 @@
     /////////////////////////////////////////////////////////////////////////
     // TX CONTROLLER
     /////////////////////////////////////////////////////////////////////////
-    uart_tx_controller tx_ctrl (
+    module_uart_tx_controller tx_ctrl (
         .clk(clk),
         .reset(reset),
         .parity_en(config_b.parity_type != 2'b0),
@@ -230,7 +230,7 @@
     /////////////////////////////////////////////////////////////////////////
     // RX DATAPATH
     /////////////////////////////////////////////////////////////////////////
-    uart_rx_datapath #(
+    module_uart_rx_datapath #(
         .RX_QUEUE_SIZE(RX_QUEUE_SIZE)
     ) rx_datapath (
         .clk(clk),
@@ -268,7 +268,7 @@
     /////////////////////////////////////////////////////////////////////////
     // TX DATAPATH
     /////////////////////////////////////////////////////////////////////////
-    uart_tx_datapath #(
+    module_uart_tx_datapath #(
         .TX_QUEUE_SIZE(TX_QUEUE_SIZE)
     ) tx_datapath (
         .clk(clk),
