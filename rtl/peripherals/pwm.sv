@@ -1,4 +1,4 @@
-module pwm #(
+module module_pwm #(
 
 ) (
     
