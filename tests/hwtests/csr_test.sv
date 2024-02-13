@@ -1,7 +1,7 @@
 `include "rtl/components/csr.sv"
 `include "tests/test_constants.vh"
 
-module module_csr_test();
+module csr_test();
 
     logic reset, clk, we, mepc_we, mcause_we;
     logic [11:0] a;

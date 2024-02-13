@@ -2,7 +2,7 @@
 `include "rtl/constants.vh"
 `include "tests/test_constants.vh"
 
-module module_fifo_test();
+module fifo_test();
 
     logic clk, reset, we, re, empty, full;
     logic  [31:0] din, dout;

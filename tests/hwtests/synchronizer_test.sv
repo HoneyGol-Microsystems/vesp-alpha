@@ -1,4 +1,4 @@
-module module_synchronizer_test();
+module synchronizer_test();
 
     logic       clk;
     logic       en;

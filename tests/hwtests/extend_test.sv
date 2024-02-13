@@ -1,7 +1,7 @@
 `include "rtl/components/extend.sv"
 `include "rtl/constants.vh"
 
-module module_extend_test();
+module extend_test();
 	logic uext;
     logic [7:0] data8;
     logic [15:0] data16;

@@ -1,7 +1,7 @@
 `include "rtl/components/register_file32.sv"
 `include "rtl/constants.vh"
 
-module module_register_file_test();
+module register_file_test();
 	logic clk, we3;
 	logic [4:0] a1, a2, a3;
 	logic [31:0] di3, rd1, rd2;

@@ -1,6 +1,6 @@
 `timescale 10ns/1ns
 
-module module_millis_timer_test();
+module millis_timer_test();
 
     localparam TIMER_WIDTH   = 32;
     localparam REF_FREQUENCY = 50000000;
