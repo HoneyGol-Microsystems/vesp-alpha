@@ -1,12 +1,13 @@
 `include "rtl/components/gpio.sv"
 `include "tests/test_constants.vh"
 
-module module_gpio_test();
+module gpio_test();
 
     logic clk, reset, we;
     logic [2:0] reg_sel;
     logic [31:0] data_out, data_in;
-    logic [15:0] ports, ports_reg;
+    wire  [15:0] ports;
+    logic [15:0] ports_reg;
 
     assign ports = ports_reg;
 
@@ -25,31 +26,31 @@ module module_gpio_test();
         we <= 0;
         #2;
         reset <= 0;
-        #5;
+        #6;
 
         /* check if reset was done */
         reg_sel = 3'b000;
-        #1;
+        #2;
         `ASSERT(dut.GPIOWR_A === 0 && data_out === dut.GPIOWR_A, "GPIOWR_A does not match data_out.");
         reg_sel = 3'b001;
-        #1;
+        #2;
         `ASSERT(dut.GPIODIR_A === 0 && data_out === dut.GPIODIR_A, "GPIODIR_A does not match data_out.");
         reg_sel = 3'b011;
-        #1;
+        #2;
         `ASSERT(dut.GPIOWR_B === 0 && data_out === dut.GPIOWR_B, "GPIOWR_B does not match data_out.");
         reg_sel = 3'b100;
-        #1;
+        #2;
         `ASSERT(dut.GPIODIR_B === 0 && data_out === dut.GPIODIR_B, "GPIODIR_B does not match data_out.");
 
         /* check if data_out matches what is put on the A ports */
         ports_reg = 16'b1111111100000000;
         reg_sel = 3'b010;
-        #1;
+        #2;
         `ASSERT(data_out[23:16] === dut.ports[7:0], "data_out does not match what was written to A ports.");
         
         /* check if data_out matches what is put on the B ports */
         reg_sel = 3'b101; // can be anything > 3'b100
-        #1;
+        #2;
         `ASSERT(data_out[15:8] === dut.ports[15:8], "data_out does not match what was written to B ports.");
 
         /* test writing to A ports */
