@@ -13,7 +13,7 @@ recipe:
         name: "build/vivado"
     - find_and_replace:
         source_file: "tests/riscv_top_test.sv"
-        dest_file: "build/tmp.v"
+        dest_file: "build/tmp.sv"
         find: "\"PATH_TO_HEX\""
         replace: "\"tmp.hex\""
     - copy:
@@ -32,7 +32,7 @@ recipe:
           - "-journal"
           - "build/vivado/vivado.jou"
           - "-tclargs"
-          - "build/tmp.v"
-          - "topTest"
+          - "build/tmp.sv"
+          - "top_test"
           - "gui"
           - "build/tmp.hex"
