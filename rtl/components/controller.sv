@@ -35,15 +35,22 @@
     output logic [30:0] exc_code
 );
 
-    logic [2:0] funct3 = instruction[14:12];
-    logic [6:0] funct7 = instruction[31:25];
-    logic [4:0] rs1    = instruction[19:15];
-    logic [4:0] uimm   = instruction[19:15];
-    logic [4:0] rs2    = instruction[24:20];
-    logic [4:0] rd     = instruction[11:7];
-    logic [6:0] opcode = instruction[6:0];
-
+    logic [2:0] funct3;
+    logic [6:0] funct7;
+    logic [4:0] rs1   ;
+    logic [4:0] uimm  ;
+    logic [4:0] rs2   ;
+    logic [4:0] rd    ;
+    logic [6:0] opcode;
     logic [1:0] privilege_level;
+
+    assign funct3 = instruction[14:12];
+    assign funct7 = instruction[31:25];
+    assign rs1    = instruction[19:15];
+    assign uimm   = instruction[19:15];
+    assign rs2    = instruction[24:20];
+    assign rd     = instruction[11:7];
+    assign opcode = instruction[6:0];
 
     // store current privilege level
     // only two (machine and user) are supported for now
