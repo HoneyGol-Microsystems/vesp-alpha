@@ -147,11 +147,11 @@
     assign data_lh            = alu_res[1] ? mem_rd_data[31:16] : mem_rd_data[15:0];
     assign reg_res            = mem_to_reg ? mem_data : reg_data;
     assign branch_mret_target = mret ? mepc_out : branch_target;
-    assign next_pc            = branch | mret ? branch_mret_target : pc4;
+    assign next_pc            = branch || mret ? branch_mret_target : pc4;
     assign next_pc_int        = int_exc ? isr_address : next_pc;
 
     assign int_exc_code       = {interrupt, interrupt ? int_code : exc_code};
-    assign int_exc            = interrupt || exception;
+    assign int_exc            = interrupt | exception;
     assign next_mepc          = exception ? pc : next_pc;
 
     // ISR decoder block
