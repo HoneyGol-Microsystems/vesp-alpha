@@ -82,3 +82,8 @@ You can remove all generated content using:
 ```sh
 ./make.py clean
 ```
+
+## License
+All files in this repository, if not stated otherwise, are licensed under the GNU GENERAL PUBLIC LICENSE, version 3. The full license text is available in the `LICENSE` file.
+
+© 2024 Ondrej Golasowski, Jan Medek
