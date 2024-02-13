@@ -83,7 +83,7 @@
             .we2(d_we),
 
             .do1(i_read),
-            .do2(data_mem_dout),
+            .do2(data_mem_dout)
         );
     `endif // SPLIT_MEMORY
 
