@@ -6,7 +6,7 @@
 `define OPCODE_FAIL         32'b0
 `define PC_STOP             'ha4
 
-module module_top_test();
+module top_test();
     
     logic clk, reset;
 
@@ -20,7 +20,9 @@ module module_top_test();
         $readmemh(`__MKPY_CURRENT_TEST, dut.ram.ram, 0, `RAM_WORD_CNT-1);
 
         reset <= 1;
-        #1;
+        
+        #2;
+
         reset <= 0;
         #99999;
 
