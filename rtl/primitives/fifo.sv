@@ -21,13 +21,13 @@
         if (reset) begin
             front_pointer <= 0;
             back_pointer  <= 0;
-            empty        <= 1;
-            full         <= 0;
+            empty         <= 1;
+            full          <= 0;
         end else begin        
             if (we && !full) begin
                 memory[back_pointer] <= din;
                 back_pointer         <= back_pointer_inc;
-                empty               <= 0;
+                empty                <= 0;
 
                 if (!re) begin
                     full  <= (front_pointer == back_pointer_inc) ? 1'b1 : 1'b0;

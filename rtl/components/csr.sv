@@ -50,23 +50,23 @@
     // All drivers should be in a single always block.
     always_ff @(posedge clk) begin
         if (reset) begin
-            mtvec    = 0;
-            mepc     = 0;
-            mcause   = 0;
-            mscratch = 0;
+            mtvec    <= 0;
+            mepc     <= 0;
+            mcause   <= 0;
+            mscratch <= 0;
         end else begin
             if (we) begin
                 case (a)
                     // Permit MODE only 0, 1 (direct, vectored).
-                    'h305: mtvec    = {din[31:2], din[1:0] < 2 ? din[1:0] : mtvec[1:0]};
-                    'h340: mscratch = din;
-                    'h341: mepc     = din;
+                    'h305: mtvec    <= {din[31:2], din[1:0] < 2 ? din[1:0] : mtvec[1:0]};
+                    'h340: mscratch <= din;
+                    'h341: mepc     <= din;
                 endcase
             end
 
             // Direct writes have priority.
-            if (mepc_we)   mepc   = mepc_din;
-            if (mcause_we) mcause = mcause_din;
+            if (mepc_we)   mepc   <= mepc_din;
+            if (mcause_we) mcause <= mcause_din;
         end
     end
 

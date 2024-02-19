@@ -12,12 +12,12 @@
 );
 
     always_ff @(posedge clk) begin
-        int_code = 0;
+        int_code <= 0;
 
         if (irq_bus > 0)
-            interrupt = 1;
+            interrupt <= 1;
         else
-            interrupt = 0;
+            interrupt <= 0;
     end
 
 endmodule

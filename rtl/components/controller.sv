@@ -56,9 +56,9 @@
     // only two (machine and user) are supported for now
     always_ff @(posedge clk) begin
         if (mret)
-            privilege_level = 2'b00; // user mode
+            privilege_level <= 2'b00; // user mode
         else if (reset || interrupt || exception)
-            privilege_level = 2'b11; // machine mode
+            privilege_level <= 2'b11; // machine mode
     end
 
     // decode instructions and set control signals
