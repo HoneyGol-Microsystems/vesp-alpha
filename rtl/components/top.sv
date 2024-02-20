@@ -1,9 +1,9 @@
 `ifndef __FILE_TOP_V
 `define __FILE_TOP_V
 
-`define SPLIT_MEMORY /* whether to use Harvard or Von-Neumann memory architecture */
-
-(* dont_touch = "yes" *) module module_top (
+(* dont_touch = "yes" *) module module_top # (
+    parameter MEM_ARCH = "harvard"
+) (
     input clk,
     input reset,
 
@@ -47,45 +47,48 @@
         .dout(millis_timer_dout)
     );
 
-    `ifdef SPLIT_MEMORY
-        module_instruction_memory #(
-            .WORD_CNT(`INSTR_MEM_WORD_CNT),
-            .MEM_FILE("software/firmware_text.mem")
-        ) instruction_memory (
-            .a(i_addr),
+    generate
+        if (MEM_ARCH == "harvard") begin : gen_memory
+            module_instruction_memory #(
+                .WORD_CNT(`INSTR_MEM_WORD_CNT),
+                .MEM_FILE("software/firmware_text.mem")
+            ) instruction_memory (
+                .a(i_addr),
 
-            .d(i_read)
-        );
+                .d(i_read)
+            );
 
-        module_data_memory #(
-            .WORD_CNT(`DATA_MEM_WORD_CNT),
-            .MEM_FILE("software/firmware_data.mem")
-        ) data_memory (
-            .clk(clk),
-            .we(d_we),
-            .mask(d_mask),
-            .a(d_addr),
-            .din(d_write),
+            module_data_memory #(
+                .WORD_CNT(`DATA_MEM_WORD_CNT),
+                .MEM_FILE("software/firmware_data.mem")
+            ) data_memory (
+                .clk(clk),
+                .we(d_we),
+                .mask(d_mask),
+                .a(d_addr),
+                .din(d_write),
 
-            .dout(data_mem_dout)
-        );
+                .dout(data_mem_dout)
+            );
+        end else if (MEM_ARCH == "neumann") begin : gen_memory
+            module_ram #(
+                .WORD_CNT(`RAM_WORD_CNT),
+                .MEM_FILE("")
+            ) ram (
+                .clk(clk),
+                .a1(i_addr),
+                .a2(d_addr),
+                .di2(d_write),
+                .m2(d_mask),
+                .we2(d_we),
 
-    `else
-        module_ram #(
-            .WORD_CNT(`RAM_WORD_CNT),
-            .MEM_FILE("")
-        ) ram (
-            .clk(clk),
-            .a1(i_addr),
-            .a2(d_addr),
-            .di2(d_write),
-            .m2(d_mask),
-            .we2(d_we),
-
-            .do1(i_read),
-            .do2(data_mem_dout)
-        );
-    `endif // SPLIT_MEMORY
+                .do1(i_read),
+                .do2(data_mem_dout)
+            );
+        end else begin
+            $fatal("Unknown memory architecture specified.");
+        end
+    endgenerate
 
     module_cpu cpu (
         .clk(clk),
