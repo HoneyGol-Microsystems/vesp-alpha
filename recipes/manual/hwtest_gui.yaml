@@ -17,7 +17,7 @@ recipe:
         executable: "vivado"
         params:
           - "-mode"
-          - "batch"
+          - "gui"
           - "-source"
           - "vivado/simulation.tcl"
           - "-log"
