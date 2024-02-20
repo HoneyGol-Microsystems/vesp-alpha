@@ -30,7 +30,7 @@
                 empty                <= 0;
 
                 if (!re) begin
-                    full  <= (front_pointer == back_pointer_inc) ? 1'b1 : 1'b0;
+                    full <= (front_pointer == back_pointer_inc) ? 1'b1 : 1'b0;
                 end
             end
 
