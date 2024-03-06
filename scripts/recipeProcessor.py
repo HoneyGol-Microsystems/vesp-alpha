@@ -275,6 +275,8 @@ class RecipeProcessor:
             return file.suffix == ".v"
         elif fileType == "hex":
             return file.suffix == ".hex"
+        elif fileType == "systemverilog":
+            return file.suffix == ".sv"
         else:
             return False
 

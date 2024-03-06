@@ -1,9 +1,9 @@
-module synchronizerTest();
+module synchronizer_test();
 
     logic       clk;
     logic       en;
-    logic [1:0] dataIn;
-    logic [1:0] dataOut;
+    logic [1:0] data_in;
+    logic [1:0] data_out;
     logic [1:0] rise;
     logic [1:0] fall;
 
@@ -13,24 +13,24 @@ module synchronizerTest();
     task write_and_test_task(
         integer value_to_write
     );
-        dataIn = value_to_write;
-        calculated_rise = ~dataOut & dataIn;
-        calculated_fall = dataOut & ~dataIn;
+        data_in = value_to_write;
+        calculated_rise = ~data_out & data_in;
+        calculated_fall = data_out & ~data_in;
 
         #4;
         assert(rise === calculated_rise)    else $fatal("Wrong rise value.");
         assert(fall === calculated_fall)    else $fatal("Wrong fall value.");
-        assert(dataOut === value_to_write)  else $fatal("Wrong output value.");
+        assert(data_out === value_to_write)  else $fatal("Wrong output value.");
     endtask
 
-    synchronizer # (
+    module_synchronizer #(
         .LEN(2),
         .STAGES(2)
-    ) synchronizerInst(
+    ) synchronizer (
         .en(en),
         .clk(clk),
-        .dataIn(dataIn),
-        .dataOut(dataOut),
+        .data_in(data_in),
+        .data_out(data_out),
         .rise(rise),
         .fall(fall)
     );
@@ -44,9 +44,9 @@ module synchronizerTest();
 
         $display("- Testing two stage synchronizer");
         $display("Pushing init value (0).");
-        dataIn = 0;
+        data_in = 0;
         #4;
-        assert(dataOut === 0) else $fatal("Wrong output value.");
+        assert(data_out === 0) else $fatal("Wrong output value.");
 
         write_and_test_task(2);
         write_and_test_task(1);

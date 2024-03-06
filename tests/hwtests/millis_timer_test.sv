@@ -12,7 +12,7 @@ module millis_timer_test();
     logic                   clk;
     logic [TIMER_WIDTH-1:0] dout;
 
-    millis_timer #(
+    module_millis_timer #(
         .TIMER_WIDTH(TIMER_WIDTH),
         .CLK_FREQ_HZ(REF_FREQUENCY)
     ) DUT (

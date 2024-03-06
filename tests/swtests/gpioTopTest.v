@@ -8,8 +8,8 @@ module gpioTopTest();
     
     reg clk, reset;
     wire [15:0] ports;
-    // reg [15:0] portsReg;
-    // assign ports = portsReg;
+    // reg [15:0] ports_reg;
+    // assign ports = ports_reg;
 
     VESPTop dut(
         .clk(clk),

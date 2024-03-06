@@ -1,4 +1,4 @@
-`include "rtl/components/top.v"
+`include "rtl/components/top.sv"
 `include "rtl/constants.vh"
 
 `define __MKPY_CURRENT_TEST "PATH_TO_HEX"
@@ -6,21 +6,25 @@
 `define OPCODE_FAIL         32'b0
 `define PC_STOP             'ha4
 
-module topTest();
+module top_test();
     
-    reg clk, reset;
+    logic clk, reset;
 
-    top dut (
+    module_top #(
+        .MEM_ARCH("neumann")
+    ) dut (
         .clk(clk),
         .reset(reset)
     );
 
     initial begin
 
-        $readmemh(`__MKPY_CURRENT_TEST, dut.ram.RAM, 0, `RAM_WORD_CNT-1);
+        $readmemh(`__MKPY_CURRENT_TEST, dut.gen_memory.ram.ram, 0, `RAM_WORD_CNT-1);
 
         reset <= 1;
-        #1;
+        
+        #2;
+
         reset <= 0;
         #99999;
 
@@ -33,19 +37,19 @@ module topTest();
         clk <= 0; #1;
 	end
 
-    always @(posedge clk) begin
-        if (dut.iRead === `OPCODE_PASS) begin
+    always_ff @(posedge clk) begin
+        if (dut.i_read === `OPCODE_PASS) begin
             $display(`ASSERT_SUCCESS);
             $finish;
         end
 
-        if (dut.iRead === `OPCODE_FAIL) begin
+        if (dut.i_read === `OPCODE_FAIL) begin
             $display(`ASSERT_FAIL);
             $finish;
         end
 
         /* stop on certain PC for debugging purposes */
-        // if (dut.cpu.PC === `PC_STOP) begin
+        // if (dut.cpu.pc === `PC_STOP) begin
         //     $display(`ASSERT_DEBUG_STOP);
         //     $finish;
         // end

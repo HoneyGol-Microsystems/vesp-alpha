@@ -1,19 +1,19 @@
-`include "rtl/components/extend.v"
+`include "rtl/components/extend.sv"
 `include "rtl/constants.vh"
 
-module extendTest();
-	reg [7:0] data8;
-    reg [15:0] data16;
-    reg uext;
-    wire [31:0] res8, res16;
+module extend_test();
+	logic uext;
+    logic [7:0] data8;
+    logic [15:0] data16;
+    logic [31:0] res8, res16;
 
-	extend#(8, 32) ext8_32
+	module_extend #(8, 32) ext8_32
     (
         .data(data8),
         .uext(uext),
         .res(res8)
     );
-    extend#(16, 32) ext16_32
+    module_extend #(16, 32) ext16_32
     (
         .data(data16),
         .uext(uext),

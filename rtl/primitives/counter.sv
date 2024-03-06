@@ -1,17 +1,18 @@
-(* dont_touch = "yes" *) module counter #(
+(* dont_touch = "yes" *) module module_counter #(
     parameter COUNTER_WIDTH = 4
 ) (
     input  logic                     reset,
     input  logic                     clk,
     input  logic                     en,
     input  logic [COUNTER_WIDTH-1:0] max,
+
     output logic                     top,
     output logic                     top_pulse,
     output logic [COUNTER_WIDTH-1:0] val
 );
 
     logic [COUNTER_WIDTH-1:0] counter;
-    logic                     top_processed;
+    logic top_processed;
 
     assign val       = counter;
     assign top       = (counter == max);

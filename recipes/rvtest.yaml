@@ -12,8 +12,8 @@ recipe:
     - make_directory:
         name: "build/vivado"
     - find_and_replace:
-        source_file: "tests/riscvTopTest.v"
-        dest_file: "build/tmp.v"
+        source_file: "tests/riscv_top_test.sv"
+        dest_file: "build/tmp.sv"
         find: "\"PATH_TO_HEX\""
         replace: "\"tmp.hex\""
     - copy:
@@ -32,8 +32,8 @@ recipe:
           - "-journal"
           - "build/vivado/vivado.jou"
           - "-tclargs"
-          - "build/tmp.v"
-          - "topTest"
+          - "build/tmp.sv"
+          - "top_test"
           - "nogui"
           - "build/tmp.hex"
         assert:

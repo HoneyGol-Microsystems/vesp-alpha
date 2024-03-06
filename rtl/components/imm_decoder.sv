@@ -1,16 +1,21 @@
 `ifndef __FILE_IMMDECODER_V
 `define __FILE_IMMDECODER_V
 
-(* dont_touch = "yes" *) module immDecoder (
-    input      [31:0] instruction, // instruction to get the immediate from
-    output reg [31:0] imm          // result immediate
+(* dont_touch = "yes" *) module module_imm_decoder (
+    input  logic [31:0] instruction, // instruction to get the immediate from
+
+    output logic [31:0] imm          // result immediate
 );
 
-    wire [2:0] funct3 = instruction[14:12];
-    wire [6:0] opcode = instruction[6:0];
-    wire [4:0] rs1    = instruction[19:15];
+    logic [2:0] funct3;
+    logic [6:0] opcode;
+    logic [4:0] rs1;
 
-    always @(*) begin
+    assign funct3 = instruction[14:12];
+    assign opcode = instruction[6:0];
+    assign rs1    = instruction[19:15];
+
+    always_comb begin
         casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11
             5'b00?00: begin // I-type without JALR
                 if (opcode[4] && funct3[1:0] == 2'b01) begin // SLLI, SRLI or SRAI instruction

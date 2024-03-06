@@ -1,29 +1,32 @@
 `ifndef __FILE_VESPTOP_V
 `define __FILE_VESPTOP_V
 
-(* dont_touch = "yes" *) module VESPTop (
+(* dont_touch = "yes" *) module module_vesp_top (
     input clk,
     input reset,
-    inout [15:0] gpioPorts
+
+    inout [15:0] gpio_ports
 );
 
-    wire syncReset, pllFeedback, divClk;
+    logic sync_reset, pll_feedback, div_clk;
 
     // synchronize reset signal
-    synchronizer #(
+    module_synchronizer #(
         .LEN(1),
         .STAGES(2)
-    ) resetSync (
-        .clk(divClk),
+    ) reset_sync (
+        .clk(div_clk),
         .en(1'b1),
-        .dataIn(reset),
-        .dataOut(syncReset)
+        .data_in(reset),
+
+        .data_out(sync_reset)
     );
 
-    top top(
-        .clk(divClk),
-        .reset(syncReset),
-        .gpioPorts(gpioPorts)
+    module_top top(
+        .clk(div_clk),
+        .reset(sync_reset),
+
+        .gpio_ports(gpio_ports)
     );
     
     // PLLE2_BASE: Base Phase Locked Loop (PLL)
@@ -38,21 +41,21 @@
     )
     PLLE2_BASE_inst (
       // Clock Outputs: 1-bit (each) output: User configurable clock outputs
-      .CLKOUT0(divClk),       // 1-bit output: CLKOUT0
+      .CLKOUT0(div_clk),       // 1-bit output: CLKOUT0
       .CLKOUT1(),             // 1-bit output: CLKOUT1
       .CLKOUT2(),             // 1-bit output: CLKOUT2
       .CLKOUT3(),             // 1-bit output: CLKOUT3
       .CLKOUT4(),             // 1-bit output: CLKOUT4
       .CLKOUT5(),             // 1-bit output: CLKOUT5
       // Feedback Clocks: 1-bit (each) output: Clock feedback ports
-      .CLKFBOUT(pllFeedback), // 1-bit output: Feedback clock
+      .CLKFBOUT(pll_feedback), // 1-bit output: Feedback clock
       .LOCKED(),              // 1-bit output: LOCK
       .CLKIN1(clk),           // 1-bit input: Input clock
       // Control Ports: 1-bit (each) input: PLL control ports
       .PWRDWN(1'b0),          // 1-bit input: Power-down
       .RST(1'b0),             // 1-bit input: Reset
       // Feedback Clocks: 1-bit (each) input: Clock feedback ports
-      .CLKFBIN(pllFeedback)   // 1-bit input: Feedback clock
+      .CLKFBIN(pll_feedback)   // 1-bit input: Feedback clock
     );
     // End of PLLE2_BASE_inst instantiation
 
