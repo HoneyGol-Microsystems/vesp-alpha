@@ -1,4 +1,4 @@
-module module_counter_test();
+module counter_test();
 
     localparam COUNTER_WIDTH = 4;
     localparam TB_WAIT       = 200;

@@ -2,7 +2,7 @@
 `include "rtl/constants.vh"
 `include "tests/test_constants.vh"
 
-module module_fifo_test();
+module fifo_test();
 
     logic clk, reset, we, re, empty, full;
     logic  [31:0] din, dout;
@@ -42,8 +42,8 @@ module module_fifo_test();
         re = 1;
         #2;
         `ASSERT(empty === 1, "Empty != 1 after reading empty FIFO!");
-        `ASSERT(fifo.frontPointer === 0, "Front pointer did move when empty!");
-        `ASSERT(fifo.backPointer === 0, "Back pointer did move when reading!");
+        `ASSERT(fifo.front_pointer === 0, "Front pointer did move when empty!");
+        `ASSERT(fifo.back_pointer === 0, "Back pointer did move when reading!");
 
         // Attempt to write.
         re = 0;
@@ -52,33 +52,33 @@ module module_fifo_test();
         #2;
         `ASSERT(empty === 0, "Empty != 0 after writing to empty FIFO!");
         `ASSERT(full  === 0, "Full is 1 even when not full!");
-        `ASSERT(fifo.frontPointer === 0, "Front pointer did move when writing only!");
-        `ASSERT(fifo.backPointer  === 1, "Back pointer moved wrongly when writing!");
+        `ASSERT(fifo.front_pointer === 0, "Front pointer did move when writing only!");
+        `ASSERT(fifo.back_pointer  === 1, "Back pointer moved wrongly when writing!");
 
         // Write three more values.
         din = 32'hbababebe;
         #2;
-        `ASSERT(fifo.frontPointer === 0, "Front pointer did move when writing only!");
-        `ASSERT(fifo.backPointer  === 2, "Back pointer moved wrongly when writing!");
+        `ASSERT(fifo.front_pointer === 0, "Front pointer did move when writing only!");
+        `ASSERT(fifo.back_pointer  === 2, "Back pointer moved wrongly when writing!");
         `ASSERT(full  === 0, "Full is 1 even when not full!");
 
         din = 32'hcacacaca;
         #2;
-        `ASSERT(fifo.frontPointer === 0, "Front pointer did move when writing only!");
-        `ASSERT(fifo.backPointer  === 3, "Back pointer moved wrongly when writing!");
+        `ASSERT(fifo.front_pointer === 0, "Front pointer did move when writing only!");
+        `ASSERT(fifo.back_pointer  === 3, "Back pointer moved wrongly when writing!");
         `ASSERT(full  === 0, "Full is 1 even when not full!");
 
         din = 32'hfeedbeef;
         #2;
-        `ASSERT(fifo.frontPointer === 0, "Front pointer did move when writing only!");
-        `ASSERT(fifo.backPointer  === 0, "Back pointer moved wrongly when writing!");
+        `ASSERT(fifo.front_pointer === 0, "Front pointer did move when writing only!");
+        `ASSERT(fifo.back_pointer  === 0, "Back pointer moved wrongly when writing!");
         `ASSERT(full  === 1, "Full is 0 even when full!");
 
         // Attempt to write to full FIFO.
         din = 32'h00000000;
         #2
-        `ASSERT(fifo.frontPointer === 0, "Front pointer did move when writing only!");
-        `ASSERT(fifo.backPointer  === 0, "Back pointer moved when writing to full FIFO!");
+        `ASSERT(fifo.front_pointer === 0, "Front pointer did move when writing only!");
+        `ASSERT(fifo.back_pointer  === 0, "Back pointer moved when writing to full FIFO!");
         `ASSERT(full  === 1, "Full is 0 even when full!");
 
         // Attempt to read back items in queue.

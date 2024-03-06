@@ -7,7 +7,7 @@ recipe:
   comment: "This test recipe compiles and runs Verilog test files using Vivado XSIM."
   sources:
     - path: "tests/hwtests"
-      type: "verilog"
+      type: "systemverilog"
   # halt_on_step_error: true
   # halt_on_source_error
   steps:
@@ -17,7 +17,7 @@ recipe:
         executable: "vivado"
         params:
           - "-mode"
-          - "batch"
+          - "gui"
           - "-source"
           - "vivado/simulation.tcl"
           - "-log"

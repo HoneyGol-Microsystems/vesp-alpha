@@ -7,9 +7,13 @@
     output logic [31:0] imm          // result immediate
 );
 
-    logic [2:0] funct3 = instruction[14:12];
-    logic [6:0] opcode = instruction[6:0];
-    logic [4:0] rs1    = instruction[19:15];
+    logic [2:0] funct3;
+    logic [6:0] opcode;
+    logic [4:0] rs1;
+
+    assign funct3 = instruction[14:12];
+    assign opcode = instruction[6:0];
+    assign rs1    = instruction[19:15];
 
     always_comb begin
         casez (opcode[6:2]) // omit the lowest two bits of opcode - they are always 11

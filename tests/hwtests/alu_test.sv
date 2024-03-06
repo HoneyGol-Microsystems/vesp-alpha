@@ -1,7 +1,7 @@
 `include "rtl/components/alu.sv"
 `include "rtl/constants.vh"
 
-module module_alu_test();
+module alu_test();
     logic zero;
     logic [3:0] ctrl;
     logic [31:0] op1, op2, res;
