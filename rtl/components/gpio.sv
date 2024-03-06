@@ -22,12 +22,12 @@
 
     always_comb begin : register_read_proc
         case (reg_sel)
-            3'b000:  dout = { {24{1'b0}}, GPIOWR_A                };
-            3'b001:  dout = { {16{1'b0}}, GPIODIR_A,   {8{1'b0}}  };
+            3'b000:  dout = { {24{1'b0}}, GPIOWR_A              };
+            3'b001:  dout = { {16{1'b0}}, GPIODIR_A, {8{1'b0}}  };
             3'b010:  dout = { {8{1'b0}} , GPIORD_A , {16{1'b0}} };
-            3'b011:  dout = { GPIOWR_B  , {24{1'b0}}              };
-            3'b100:  dout = { {24{1'b0}}, GPIODIR_B               };
-            default: dout = { {16{1'b0}}, GPIORD_B, {8{1'b0}}  };
+            3'b011:  dout = { GPIOWR_B  , {24{1'b0}}            };
+            3'b100:  dout = { {24{1'b0}}, GPIODIR_B             };
+            default: dout = { {16{1'b0}}, GPIORD_B,  {8{1'b0}}  };
         endcase    
     end
 
