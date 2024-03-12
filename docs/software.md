@@ -71,28 +71,30 @@ To create the `.mem` file(s), run the script and supply three arguments - **loca
 If `von-neumann` architecture is specified, corresponding `*.mem` file will be created with the same name as the executable has and if `harvard` architecture is specified, `*_text.mem` and `*_data.mem` will be created. For more information about the script, run it with `-h` or `--help`.
 
 ## Deploying on FPGA
-The created `.mem` files can be loaded straight to the FPGA. To do that, open [top.v](/rtl/components/top.v) and supply a **path to the** `*_text.mem` **and** `*_data.mem` **files** to the parameters `MEM_FILE` of the **instruction** and the **data** memory module instances:
+The created `.mem` files can be loaded straight to the FPGA. To do that, open [top.sv](/rtl/components/top.sv) and supply a **path to the** `*_text.mem` **and** `*_data.mem` **files** to the parameters `MEM_FILE` of the **instruction** and the **data** memory module instances:
 ```verilog
-instructionMemory #(
+module_instruction_memory #(
    .WORD_CNT(`INSTR_MEM_WORD_CNT),
-   .MEM_FILE("*_text.mem")
-) instrMemInst (
-   .a(iAddr),
-   .d(iRead)
+   .MEM_FILE("software/firmware_text.mem")
+) instruction_memory (
+   .a(i_addr),
+
+   .d(i_read)
 );
 
-dataMemory #(
+module_data_memory #(
    .WORD_CNT(`DATA_MEM_WORD_CNT),
-   .MEM_FILE("*_data.mem")
-) dataMemInst (
+   .MEM_FILE("software/firmware_data.mem")
+) data_memory (
    .clk(clk),
-   .we(dWE),
-   .mask(dMask),
-   .a(dAddr),
-   .di(dWrite),
-   .do(dRead)
+   .we(d_we),
+   .mask(d_mask),
+   .a(d_addr),
+   .din(d_write),
+
+   .dout(data_mem_dout)
 );
 ```
 If needed, the `INSTR_MEM_WORD_CNT` and `DATA_MEM_WORD_CNT` values can be changed in the [constants.vh](/rtl/constants.vh) file.
 
-Now, the global top module [VESPTop.v](/rtl/top/VESPTop.v), which connects `top.v`, synchronises `reset` signal and divides clock frequency using this [PLL template](https://docs.xilinx.com/r/en-US/ug953-vivado-7series-libraries/PLLE2_BASE) is ready for bitstream generation. To create a Vivado project with this top module, see [Creating a Vivado project](/README.md#creating-a-vivado-project).
+Now, the global top module [vesp_top.sv](/rtl/top/vesp_top.sv), which connects `top.sv`, synchronises `reset` signal and divides clock frequency using this [PLL template](https://docs.xilinx.com/r/en-US/ug953-vivado-7series-libraries/PLLE2_BASE) is ready for bitstream generation. To create a Vivado project with this top module, see [Creating a Vivado project](/README.md#creating-a-vivado-project).

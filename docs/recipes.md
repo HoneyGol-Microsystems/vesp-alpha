@@ -1,5 +1,5 @@
 # Creating custom recipes
-A *recipe* is a custom YAML-based file which describes how to run a test procedure and how to interpret results. Recipes are processed using `recipeProcessor.py` script.
+A *recipe* is a custom YAML-based file which describes how to run a test procedure and how to interpret results. Recipes are processed using [recipeProcessor.py](/scripts/recipeProcessor.py) script.
 
 ## Structure
 ### Basic structure
@@ -95,4 +95,4 @@ Example:
     recursive: false
 ```
 ## Examples
-Examples of complete recipes can be found in the `recipes` folder.
+Examples of complete recipes can be found in the [recipes](/recipes/) folder.
