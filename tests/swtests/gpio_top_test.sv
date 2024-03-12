@@ -4,17 +4,16 @@
 `define OPCODE_FAIL         32'b0
 `define PC_STOP             'ha4
 
-module gpioTopTest();
+module gpio_top_test();
     
     reg clk, reset;
     wire [15:0] ports;
-    // reg [15:0] ports_reg;
-    // assign ports = ports_reg;
 
-    VESPTop dut(
+    module_vesp_top dut (
         .clk(clk),
         .reset(reset),
-        .gpioPorts(ports)
+
+        .gpio_ports(ports)
     );
 
     initial begin
