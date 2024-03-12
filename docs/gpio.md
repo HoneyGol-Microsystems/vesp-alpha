@@ -3,7 +3,7 @@ The GPIO (general purpose input-output) peripheral allows programmer to interfac
 These values can be either read to or written from the 16 available ports.
 
 ## Hardware implementation
-Whole GPIO is implementated in the `gpio.sv` file.
+Whole GPIO is implementated in the [gpio.sv](/rtl/components/gpio.sv) file.
 
 The GPIO peripheral principle is very simple. It consists of three types of registers:
 - `GPIODIR`: directions of the ports.

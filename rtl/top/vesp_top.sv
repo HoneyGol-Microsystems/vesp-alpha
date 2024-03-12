@@ -22,7 +22,9 @@
         .data_out(sync_reset)
     );
 
-    module_top top(
+    module_top #(
+        .MEM_ARCH("harvard")
+    ) top (
         .clk(div_clk),
         .reset(sync_reset),
 
