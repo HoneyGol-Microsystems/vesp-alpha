@@ -50,7 +50,7 @@ All tests can be launched using
 ```sh
 ./make.py test
 ```
-This command will run all tests (using all the *recipes* in the `recipes` directory) on current version of the CPU located in the repository.
+This command will run all tests (using all the *recipes* in the [recipes](/recipes/) directory) on current version of the CPU located in the repository.
 
 Test routines are defined using a *recipe*, which is a custom YAML-based file describing all steps that should be performed and how are test results interpreted (how to recognize success or failure). A tutorial on creating a recipe is located in [docs/recipes.md](docs/recipes.md). 
 
@@ -59,7 +59,7 @@ To run specific recipe, use the `--recipe` switch. You can also pass custom sour
 ./make.py test --recipe recipes/rvtest.yaml --sources tests/riscv-tests-hex/rv32ui-p-add.hex
 ```
 
-Of course, only files compatible with the selected recipe will work. Trying to run hex files using Hardware Test (hwtest.yaml) recipe will obviously not work. See list below for currently available recipes:
+Of course, only files compatible with the selected recipe will work. Trying to run hex files using Hardware Test (`hwtest.yaml`) recipe will obviously not work. See list below for currently available recipes:
 - `rvtest.yaml`: This recipe runs pre-compiled official RISC-V tests in simulation using Vivado.
 - `hwtest.yaml`: This recipe runs custom Verilog-based tests mainly used to test separate components.
 
@@ -84,6 +84,6 @@ You can remove all generated content using:
 ```
 
 ## License
-All files in this repository, if not stated otherwise, are licensed under the GNU GENERAL PUBLIC LICENSE, version 3. The full license text is available in the `LICENSE` file.
+All files in this repository, if not stated otherwise, are licensed under the GNU GENERAL PUBLIC LICENSE, version 3. The full license text is available in the [LICENSE](/LICENSE) file.
 
 © 2024 Ondrej Golasowski, Jan Medek
