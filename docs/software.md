@@ -1,5 +1,5 @@
 # Software
-This document describes compiling and running use programs on the VESP.
+This document describes compiling and running user programs on the VESP.
 
 ## Compilation of user programs
 User programs can be written in C or using assembly (with `.S` suffix, not `.s`). Executables of these programs can be generated in two ways:
