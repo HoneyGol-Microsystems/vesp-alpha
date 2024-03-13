@@ -7,6 +7,8 @@
 `define ASSERT_TIMEOUT "ASSERT_TIMEOUT"
 `define ASSERT_DEBUG_STOP "ASSERT_DEBUG_STOP"
 
+// test
+
 // assertion macro
 `define ASSERT(CONDITION, ERROR_MSG) if (!(CONDITION)) begin $display(ERROR_MSG); $display(`ASSERT_FAIL); $finish; end
 
